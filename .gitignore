@@ -6,7 +6,8 @@ __pycache__/
 .Python
 
 # Vault data (user content, not code)
-my-ai-vault/
+my-ai-vault/*
+!my-ai-vault/30-Skills/
 
 # IDE
 .claude/
