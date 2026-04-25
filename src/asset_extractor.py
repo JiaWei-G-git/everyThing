@@ -163,8 +163,116 @@ def extract(source_path: str = None):
 
     total = 0
     for f in files:
-        rel_path = f.relative_to(VAULT_ROOT)
+        try:
+            rel_path = f.relative_to(VAULT_ROOT)
+        except ValueError:
+            rel_path = f.name
         assets = extract_assets_from_file(f)
+        if assets:
+            save_draft_assets(assets, str(rel_path))
+            total += len(assets)
+    print(f"\n[OK] 共提取 {total} 条候选资产到 {DRAFT_DIR}")
+
+
+def mock_extract(content: str) -> list:
+    """Mock 模式：基于关键词匹配返回模拟资产"""
+    assets = []
+    content_lower = content.lower()
+    if "sql" in content_lower or "查询" in content or "优化" in content:
+        assets.append({
+            "type": "prompt",
+            "name": "SQL性能分析",
+            "scenario": "分析慢查询并提供优化方案",
+            "content": "请分析以下 SQL 查询的性能瓶颈，并给出优化建议：\n```sql\n{{sql语句}}\n```",
+            "confidence": "high"
+        })
+    if "docker" in content_lower or "镜像" in content or "构建" in content:
+        assets.append({
+            "type": "skill",
+            "name": "Docker构建优化",
+            "scenario": "优化 Dockerfile 以提升构建速度和缓存命中率",
+            "content": "1. 使用多阶段构建\n2. 将不常变的指令放在前面\n3. 使用 .dockerignore 排除无关文件\n4. 使用 BuildKit 并行构建",
+            "confidence": "high"
+        })
+    if "组件" in content or "vue" in content_lower or "表格" in content:
+        assets.append({
+            "type": "prompt",
+            "name": "Vue通用组件设计",
+            "scenario": "设计可复用的 Vue 组件",
+            "content": "请帮我设计一个 Vue3 的通用 {{组件类型}} 组件，支持以下功能：\n- 功能1\n- 功能2\n- 插槽自定义",
+            "confidence": "medium"
+        })
+    if not assets:
+        assets.append({
+            "type": "prompt",
+            "name": "通用问题分析",
+            "scenario": "分析技术问题并给出解决方案",
+            "content": "请分析以下问题并给出解决方案：\n\n{{问题描述}}",
+            "confidence": "medium"
+        })
+    return assets
+
+
+def extract_assets_from_file(file_path: Path, use_mock: bool = False) -> list:
+    """从单个原料文件中提取资产"""
+    content = file_path.read_text(encoding="utf-8")
+    print(f"正在提炼: {file_path.name} ...")
+    if use_mock:
+        assets = mock_extract(content)
+        print(f"  [MOCK] 发现 {len(assets)} 条候选资产")
+        return assets
+    try:
+        response = call_llm(EXTRACTION_PROMPT, content)
+    except Exception as e:
+        print(f"  [ERR] LLM 调用失败: {e}")
+        return []
+    json_str = response
+    if "```json" in response:
+        json_str = response.split("```json")[1].split("```")[0].strip()
+    elif "```" in response:
+        json_str = response.split("```")[1].split("```")[0].strip()
+    try:
+        assets = json.loads(json_str)
+        print(f"  发现 {len(assets)} 条候选资产")
+        return assets
+    except json.JSONDecodeError:
+        print(f"  [WARN] LLM 返回格式异常，跳过")
+        return []
+
+
+def extract(source_path: str = None, use_mock: bool = False):
+    """资产提炼入口"""
+    mode_str = "[MOCK 模式]" if use_mock else ""
+    print(f"=== AI Vault 资产提炼 {mode_str} ===\n")
+
+    if source_path:
+        target = Path(source_path)
+        if not target.exists():
+            print(f"文件不存在: {target}")
+            return
+        files = [target]
+    else:
+        candidates = []
+        for root in [INBOX_DIR, WORK_DIR]:
+            if not root.exists():
+                continue
+            for f in root.rglob("*.md"):
+                if "待提炼" in str(f):
+                    continue
+                candidates.append(f)
+        if not candidates:
+            print("未找到原料文件")
+            return
+        print(f"发现 {len(candidates)} 个原料文件，全部处理:\n")
+        files = candidates
+
+    total = 0
+    for f in files:
+        try:
+            rel_path = f.relative_to(VAULT_ROOT)
+        except ValueError:
+            rel_path = f.name
+        assets = extract_assets_from_file(f, use_mock=use_mock)
         if assets:
             save_draft_assets(assets, str(rel_path))
             total += len(assets)
@@ -174,5 +282,6 @@ def extract(source_path: str = None):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("source", nargs="?", help="原料文件路径")
+    parser.add_argument("--mock", action="store_true", help="使用 Mock 模式（不调用 LLM）")
     args = parser.parse_args()
-    extract(args.source)
+    extract(args.source, use_mock=args.mock)
