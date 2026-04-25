@@ -52,10 +52,10 @@ my-ai-vault/
 ├── 00-Inbox-收件箱/         # 原料·快速捕获
 │   └── 待提炼/              #   待确认资产
 ├── 01-Work-工作记录/         # 原料·按项目聚合
-├── 10-Prompts-提示词/        # 资产
-├── 20-Agents-代理/
-├── 30-Skills-技能/           # 与 AI 工具共享
-├── 40-MCP-服务/
+├── 10-Prompts/               # 资产
+├── 20-Agents/
+├── 30-Skills/                # 与 AI 工具共享
+├── 40-MCP/
 ├── 50-Workflows-工作流/
 ├── 60-Tutorials-教程/
 ├── 70-Sharing-团队共享/
