@@ -1,3 +1,5 @@
+## 文件: my-ai-vault/30-Skills/asset-extractor/SKILL.md
+
 ---
 name: asset-extractor
 description: 从 AI 协作的会话记录中自动抽取可复用知识资产（Prompt 候选、Skill 候选）。当用户说"提炼资产"、"提取 Prompt/Skill"或表达类似意图时触发。会扫描 Vault 原料层目录，分析会话记录并提取高价值内容，输出结构化提炼报告供人工确认。

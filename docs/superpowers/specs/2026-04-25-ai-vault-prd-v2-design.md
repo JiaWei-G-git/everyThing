@@ -363,17 +363,7 @@ jw-G-obsidian/                          # Vault 根目录
 ### 4.1 统一 Skill 源（核心架构设计）
 
 - **Skill 仓库**：Vault 的 `30-Skills-技能/` 目录作为所有 AI 工具的共享技能仓库。
-- **共享机制**：各 AI 工具不再维护独立的 skill 目录副本，而是通过 **symlink（符号链接）** 或配置映射，直接指向 Vault 内的 skill 目录。
-  - **Windows**：
-    ```powershell
-    mklink /D "C:\Users\<User>\.kimi\skills\我的技能" "D:\我的知识库\30-Skills-技能\我的技能"
-    mklink /D "C:\Users\<User>\.claude\skills\我的技能" "D:\我的知识库\30-Skills-技能\我的技能"
-    ```
-  - **macOS/Linux**：
-    ```bash
-    ln -s ~/我的知识库/30-Skills-技能/我的技能 ~/.kimi/skills/我的技能
-    ln -s ~/我的知识库/30-Skills-技能/我的技能 ~/.claude/skills/我的技能
-    ```
+- **共享机制**：各 AI 工具不再维护独立的 skill 目录副本，而是通过**符号链接（或等效方式）**引用 Vault 内的 skill 目录。安装由 AI 通过提示词自动完成，无需用户手动执行脚本。
 - **优势**：
   - 一份 skill，多工具共用；
   - 在 Vault 中编辑 skill，所有工具实时生效；
@@ -383,7 +373,7 @@ jw-G-obsidian/                          # Vault 根目录
 
 ### 4.2 与 Kimi Code 集成
 
-- **Skill 共享**：Kimi Code 的 skills 目录通过 symlink 引用 Vault 的 `30-Skills-技能/` 下的子目录；
+- **Skill 共享**：Kimi Code 通过符号链接引用 Vault 的 `30-Skills-技能/`;
 - **原子能力 Skill**：在 Vault 内维护以下核心 Skill，供 Kimi Code 调用：
   - `保存会话`（F-001）：归档当前会话到原料层；
   - `提炼资产`（F-003）：从指定原料提取可复用资产；
@@ -397,7 +387,7 @@ jw-G-obsidian/                          # Vault 根目录
 
 ### 4.3 与 Claude Code 集成
 
-- **Skill 共享**：`.claude/skills/` 通过 symlink 引用 Vault 的 `30-Skills-技能/`；
+- **Skill 共享**：Claude Code 通过符号链接引用 Vault 的 `30-Skills-技能/`;
 - **项目级配置**：在 `CLAUDE.md` 中配置 Vault 相关路径和模板：
   ```markdown
   <!-- AI-Vault-Config -->
@@ -411,7 +401,7 @@ jw-G-obsidian/                          # Vault 根目录
 
 ### 4.4 与 Cursor / Codex CLI 集成（P2）
 
-- **Skill 共享**：Cursor 的插件目录或 Codex CLI 的 `~/.codex/skills/` 通过 symlink 指向 Vault 的 `30-Skills-技能/`；
+- **Skill 共享**：Cursor 或 Codex CLI 通过符号链接引用 Vault 的 `30-Skills-技能/`;
 - **场景**：未来各工具成熟后，统一从 Vault 加载 skill，无需额外适配。
 
 ---

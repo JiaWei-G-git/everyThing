@@ -1,23 +1,16 @@
-# Python
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-.Python
-
-# Vault data (user content, not code)
-my-ai-vault/*
-!my-ai-vault/30-Skills/
-
-# IDE
+﻿# IDE
 .claude/
 .vscode/
 .idea/
 
-# Test artifacts
-AGENTS.md
-test_api.py
-test_session.py
-
 # Environment
 .env
+
+# Hackathon submission materials
+黑客松提交材料.md
+*.mp4
+*.mov
+
+# OS
+.DS_Store
+Thumbs.db
