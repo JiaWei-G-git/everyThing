@@ -30,6 +30,7 @@
 将整个 **`bootstrap/`** 文件夹提交给任意 AI 编码助手（Kimi Code / Claude Code / Cursor），AI 会按照文件夹内文档的规范完整生成整个项目。
 
 生成内容包括：
+
 - Vault 目录结构（18 个标准目录）
 - 3 个 Markdown 模板（会话记录 / 周报 / Prompt 资产）
 - 4 个 Skill 定义（会话记录 / 资产提炼 / 周报生成 / 模式挖掘）
@@ -46,6 +47,7 @@
 > **"请将当前项目 `my-ai-vault/30-Skills/` 下的四个 Skill 以符号链接（或等效方式）安装到你当前 AI 工具的 Skill 目录中，确保 `30-Skills/` 始终作为唯一来源。"**
 
 AI 会根据所在工具自动处理：
+
 - **Kimi Code**：`~/.kimi/skills/` ← Junction 到 `my-ai-vault/30-Skills/`
 - **Claude Code**：`~/.claude/skills/` ← 等效机制
 
@@ -69,6 +71,7 @@ New-Item -ItemType Junction -Path "$env:USERPROFILE\.kimi\skills\ai-vault" -Targ
 > **"保存本次会话"** 或 **"/save-session"**
 
 AI 会：
+
 1. 读取项目级 `AGENTS.md` / `CLAUDE.md` 中的归档路径配置
 2. 首次使用会询问归档位置并记忆
 3. 从会话上下文中自动采集主题、背景、有效提示词、解决思路、优化经验
@@ -86,6 +89,7 @@ AI 会：
 > **"盘点本周模式"** 或 **"/pattern"**
 
 AI 会：
+
 1. 扫描 `01-Work-工作记录/` 下最近 N 天的会话记录
 2. 按 `topic` + `tags` 聚类统计频次
 3. 输出「重复主题排行榜」（≥3 次的主题高亮建议提炼）
@@ -104,6 +108,7 @@ AI 会：
 > **"提炼资产"** 或 **"/extract"**
 
 AI 会：
+
 1. 扫描 `00-Inbox` 和 `01-Work` 下的单条原料文件
 2. 调用 LLM 分析并提取可复用的 Prompt / Skill
 3. 将候选资产保存到 `00-Inbox-收件箱/待提炼/`
@@ -118,6 +123,7 @@ AI 会：
 > **"生成本周周报"** 或 **"/weekly"**
 
 AI 会：
+
 1. 按项目聚合最近 7 天的会话记录
 2. 选择模板（项目自定义 → 类型模板 → 默认模板）
 3. 生成结构化周报并保存到 `01-Work-工作记录/<项目名>/文档/`
@@ -129,11 +135,13 @@ AI 会：
 前往 `00-Inbox-收件箱/待提炼/` 审阅提取结果：
 
 **审阅策略**：
+
 - **高置信度资产**：AI 自动标注为 high confidence，可快速扫读后直接迁移
 - **中低置信度资产**：AI 对话式逐条汇报（"这条 Skill 场景是 X，建议放 Y 目录，是否确认？"），你回复「确认/修改/跳过/删除」
 - **30 秒规则**：每个草稿最多看 30 秒，不纠结，直觉判断
 
 **迁移操作**：
+
 - 质量达标的资产，手动移动到对应资产目录（`10-Prompts/` 或 `30-Skills/`）
 - 修改 `maturity: draft` 为 `maturity: confirmed`
 - 不达标的直接删除
@@ -182,14 +190,14 @@ my-ai-vault/
 
 ### 目录流转规则
 
-| 阶段 | 所在目录 | 说明 |
-|------|---------|------|
-| 原料捕获 | `00-Inbox` / `01-Work` | 会话记录、工作日志等原始材料 |
-| 候选提取 | `00-Inbox-收件箱/待提炼` | LLM 提取的草稿，需人工确认 |
-| 资产沉淀 | `10~60` | 确认后的可复用资产 |
-| 团队共享 | `70-Sharing-团队共享` | 打包分享给团队的资产集合 |
-| 模板维护 | `90-Templates` | 周报模板等标准化文档 |
-| 历史归档 | `99-Archive` | 过期或旧版本资产 |
+| 阶段     | 所在目录                 | 说明                         |
+| -------- | ------------------------ | ---------------------------- |
+| 原料捕获 | `00-Inbox` / `01-Work`   | 会话记录、工作日志等原始材料 |
+| 候选提取 | `00-Inbox-收件箱/待提炼` | LLM 提取的草稿，需人工确认   |
+| 资产沉淀 | `10~60`                  | 确认后的可复用资产           |
+| 团队共享 | `70-Sharing-团队共享`    | 打包分享给团队的资产集合     |
+| 模板维护 | `90-Templates`           | 周报模板等标准化文档         |
+| 历史归档 | `99-Archive`             | 过期或旧版本资产             |
 
 ---
 
@@ -201,11 +209,13 @@ my-ai-vault/
 
 ```markdown
 <!-- AI-Vault-Config -->
+
 - session_archive_path: "01-Work-工作记录/XX项目/会话记录/"
 - weekly_template: "90-Templates/周报/敏捷开发-周报模板.md"
 ```
 
 **作用**：
+
 - `session_archive_path`：会话记录的自动归档位置，首次设置后自动复用
 - `weekly_template`：该项目的专属周报模板（可选）
 
@@ -215,11 +225,11 @@ my-ai-vault/
 
 ## 关联文档
 
-| 文档 | 路径 | 说明 |
-|------|------|------|
-| **一键生成** | `bootstrap/` | **AI 一键重建整个项目** |
-| 架构设计 | `docs/知识库架构与流转流程-2026-04-25.md` | Vault 设计权威参考 |
-| PRD v2.0 | `docs/superpowers/specs/2026-04-25-ai-vault-prd-v2-design.md` | 完整需求文档 |
+| 文档         | 路径                                                          | 说明                    |
+| ------------ | ------------------------------------------------------------- | ----------------------- |
+| **一键生成** | `bootstrap/`                                                  | **AI 一键重建整个项目** |
+| 架构设计     | `docs/知识库架构与流转流程-2026-04-25.md`                     | Vault 设计权威参考      |
+| PRD v2.0     | `docs/superpowers/specs/2026-04-25-ai-vault-prd-v2-design.md` | 完整需求文档            |
 
 ---
 
@@ -251,6 +261,7 @@ my-ai-vault/
 本项目采用 **Vibe Coding** 方式开发：开发者通过自然语言描述需求，AI 生成完整的 Skill 定义、目录结构和项目文档。项目本身无传统代码，所有"逻辑"以 Markdown 形式的 Skill 定义存在，由 AI 工具在运行时解析执行。
 
 **开发过程**：
+
 1. 开发者提出"想要一个管理 AI 协作知识的系统"
 2. AI 建议"纯 Markdown + Skill 系统"方案，替代了最初的 Python 脚本方案
 3. AI 编写 4 个核心 Skill（session-recorder / asset-extractor / pattern-miner / weekly-generator）
@@ -258,9 +269,3 @@ my-ai-vault/
 5. 开发者通过自然语言测试、调优，AI 协助修复边界问题
 
 ---
-
-## 引用与致谢
-
-- 项目灵感来源于 **Obsidian + Zettelkasten** 知识管理方法论
-- Skill 系统设计参考 **Kimi Code CLI** 和 **Claude Code** 的 Skill 规范
-- Vault 目录流转规则借鉴 **PARA 方法**（Projects / Areas / Resources / Archives）
