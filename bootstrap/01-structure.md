@@ -21,7 +21,7 @@ my-ai-vault/
 ├── 70-Sharing-团队共享/
 ├── 90-Templates/
 │   └── 周报/
-└── 99-Archive-归档/
+└── 99-Archive/
     └── 资产版本历史/
 ```
 
@@ -43,7 +43,7 @@ $dirs = @(
     "my-ai-vault/60-Tutorials-教程",
     "my-ai-vault/70-Sharing-团队共享",
     "my-ai-vault/90-Templates/周报",
-    "my-ai-vault/99-Archive-归档/资产版本历史"
+    "my-ai-vault/99-Archive/资产版本历史"
 )
 foreach ($d in $dirs) { New-Item -ItemType Directory -Path $d -Force | Out-Null }
 ```

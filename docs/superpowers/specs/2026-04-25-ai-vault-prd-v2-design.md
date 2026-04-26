@@ -46,7 +46,7 @@
 | **会话记录（Session Record）** | 单次 AI 协作的完整记录，包含背景、Prompt、解决思路、优化经验 |
 | **MOC** | Map of Content，项目级索引页，聚合该项目下的所有关联笔记 |
 | **Skill** | 原子化的操作指令集，可被 AI 工具（Kimi Code / Claude Code）直接调用 |
-| **MCP** | Model Context Protocol 服务定义与配置，存放于 `40-MCP-服务/` |
+| **MCP** | Model Context Protocol 服务定义与配置，存放于 `40-MCP/` |
 
 ---
 
@@ -61,15 +61,15 @@ jw-G-obsidian/                          # Vault 根目录
 │       ├── 会话记录/                   #   与 AI 协作的会话
 │       ├── 日志/                       #   日常工作日志
 │       └── 文档/                       #   项目相关文档、需求、设计、周报
-├── 10-Prompts-提示词/                  # 资产·经过验证的 Prompt 模板
+├── 10-Prompts/                  # 资产·经过验证的 Prompt 模板
 ├── 20-Agents/                     # 资产·定制化 Agent 配置
 ├── 30-Skills/                     # 资产·标准化 Skill 模块（AI 工具共享源）
-├── 40-MCP-服务/                        # 资产·MCP 服务定义与文档
+├── 40-MCP/                        # 资产·MCP 服务定义与文档
 ├── 50-Workflows-工作流/                # 资产·多步骤工作流编排
 ├── 60-Tutorials-教程/                  # 资产·外部教程 + 工具使用文档 + 自结总结
 ├── 70-Sharing-团队共享/                # 资产·打包给团队的资产包与上手指南
-├── 90-Templates-模板/                  # 工具·Templater 笔记模板、周报模板
-└── 99-Archive-归档/                    # 沉淀·失效、不再维护的内容
+├── 90-Templates/                  # 工具·Templater 笔记模板、周报模板
+└── 99-Archive/                    # 沉淀·失效、不再维护的内容
     └── 资产版本历史/
 ```
 
@@ -191,7 +191,7 @@ jw-G-obsidian/                          # Vault 根目录
 - **优先级**：P1
 - **描述**：在写入资产目录前，检测是否已存在相似资产。
 - **去重策略**：基于标题 + 内容摘要的向量相似度，阈值 ≥ 0.85 视为重复，提示合并或更新。
-- **版本管理**：同一资产的迭代更新保留历史版本于 `99-Archive-归档/资产版本历史/`。
+- **版本管理**：同一资产的迭代更新保留历史版本于 `99-Archive/资产版本历史/`。
 
 ---
 
@@ -245,9 +245,9 @@ jw-G-obsidian/                          # Vault 根目录
 - **描述**：基于聚合内容，调用 LLM 生成符合模板的 Markdown 文档。
 - **模板体系**：
   - **默认模板**：系统内置通用周报模板，适用于大多数项目；
-  - **自定义模板**：存放于 `90-Templates-模板/周报/` 目录下，用户可创建项目专属模板，如：
+  - **自定义模板**：存放于 `90-Templates/周报/` 目录下，用户可创建项目专属模板，如：
     ```
-    90-Templates-模板/周报/
+    90-Templates/周报/
     ├── 默认周报模板.md
     ├── 敏捷开发-周报模板.md
     ├── 客户项目-周报模板.md
@@ -258,7 +258,7 @@ jw-G-obsidian/                          # Vault 根目录
      ```markdown
      <!-- AI-Vault-Config -->
      - session_archive_path: "01-Work-工作记录/XX项目/会话记录/"
-     - weekly_template: "90-Templates-模板/周报/敏捷开发-周报模板.md"
+     - weekly_template: "90-Templates/周报/敏捷开发-周报模板.md"
      ```
   2. 如项目未指定模板，使用默认模板；
   3. 如指定模板不存在，回退到默认模板并提示用户。
@@ -294,12 +294,12 @@ jw-G-obsidian/                          # Vault 根目录
 
 - **优先级**：P1
 - **描述**：当资产区单类数量超过阈值时，基于现有资产的标签/内容聚类，生成子分类方案。
-- **示例**：`10-Prompts-提示词/` 达到 11 条 → 建议拆分为 `10-Prompts-提示词/前端/`、`10-Prompts-提示词/后端/` 等。
+- **示例**：`10-Prompts/` 达到 11 条 → 建议拆分为 `10-Prompts/前端/`、`10-Prompts/后端/` 等。
 
 #### F-014 失效内容归档
 
 - **优先级**：P1
-- **描述**：定期（每月）扫描全库，将长期未更新或标记为 `deprecated` 的内容移至 `99-Archive-归档/`。
+- **描述**：定期（每月）扫描全库，将长期未更新或标记为 `deprecated` 的内容移至 `99-Archive/`。
 - **判定条件**：
   - 最后修改时间 > 90 天且未被任何 MOC 引用；
   - 文件头部 YAML 包含 `status: deprecated`。
@@ -393,7 +393,7 @@ jw-G-obsidian/                          # Vault 根目录
   <!-- AI-Vault-Config -->
   - vault_root: "/Users/xxx/我的知识库"
   - session_archive_path: "01-Work-工作记录/XX项目/会话记录/"
-  - weekly_template: "90-Templates-模板/周报/敏捷开发-周报模板.md"
+  - weekly_template: "90-Templates/周报/敏捷开发-周报模板.md"
   ```
 - **触发器模式**：Claude Code Agent 模式下执行 `/save-to-vault` 触发归档。
 
@@ -478,7 +478,7 @@ tags: [backend, performance, prompt]
 <!-- AI-Vault-Config -->
 - vault_root: "D:/我的知识库"
 - session_archive_path: "01-Work-工作记录/XX项目/会话记录/"
-- weekly_template: "90-Templates-模板/周报/敏捷开发-周报模板.md"
+- weekly_template: "90-Templates/周报/敏捷开发-周报模板.md"
 ```
 
 ---

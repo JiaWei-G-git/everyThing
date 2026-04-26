@@ -1,4 +1,4 @@
-# 四 Skill 头脑风暴分析
+﻿# 四 Skill 头脑风暴分析
 
 > 分析日期: 2026-04-25
 > 范围: session-recorder / asset-extractor / weekly-generator / pattern-miner
@@ -25,7 +25,7 @@
 
 1. **结构化提取增强**：在 SKILL.md 中增加"提取 checklist"，要求 AI 必须逐项确认 6 个 YAML 字段 + 4 个正文区块是否都已填充
 2. **标签自动推荐**：保存时让 AI 基于内容自动推荐 3-5 个 tags，用户可一键确认或修改
-3. **相似会话检测**：保存前扫描 `01-Work/` 下近 30 天记录，如果 topic 相似度 ≥ 0.8，提示"已有 3 条同类记录，建议后续用 pattern-miner 提炼"
+3. **相似会话检测**：保存前扫描 `01-Work-工作记录/` 下近 30 天记录，如果 topic 相似度 ≥ 0.8，提示"已有 3 条同类记录，建议后续用 pattern-miner 提炼"
 4. **项目路径智能推断**：除了 AGENTS.md，再支持从 Git 远程 URL 推断项目名，自动拼接路径
 
 ---
@@ -102,7 +102,7 @@
 | # | 问题 | 说明 |
 |---|------|------|
 | S1 | **缺少统一配置中心** | AGENTS.md 只存了 `session_archive_path`，其他配置（默认时间范围、LLM 温度、去重阈值）散落在各 SKILL.md 中 |
-| S2 | **Skill 之间零联动** | session-recorder 保存后不能自动触发 pattern-miner 增量扫描；weekly-generator 和 pattern-miner 各自独立扫描 `01-Work/`，重复 I/O |
+| S2 | **Skill 之间零联动** | session-recorder 保存后不能自动触发 pattern-miner 增量扫描；weekly-generator 和 pattern-miner 各自独立扫描 `01-Work-工作记录/`，重复 I/O |
 | S3 | **无反馈闭环** | 所有 Skill 的产出（会话记录、提取的草稿、周报）都没有"后续使用效果"的跟踪数据 |
 | S4 | **平台绑定过深** | Junction 是 Windows 特有；PowerShell 命令在其他平台不通用；各 AI 工具 Skill 系统差异大 |
 

@@ -1,4 +1,4 @@
-## 第 7 步：配置、Junction 安装与验证
+﻿## 第 7 步：配置、Junction 安装与验证
 
 ### 7.1 AGENTS.md（项目根目录）
 
@@ -75,7 +75,7 @@ Get-ChildItem $sourceDir -Directory | ForEach-Object {
 
 #### 测试 asset-extractor
 
-**触发**：`提炼会话 @01-Work/XX项目/会话记录/xxx.md`
+**触发**：`提炼会话 @01-Work-工作记录/XX项目/会话记录/xxx.md`
 
 **预期行为**：
 1. 读取指定会话记录
@@ -89,7 +89,7 @@ Get-ChildItem $sourceDir -Directory | ForEach-Object {
 
 **预期行为**：
 1. 读取 `AGENTS.md` 配置
-2. 扫描 `01-Work-XX项目/会话记录/` 最近 7 天记录
+2. 扫描 `01-Work-工作记录/XX项目/会话记录/` 最近 7 天记录
 3. 按维度聚合
 4. 选择周报模板
 5. 调用 LLM 生成文档
@@ -100,7 +100,7 @@ Get-ChildItem $sourceDir -Directory | ForEach-Object {
 **触发**：`盘点本周模式`
 
 **预期行为**：
-1. 扫描 `01-Work/` 下最近 30 天的会话记录
+1. 扫描 `01-Work-工作记录/` 下最近 30 天的会话记录
 2. 聚类统计，输出重复主题排行榜
 3. 用户选择主题后，读取相关会话正文
 4. 调用 LLM 跨案例抽象
@@ -150,6 +150,6 @@ Get-ChildItem $sourceDir -Directory | ForEach-Object {
 #### 问题 4：weekly-generator 输出为空
 
 **排查步骤**：
-1. 确认 `01-Work/<项目名>/会话记录/` 目录下有 .md 文件
+1. 确认 `01-Work-工作记录/<项目名>/会话记录/` 目录下有 .md 文件
 2. 确认时间范围正确（默认最近 7 天）
 3. 检查模板文件是否存在

@@ -1,4 +1,4 @@
-# 📁 Skills 资产索引
+﻿# 📁 Skills 资产索引
 
 > 本目录存放可执行的 **Skill**（技能），每个 Skill 是一个完整的 AI 协作工作流。
 > 
@@ -21,7 +21,7 @@
 
 ```
 外部教程/笔记 ──→ asset-extractor ──┐
-                                    ├──→ 00-Inbox/待提炼/ ──→ 人工确认 ──→ 10-Prompts / 30-Skills
+                                    ├──→ 00-Inbox-收件箱/待提炼/ ──→ 人工确认 ──→ 10-Prompts / 30-Skills
 工作会话记录 ────→ session-recorder ──┤      ▲
                          │            │      │
                          └────────────┘      │
