@@ -1,0 +1,117 @@
+{
+  "name": "ai-knowledge-base",
+  "displayName": "AI 技能知识库",
+  "description": "团队 AI 技能知识库平台",
+  "version": "0.1.1",
+  "publisher": "your-publisher-name",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished",
+    "onView:aiKnowledgeBase.sidebar"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "aiKnowledgeBase.openSkill",
+        "title": "打开技能详情",
+        "category": "AI知识库"
+      },
+      {
+        "command": "aiKnowledgeBase.searchSkills",
+        "title": "搜索技能",
+        "category": "AI知识库",
+        "icon": "$(search)"
+      },
+      {
+        "command": "aiKnowledgeBase.installToClaude",
+        "title": "安装到 Claude Code",
+        "category": "AI知识库"
+      },
+      {
+        "command": "aiKnowledgeBase.installToCursor",
+        "title": "安装到 Cursor",
+        "category": "AI知识库"
+      },
+      {
+        "command": "aiKnowledgeBase.copyPrompt",
+        "title": "复制 Prompt",
+        "category": "AI知识库"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "aiKnowledgeBaseContainer",
+          "title": "AI 技能知识库",
+          "icon": "$(book)"
+        }
+      ]
+    },
+    "views": {
+      "aiKnowledgeBaseContainer": [
+        {
+          "id": "aiKnowledgeBase.sidebar",
+          "name": "知识库",
+          "type": "webview"
+        }
+      ]
+    },
+    "menus": {
+      "view/item/context": [
+        {
+          "command": "aiKnowledgeBase.openSkill",
+          "when": "viewItem == skill",
+          "group": "navigation"
+        },
+        {
+          "command": "aiKnowledgeBase.installToClaude",
+          "when": "viewItem == skill",
+          "group": "install@1"
+        },
+        {
+          "command": "aiKnowledgeBase.installToCursor",
+          "when": "viewItem == skill",
+          "group": "install@2"
+        },
+        {
+          "command": "aiKnowledgeBase.copyPrompt",
+          "when": "viewItem == skill",
+          "group": "copy@1"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "AI 技能知识库",
+      "properties": {
+        "aiKnowledgeBase.localPath": {
+          "type": "string",
+          "default": "",
+          "description": "用户本地知识库路径（留空则使用内置模板）"
+        },
+        "aiKnowledgeBase.defaultInstallTarget": {
+          "type": "string",
+          "default": "claude-code",
+          "enum": ["claude-code", "cursor", "generic"],
+          "description": "默认安装目标平台"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/node": "20.x",
+    "@types/vscode": "^1.74.0",
+    "typescript": "^5.3.0"
+  }
+}
