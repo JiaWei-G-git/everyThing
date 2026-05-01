@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>文件浏览器</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: var(--vscode-font-family);
+      background: var(--vscode-editor-background);
+      color: var(--vscode-foreground);
+      padding: 16px;
+    }
+    h2 { margin-bottom: 12px; font-size: 16px; }
+    .breadcrumb {
+      color: var(--vscode-textLink-foreground);
+      margin-bottom: 12px;
+      font-size: 12px;
+      cursor: pointer;
+      padding: 6px 0;
+    }
+    .breadcrumb:hover { text-decoration: underline; }
+    .file-list {
+      border: 1px solid var(--vscode-panel-border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .file-item {
+      display: flex;
+      align-items: center;
+      padding: 8px 12px;
+      cursor: pointer;
+      border-bottom: 1px solid var(--vscode-panel-border);
+      transition: background 0.15s;
+    }
+    .file-item:last-child { border-bottom: none; }
+    .file-item:hover { background: var(--vscode-list-hoverBackground); }
+    .icon {
+      width: 20px;
+      height: 20px;
+      margin-right: 10px;
+      text-align: center;
+      font-size: 14px;
+    }
+    .file-name { flex: 1; font-size: 13px; }
+    .file-size {
+      color: var(--vscode-descriptionForeground);
+      font-size: 11px;
+      min-width: 60px;
+      text-align: right;
+    }
+    .empty {
+      padding: 40px;
+      text-align: center;
+      color: var(--vscode-descriptionForeground);
+    }
+    .preview {
+      margin-top: 16px;
+      padding: 12px;
+      background: var(--vscode-textCodeBlock-background);
+      border-radius: 4px;
+      font-family: var(--vscode-editor-font-family);
+      font-size: 12px;
+      white-space: pre-wrap;
+      word-break: break-all;
+      max-height: 300px;
+      overflow: auto;
+    }
+    .preview-label {
+      font-size: 11px;
+      color: var(--vscode-descriptionForeground);
+      margin-bottom: 8px;
+    }
+    #previewArea { display: none; }
+  </style>
+</head>
+<body>
+  <h2>文件浏览器</h2>
+  <div class="breadcrumb" id="breadcrumb">点击选择文件夹</div>
+  <div class="file-list" id="fileList">
+    <div class="empty">尚未选择文件夹，点击上方路径选择</div>
+  </div>
+  <div id="previewArea">
+    <div class="preview-label">文件预览</div>
+    <div class="preview" id="preview"></div>
+  </div>
+
+  <script>
+    const vscode = acquireVsCodeApi();
+
+    document.getElementById('breadcrumb').addEventListener('click', () => {
+      vscode.postMessage({ command: 'selectFolder' });
+    });
+
+    window.addEventListener('message', event => {
+      const msg = event.data;
+      if (msg.command === 'showFiles') {
+        renderFiles(msg.path, msg.files);
+      }
+      if (msg.command === 'showContent') {
+        showPreview(msg.content, msg.isImage);
+      }
+    });
+
+    function renderFiles(currentPath, files) {
+      document.getElementById('breadcrumb').textContent = currentPath || '点击选择文件夹';
+      const list = document.getElementById('fileList');
+      if (!files || files.length === 0) {
+        list.innerHTML = '<div class="empty">空文件夹</div>';
+        return;
+      }
+
+      list.innerHTML = files.map(f => `
+        <div class="file-item" data-path="${escapeHtml(f.path)}" data-type="${f.isDirectory ? 'dir' : 'file'}">
+          <div class="icon">${f.isDirectory ? '&#128193;' : '&#128196;'}</div>
+          <div class="file-name">${escapeHtml(f.name)}</div>
+          <div class="file-size">${f.isDirectory ? '文件夹' : formatSize(f.size)}</div>
+        </div>
+      `).join('');
+
+      list.querySelectorAll('.file-item').forEach(item => {
+        item.addEventListener('click', () => {
+          const path = item.dataset.path;
+          const type = item.dataset.type;
+          if (type === 'dir') {
+            vscode.postMessage({ command: 'openFolder', path });
+          } else {
+            vscode.postMessage({ command: 'readFile', path });
+          }
+        });
+      });
+    }
+
+    function showPreview(content, isImage) {
+      const area = document.getElementById('previewArea');
+      const box = document.getElementById('preview');
+      area.style.display = 'block';
+      if (isImage) {
+        box.innerHTML = `<img src="${content}" style="max-width:100%; max-height:250px;">`;
+      } else {
+        box.textContent = content.substring(0, 5000) || '(空文件)';
+      }
+    }
+
+    function formatSize(bytes) {
+      if (bytes < 1024) return bytes + ' B';
+      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+      return (bytes / 1024 / 1024).toFixed(1) + ' MB';
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+  </script>
+</body>
+</html>
