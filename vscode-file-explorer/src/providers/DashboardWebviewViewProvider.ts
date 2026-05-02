@@ -4,7 +4,7 @@ import * as fs from 'fs';
 import { KnowledgeService } from '../services/KnowledgeService';
 import { SearchService } from '../services/SearchService';
 import { InstallService } from '../services/InstallService';
-import { RecentService } from '../services/RecentService';
+import { RecentService, SCENARIOS } from '../services/RecentService';
 
 export class DashboardWebviewViewProvider implements vscode.WebviewViewProvider {
   public static readonly viewType = 'aiKnowledgeBase.sidebar';
@@ -59,6 +59,15 @@ export class DashboardWebviewViewProvider implements vscode.WebviewViewProvider 
           case 'save:settings':
             await this._handleSaveSettings(message.data);
             break;
+          case 'switch:viewMode':
+            this._recentService.setViewMode(message.mode);
+            break;
+          case 'track:scenario':
+            this._recentService.trackScenarioUsage(message.scenarioId);
+            break;
+          case 'get:scenarios':
+            this._handleGetScenarios();
+            break;
         }
       }
     );
@@ -84,6 +93,9 @@ export class DashboardWebviewViewProvider implements vscode.WebviewViewProvider 
     const recent = this._recentService.getRecent();
     const favorites = this._recentService.getFavorites();
     const stats = this._recentService.getStats(kb);
+    const usageStats = this._recentService.getUsageStats();
+    const topScenarios = this._recentService.getTopScenarios();
+    const viewMode = this._recentService.getViewMode();
 
     this._view.webview.postMessage({
       type: 'init:data',
@@ -92,11 +104,15 @@ export class DashboardWebviewViewProvider implements vscode.WebviewViewProvider 
 
     this._view.webview.postMessage({
       type: 'init:state',
-      data: { recent, favorites, stats }
+      data: { recent, favorites, stats, usageStats, topScenarios, viewMode }
     });
   }
 
   private async _handleOpenSkill(skillId: string) {
+    const skill = this._knowledgeService.getSkill(skillId);
+    if (skill && skill.scenarioTags.length > 0) {
+      this._recentService.trackScenarioUsage(skill.scenarioTags[0]);
+    }
     this._recentService.addRecent(skillId, this._knowledgeService);
     this._sendInitialData();
   }
@@ -158,6 +174,13 @@ export class DashboardWebviewViewProvider implements vscode.WebviewViewProvider 
     await config.update('localPath', data.localPath, true);
     await config.update('defaultInstallTarget', data.defaultInstallTarget, true);
     this._sendSettings();
+  }
+
+  private _handleGetScenarios() {
+    this._view?.webview.postMessage({
+      type: 'scenarios:data',
+      data: SCENARIOS
+    });
   }
 
   public refresh() {
