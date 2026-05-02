@@ -41,6 +41,12 @@ export class SearchService {
         matchedFields.push('标签');
       }
 
+      // 场景标签匹配
+      if (skill.scenarioTags.some(t => t.toLowerCase().includes(lowerQuery))) {
+        score += 6;
+        matchedFields.push('场景');
+      }
+
       // 内容匹配
       if (skill.content.toLowerCase().includes(lowerQuery)) {
         score += 3;
@@ -86,6 +92,13 @@ export class SearchService {
     const kb = this.knowledgeService.getKnowledgeBase();
     return kb.skills.filter(s =>
       s.tags.some(t => t.toLowerCase() === tag.toLowerCase())
+    );
+  }
+
+  public getSkillsByScenario(scenarioId: string): Skill[] {
+    const kb = this.knowledgeService.getKnowledgeBase();
+    return kb.skills.filter(s =>
+      s.scenarioTags.some(t => t.toLowerCase() === scenarioId.toLowerCase())
     );
   }
 }

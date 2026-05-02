@@ -127,7 +127,7 @@ export class KnowledgeService {
     const parsed = parseMarkdown(content);
     const fm = parsed.frontmatter;
 
-    if (fm.type !== 'skill') {
+    if (fm.type !== 'skill' && fm.type !== 'checklist') {
       return null;
     }
 
@@ -136,7 +136,7 @@ export class KnowledgeService {
       id: fileName,
       name: fm.name || fileName,
       description: fm.description || '',
-      type: 'skill',
+      type: fm.type || 'skill',
       version: fm.version || '1.0.0',
       date: fm.date || '',
       parentAgent: fm.parentAgent || '',

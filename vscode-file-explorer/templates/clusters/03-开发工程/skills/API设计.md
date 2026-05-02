@@ -10,6 +10,7 @@ tags: ["开发", "API", "后端"]
 input: "功能点清单或需求文档"
 output: "完整的API接口规范文档（含URL、方法、参数、响应）"
 estimated-time: "30-60分钟"
+scenarioTags: [写代码, 做设计]
 ---
 
 # 技能：API设计

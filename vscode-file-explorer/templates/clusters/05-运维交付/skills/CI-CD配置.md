@@ -10,6 +10,7 @@ tags: ["运维", "CI/CD", "DevOps"]
 input: "项目信息（技术栈、部署目标、分支策略）"
 output: "完整的CI/CD配置文件（GitHub Actions/GitLab CI等）"
 estimated-time: "20-40分钟"
+scenarioTags: [查故障, 写代码]
 ---
 
 # 技能：CI-CD配置
