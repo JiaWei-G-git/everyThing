@@ -55,7 +55,8 @@ export class RecentService {
     return {
       clusterCount: kb.clusters.length,
       agentCount: kb.agents.length,
-      skillCount: kb.skills.length
+      skillCount: kb.skills.length,
+      scenarioCount: kb.scenes.length
     };
   }
 }

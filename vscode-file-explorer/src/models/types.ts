@@ -4,7 +4,7 @@ export interface Skill {
   id: string;
   name: string;
   description: string;
-  type: 'skill';
+  type: 'skill' | 'checklist';
   version: string;
   date: string;
   parentAgent: string;
@@ -16,6 +16,9 @@ export interface Skill {
   estimatedTime?: string;
   filePath: string;
   content: string;
+  scenarioTags: string[];
+  source: 'core' | 'industry' | 'imported';
+  industryPackage?: string;
 }
 
 export interface Agent {
@@ -86,4 +89,31 @@ export interface DashboardStats {
   clusterCount: number;
   agentCount: number;
   skillCount: number;
+  scenarioCount: number;
+}
+
+export interface UsageStats {
+  skillUsage: Record<string, number>;
+  scenarioUsage: Record<string, number>;
+  lastUsed: number;
+}
+
+export type ViewMode = 'role' | 'scenario';
+
+export interface IndustryPackage {
+  id: string;
+  name: string;
+  version: string;
+  description: string;
+  path: string;
+  clusterCount: number;
+  skillCount: number;
+  enabled: boolean;
+}
+
+export interface Scenario {
+  id: string;
+  name: string;
+  icon: string;
+  description: string;
 }

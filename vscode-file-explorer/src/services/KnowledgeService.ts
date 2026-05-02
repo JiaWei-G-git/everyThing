@@ -147,7 +147,9 @@ export class KnowledgeService {
       output: fm.output,
       estimatedTime: fm.estimatedTime,
       filePath,
-      content: parsed.content
+      content: parsed.content,
+      scenarioTags: fm.scenarioTags || [],
+      source: fm.source || 'core'
     };
   }
 
