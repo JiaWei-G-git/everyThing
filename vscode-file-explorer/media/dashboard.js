@@ -244,7 +244,7 @@
                 <div class="list-title">${escapeHtml(r.skillName)}</div>
                 <div class="list-meta">${timeAgo(r.timestamp)} · ${escapeHtml(r.agentName)} · ${escapeHtml(r.clusterName)}</div>
               </div>
-              <span class="list-arrow">→</span>
+              <span class="list-arrow">${iconSvg('arrowRight', 12)}</span>
             </div>
           `).join('') : '<div style="padding: 12px; color: var(--fg-secondary); font-size: 12px;">暂无使用记录</div>'}
         </div>
@@ -502,7 +502,7 @@
 
     return `
       <div class="cluster-page">
-        <button class="back-btn" id="cluster-back">← 返回</button>
+        <button class="back-btn" id="cluster-back">${iconSvg('arrowLeft', 14)} 返回</button>
         <div class="skill-header">
           <div class="skill-name">${escapeHtml(cluster.name)}</div>
           <div class="skill-meta">${escapeHtml(cluster.description)}</div>
@@ -519,7 +519,7 @@
                 <div class="cluster-desc">${escapeHtml(agent.description)}</div>
                 <div class="cluster-footer">
                   <span class="cluster-count">${agentSkills.length} 个技能</span>
-                  <span class="cluster-enter">查看 →</span>
+                  <span class="cluster-enter">查看 ${iconSvg('arrowRight', 12)}</span>
                 </div>
               </div>
               ${agentSkills.map(skill => `
@@ -529,7 +529,7 @@
                     <div class="list-title">${escapeHtml(skill.name)}</div>
                     <div class="list-meta">${escapeHtml(skill.description)}</div>
                   </div>
-                  <span class="list-arrow">→</span>
+                  <span class="list-arrow">${iconSvg('arrowRight', 12)}</span>
                 </div>
               `).join('')}
             `;
@@ -561,7 +561,7 @@
 
     return `
       <div class="skill-detail">
-        <button class="back-btn" id="skill-back">← 返回</button>
+        <button class="back-btn" id="skill-back">${iconSvg('arrowLeft', 14)} 返回</button>
         <div class="skill-header">
           <div class="skill-name">${escapeHtml(skill.name)}</div>
           <div class="skill-meta">
@@ -651,7 +651,7 @@
             </div>
           </div>
         `).join('')}
-        ${progress === 100 && totalItems > 0 ? '<div class="checklist-complete">✅ 全部完成</div>' : ''}
+        ${progress === 100 && totalItems > 0 ? `<div class="checklist-complete">${iconSvg('check', 14)} 全部完成</div>` : ''}
       </div>
     `;
   }
@@ -729,7 +729,7 @@
       if (!completeEl) {
         completeEl = document.createElement('div');
         completeEl.className = 'checklist-complete';
-        completeEl.textContent = '✅ 全部完成';
+        completeEl.innerHTML = `${iconSvg('check', 14)} 全部完成`;
         container?.appendChild(completeEl);
       }
     } else if (completeEl) {
@@ -741,7 +741,7 @@
     return `
       <div class="search-page">
         <div class="search-box">
-          <span>🔍</span>
+          <span>${iconSvg('search', 14)}</span>
           <input type="text" placeholder="输入技能名称、标签或关键词..." id="search-input">
         </div>
         <div class="search-results" id="search-results">
@@ -811,7 +811,7 @@
               <div class="list-title">${escapeHtml(s.name)}</div>
               <div class="list-meta">${escapeHtml(s.description)}</div>
             </div>
-            <span class="list-arrow">→</span>
+            <span class="list-arrow">${iconSvg('arrowRight', 12)}</span>
           </div>
         `).join('') : '<div class="favorites-empty">暂无收藏技能<br>点击技能详情页的收藏按钮添加</div>'}
       </div>
