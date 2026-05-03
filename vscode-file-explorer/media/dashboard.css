@@ -39,19 +39,31 @@ body {
 
 .nav-btn:hover { background: var(--bg-hover); color: var(--fg-primary); }
 .nav-btn.active { background: var(--bg-active); color: var(--fg-primary); }
-.nav-icon { font-size: 16px; }
+.nav-icon { display: flex; align-items: center; justify-content: center; }
 .nav-label { font-size: 10px; }
+
+/* SVG 图标全局对齐 */
+.icon {
+  display: inline-block;
+  vertical-align: -2px;
+  margin-right: 4px;
+}
+.icon:only-child {
+  margin-right: 0;
+}
 
 #app { padding: var(--gap); min-width: var(--min-width); }
 
-.logo-section { text-align: center; padding: 16px 0; }
-.logo-icon { font-size: 32px; margin-bottom: 4px; }
-.logo-title { font-size: 16px; font-weight: 600; color: var(--fg-primary); }
-.logo-version { font-size: 11px; color: var(--fg-secondary); }
-
-.welcome-section { text-align: center; padding: 12px 0; border-bottom: 1px solid var(--border-color); margin-bottom: var(--gap); }
-.welcome-title { font-size: 15px; font-weight: 500; margin-bottom: 4px; }
-.welcome-desc { font-size: 12px; color: var(--fg-secondary); }
+.logo-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 0 10px;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 10px;
+}
+.logo-title { font-size: 13px; font-weight: 600; color: var(--fg-primary); }
+.logo-version { font-size: 11px; color: var(--fg-secondary); letter-spacing: 0.04em; }
 
 .search-section { display: flex; flex-direction: column; gap: 8px; margin-bottom: var(--gap); }
 .search-box {
@@ -184,10 +196,10 @@ body {
 /* 双分类导航 Tab */
 .view-mode-tabs {
   display: flex;
-  gap: 8px;
-  margin-bottom: var(--gap);
+  gap: 4px;
+  margin-bottom: 10px;
   background: var(--bg-secondary);
-  padding: 4px;
+  padding: 3px;
   border-radius: var(--radius);
 }
 
@@ -197,9 +209,9 @@ body {
   align-items: center;
   justify-content: center;
   gap: 6px;
-  padding: 8px 12px;
+  padding: 5px 10px;
   border: none;
-  border-radius: 4px;
+  border-radius: 3px;
   background: transparent;
   color: var(--fg-secondary);
   font-size: 12px;
@@ -243,6 +255,127 @@ body {
   margin-left: auto;
 }
 
+/* 核心集群大卡 */
+.cluster-card.cluster-card-core {
+  display: block;
+  padding: 14px 14px 14px 18px;
+  background: var(--card-bg);
+  border-left: 3px solid var(--fg-accent);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background 0.15s ease;
+  margin-bottom: 10px;
+}
+.cluster-card.cluster-card-core:hover {
+  background: var(--bg-hover);
+  transform: none;
+}
+.cluster-card-core-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.cluster-card-core-title {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+.cluster-card-core .cluster-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--fg-primary);
+}
+.cluster-card-core .cluster-desc {
+  font-size: 11px;
+  color: var(--fg-secondary);
+  margin: 0;
+}
+.cluster-badge-core {
+  padding: 2px 8px;
+  background: var(--fg-accent);
+  color: white;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.cluster-stats {
+  display: flex;
+  gap: 14px;
+}
+.cluster-stat-item {
+  font-size: 11px;
+  color: var(--fg-secondary);
+}
+
+/* 紧凑集群卡 (其他 5 个,2 列) */
+.clusters-grid-compact {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+.cluster-card.cluster-card-compact {
+  display: block;
+  padding: 10px 12px;
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.cluster-card.cluster-card-compact:hover {
+  background: var(--bg-hover);
+  transform: none;
+}
+.cluster-name-compact {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--fg-primary);
+  margin-bottom: 4px;
+}
+.cluster-meta-compact {
+  font-size: 11px;
+  color: var(--fg-secondary);
+}
+
+/* Dashboard 底部 footer */
+.dashboard-footer {
+  margin-top: 20px;
+  padding: 12px 0 6px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+}
+.dashboard-footer-version {
+  font-size: 11px;
+  color: var(--fg-secondary);
+  letter-spacing: 0.02em;
+}
+.dashboard-footer-links {
+  font-size: 11px;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.dashboard-footer-links a {
+  color: var(--fg-accent);
+  text-decoration: none;
+  cursor: pointer;
+}
+.dashboard-footer-links a:hover {
+  text-decoration: underline;
+}
+.dashboard-footer-sep {
+  color: var(--fg-secondary);
+}
+
 /* 场景浏览网格 */
 .scenarios-section {
   margin-bottom: var(--gap);
@@ -274,7 +407,8 @@ body {
 }
 
 .scenario-icon {
-  font-size: 28px;
+  display: flex;
+  justify-content: center;
   margin-bottom: 8px;
 }
 
@@ -303,15 +437,15 @@ body {
 
 .quick-create-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 8px;
 }
 
 .quick-create-card {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 14px 10px;
+  padding: 10px 8px;
   background: var(--bg-secondary);
   border: 1px dashed var(--border-color);
   border-radius: var(--radius);
@@ -326,8 +460,9 @@ body {
 }
 
 .quick-create-icon {
-  font-size: 24px;
-  margin-bottom: 6px;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 4px;
 }
 
 .quick-create-name {

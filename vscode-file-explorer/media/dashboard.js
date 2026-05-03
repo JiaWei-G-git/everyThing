@@ -1,4 +1,46 @@
 (function () {
+  // 图标系统:Lucide 风格 line art,16px stroke 1.5px,跟随 currentColor
+  const ICON_PATHS = {
+    search: '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>',
+    star: '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
+    settings: '<path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/>',
+    clipboard: '<rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>',
+    clock: '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+    flame: '<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-1.072-5.143 1.5-7.5 2.643 2.357 3.643 5.357 3 8 1.286-1.072 2.5-2.072 3.5-3 1.714 2.786 1.5 5.786-1 8.5a6.714 6.714 0 0 1-3 2"/>',
+    rocket: '<path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/>',
+    fileText: '<path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/>',
+    wrench: '<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>',
+    code: '<polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>',
+    database: '<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/>',
+    compass: '<circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>',
+    barChart: '<line x1="12" x2="12" y1="20" y2="10"/><line x1="18" x2="18" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="16"/>',
+    checkCircle: '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>',
+    bookOpen: '<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>',
+    target: '<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
+    tag: '<path d="M12 2H2v10l9.29 9.29c.94.94 2.48.94 3.42 0l6.58-6.58c.94-.94.94-2.48 0-3.42L12 2Z"/><line x1="7" x2="7.01" y1="7" y2="7"/>',
+    package: '<path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/>',
+    download: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/>',
+    folderOpen: '<path d="m6 14 1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2"/>',
+    zap: '<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
+    home: '<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',
+    arrowRight: '<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>',
+    arrowLeft: '<path d="m12 19-7-7 7-7"/><path d="M19 12H5"/>',
+    chevronRight: '<path d="m9 18 6-6-6-6"/>',
+    chevronDown: '<path d="m6 9 6 6 6-6"/>',
+    plus: '<path d="M5 12h14"/><path d="M12 5v14"/>',
+    check: '<polyline points="20 6 9 17 4 12"/>',
+    info: '<circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="16" y2="12"/><line x1="12" x2="12.01" y1="8" y2="8"/>',
+    alertTriangle: '<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" x2="12" y1="9" y2="13"/><line x1="12" x2="12.01" y1="17" y2="17"/>',
+    sparkles: '<path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/>',
+    listChecks: '<line x1="10" x2="21" y1="6" y2="6"/><line x1="10" x2="21" y1="12" y2="12"/><line x1="10" x2="21" y1="18" y2="18"/><polyline points="3 6 4 7 6 5"/><polyline points="3 12 4 13 6 11"/><polyline points="3 18 4 19 6 17"/>'
+  };
+
+  function iconSvg(name, size = 16) {
+    const paths = ICON_PATHS[name];
+    if (!paths) return '';
+    return `<svg class="icon icon-${name}" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths}</svg>`;
+  }
+
   const state = {
     route: '/dashboard',
     data: null,
@@ -58,6 +100,7 @@
   });
 
   document.addEventListener('DOMContentLoaded', () => {
+    initNavIcons();
     vscode.postMessage({ type: 'ready' });
     setupNavigation();
   });
@@ -71,6 +114,13 @@
   function updateNavActive() {
     document.querySelectorAll('.nav-btn').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.route === state.route);
+    });
+  }
+
+  function initNavIcons() {
+    document.querySelectorAll('.nav-icon[data-icon]').forEach(el => {
+      const name = el.dataset.icon;
+      if (name) el.innerHTML = iconSvg(name, 16);
     });
   }
 
@@ -137,22 +187,13 @@
     return `
       <div class="dashboard-page">
         <div class="logo-section">
-          <div class="logo-icon">🤖</div>
-          <div class="logo-title">AI Knowledge Base</div>
-          <div class="logo-version">v1.0.0</div>
-        </div>
-        <div class="welcome-section">
-          <div class="welcome-title">欢迎来到 AI 技能知识库</div>
-          <div class="welcome-desc">沉淀团队 AI 协作最佳实践，让每个人都能高效使用 AI</div>
+          <div class="logo-title">${iconSvg('zap', 14)}<span>AI 技能知识库</span></div>
+          <div class="logo-version">v0.2.0</div>
         </div>
         <div class="search-section">
           <div class="search-box" id="dashboard-search-box">
-            <span>🔍</span>
+            <span>${iconSvg('search', 14)}</span>
             <input type="text" placeholder="快速搜索技能或智能体..." id="dashboard-search-input">
-          </div>
-          <div class="search-actions">
-            <button class="btn" id="btn-docs">查看文档</button>
-            <button class="btn btn-primary" id="btn-start">开始使用</button>
           </div>
         </div>
         <div class="stats-section">
@@ -160,17 +201,14 @@
             <div class="stat-card">
               <div class="stat-number">${state.stats.clusterCount || clusters.length}</div>
               <div class="stat-label">智能体集群</div>
-              <div class="stat-change">+2 较上月</div>
             </div>
             <div class="stat-card">
               <div class="stat-number">${state.stats.agentCount || agents.length}</div>
               <div class="stat-label">智能体</div>
-              <div class="stat-change">+5 较上月</div>
             </div>
             <div class="stat-card">
               <div class="stat-number">${state.stats.skillCount || skills.length}</div>
               <div class="stat-label">技能</div>
-              <div class="stat-change">+12 较上月</div>
             </div>
             <div class="stat-card">
               <div class="stat-number">${state.stats.scenarioCount || 8}</div>
@@ -181,10 +219,10 @@
 
         <div class="view-mode-tabs">
           <button class="view-mode-btn ${state.viewMode === 'role' ? 'active' : ''}" data-mode="role">
-            <span>🏷️</span> 按角色浏览
+            ${iconSvg('tag', 14)} 按角色浏览
           </button>
           <button class="view-mode-btn ${state.viewMode === 'scenario' ? 'active' : ''}" data-mode="scenario">
-            <span>🎯</span> 按场景浏览
+            ${iconSvg('target', 14)} 按场景浏览
           </button>
         </div>
 
@@ -196,12 +234,12 @@
         </div>
         <div class="recent-section">
           <div class="section-header">
-            <span class="section-title">🕐 最近使用</span>
+            <span class="section-title">${iconSvg('clock', 14)} 最近使用</span>
             <button class="section-action" data-route="/recent">全部历史</button>
           </div>
           ${recent.length > 0 ? recent.map(r => `
             <div class="list-item" data-skill-id="${r.skillId}">
-              <span class="list-icon">📄</span>
+              <span class="list-icon">${iconSvg('fileText', 14)}</span>
               <div class="list-content">
                 <div class="list-title">${escapeHtml(r.skillName)}</div>
                 <div class="list-meta">${timeAgo(r.timestamp)} · ${escapeHtml(r.agentName)} · ${escapeHtml(r.clusterName)}</div>
@@ -213,7 +251,7 @@
         ${renderQuickCreate()}
         ${renderMyTopScenarios()}
         <div class="guide-section">
-          <div class="guide-title">🚀 新手上路</div>
+          <div class="guide-title">${iconSvg('rocket', 14)} 新手上路</div>
           <div class="guide-desc">只需 4 步，开始使用 AI 技能知识库</div>
           <div class="guide-steps">
             <div class="guide-step">
@@ -245,9 +283,14 @@
               </div>
             </div>
           </div>
-          <div class="guide-actions">
-            <button class="btn" id="btn-guide">阅读完整指南</button>
-            <button class="btn" id="btn-video">观看视频教程</button>
+        </div>
+
+        <div class="dashboard-footer">
+          <div class="dashboard-footer-version">v0.2.0 · AI Skill KB</div>
+          <div class="dashboard-footer-links">
+            <a href="#" data-action="docs">文档</a>
+            <span class="dashboard-footer-sep">·</span>
+            <a href="#" data-action="support">支持</a>
           </div>
         </div>
       </div>
@@ -255,58 +298,71 @@
   }
 
   function renderRoleView(clusters, agents, skills) {
-    // 开发工程集群永远排第一
-    const sortedClusters = [...clusters].sort((a, b) => {
-      if (a.id === '03-开发工程') return -1;
-      if (b.id === '03-开发工程') return 1;
-      return a.id.localeCompare(b.id);
-    });
+    const core = clusters.find(c => c.id === '03-开发工程');
+    const others = clusters
+      .filter(c => c.id !== '03-开发工程')
+      .sort((a, b) => a.id.localeCompare(b.id));
 
     return `
       <div class="clusters-section">
         <div class="section-header">
-          <span class="section-title">📋 选择你的角色，快速开始</span>
+          <span class="section-title">角色集群</span>
+          <button class="section-action" data-route="/dashboard">查看全部</button>
         </div>
-        <div class="clusters-grid">
-          ${sortedClusters.map(c => {
-            const clusterAgents = c.agents.map(id => agents.find(a => a.id === id)).filter(Boolean);
-            const clusterSkills = c.skills.map(id => skills.find(s => s.id === id)).filter(Boolean);
-            return `
-              <div class="cluster-card" data-cluster-id="${c.id}">
-                <div class="cluster-header">
-                  <span class="cluster-icon">⚡</span>
-                  <span class="cluster-name">${escapeHtml(c.name)}</span>
-                  ${c.id === '03-开发工程' ? '<span class="cluster-badge">核心</span>' : ''}
-                </div>
-                <div class="cluster-desc">${escapeHtml(c.description)}</div>
-                <div class="cluster-footer">
-                  <span class="cluster-count">${clusterAgents.length} 个智能体 · ${clusterSkills.length} 个技能</span>
-                  <span class="cluster-enter">进入 →</span>
-                </div>
-              </div>
-            `;
-          }).join('')}
+        ${core ? renderCoreClusterCard(core, agents, skills) : ''}
+        <div class="clusters-grid-compact">
+          ${others.map(c => renderClusterCardCompact(c, agents, skills)).join('')}
         </div>
+      </div>
+    `;
+  }
+
+  function renderCoreClusterCard(c, agents, skills) {
+    const aCount = c.agents.length;
+    const sCount = c.skills.length;
+    return `
+      <div class="cluster-card cluster-card-core" data-cluster-id="${c.id}">
+        <div class="cluster-card-core-header">
+          <div class="cluster-card-core-title">
+            <span class="cluster-name">${escapeHtml(c.name)}</span>
+            <span class="cluster-desc">${escapeHtml(c.description)}</span>
+          </div>
+          <span class="cluster-badge-core">CORE</span>
+        </div>
+        <div class="cluster-stats">
+          <span class="cluster-stat-item">${iconSvg('zap', 12)} ${aCount} 智能体</span>
+          <span class="cluster-stat-item">${iconSvg('clipboard', 12)} ${sCount} 技能</span>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderClusterCardCompact(c, agents, skills) {
+    const aCount = c.agents.length;
+    return `
+      <div class="cluster-card cluster-card-compact" data-cluster-id="${c.id}">
+        <div class="cluster-name-compact">${escapeHtml(c.name)}</div>
+        <div class="cluster-meta-compact">${iconSvg('zap', 12)} ${aCount} 智能体</div>
       </div>
     `;
   }
 
   function renderScenarioView(skills) {
     const scenarios = state.scenarios.length > 0 ? state.scenarios : [
-      { id: 'write-doc', name: '写文档', icon: '📝', description: '周报、会议纪要、项目材料、测试报告' },
-      { id: 'troubleshoot', name: '查故障', icon: '🔧', description: '排查、巡检、日志分析' },
-      { id: 'write-code', name: '写代码', icon: '💻', description: '生成、Review、Bug 定位' },
-      { id: 'data-work', name: '搞数据', icon: '🗄️', description: 'SQL、报表、迁移、清理' },
-      { id: 'design', name: '做设计', icon: '📐', description: '原型、数模、架构、接口' },
-      { id: 'manage-project', name: '管项目', icon: '📊', description: '计划、跟踪、汇报' },
-      { id: 'test-quality', name: '测试质量', icon: '✅', description: '用例、审查、验证' },
-      { id: 'knowledge', name: '知识检索', icon: '📚', description: '问答、文档整理' }
+      { id: 'write-doc', name: '写文档', icon: 'fileText', description: '周报、会议纪要、项目材料、测试报告' },
+      { id: 'troubleshoot', name: '查故障', icon: 'wrench', description: '排查、巡检、日志分析' },
+      { id: 'write-code', name: '写代码', icon: 'code', description: '生成、Review、Bug 定位' },
+      { id: 'data-work', name: '搞数据', icon: 'database', description: 'SQL、报表、迁移、清理' },
+      { id: 'design', name: '做设计', icon: 'compass', description: '原型、数模、架构、接口' },
+      { id: 'manage-project', name: '管项目', icon: 'barChart', description: '计划、跟踪、汇报' },
+      { id: 'test-quality', name: '测试质量', icon: 'checkCircle', description: '用例、审查、验证' },
+      { id: 'knowledge', name: '知识检索', icon: 'bookOpen', description: '问答、文档整理' }
     ];
 
     return `
       <div class="scenarios-section">
         <div class="section-header">
-          <span class="section-title">💡 你在做什么？选择一个场景开始</span>
+          <span class="section-title">${iconSvg('sparkles', 14)} 你在做什么？选择一个场景开始</span>
         </div>
         <div class="scenarios-grid">
           ${scenarios.map(s => {
@@ -315,7 +371,7 @@
             ).length;
             return `
               <div class="scenario-card" data-scenario-id="${s.id}">
-                <div class="scenario-icon">${s.icon}</div>
+                <div class="scenario-icon">${iconSvg(s.icon, 28)}</div>
                 <div class="scenario-name">${escapeHtml(s.name)}</div>
                 <div class="scenario-desc">${escapeHtml(s.description)}</div>
                 <div class="scenario-count">${skillCount} 个技能</div>
@@ -331,21 +387,21 @@
     return `
       <div class="quick-create-section">
         <div class="section-header">
-          <span class="section-title">⚡ 快速创建</span>
+          <span class="section-title">${iconSvg('zap', 14)} 快速模板</span>
         </div>
         <div class="quick-create-grid">
           <div class="quick-create-card" data-action="写周报">
-            <div class="quick-create-icon">📝</div>
+            <div class="quick-create-icon">${iconSvg('fileText', 18)}</div>
             <div class="quick-create-name">写周报</div>
             <div class="quick-create-desc">一键生成工作周报</div>
           </div>
           <div class="quick-create-card" data-action="会议纪要">
-            <div class="quick-create-icon">📋</div>
+            <div class="quick-create-icon">${iconSvg('clipboard', 18)}</div>
             <div class="quick-create-name">会议纪要</div>
             <div class="quick-create-desc">整理会议要点</div>
           </div>
           <div class="quick-create-card" data-action="项目材料">
-            <div class="quick-create-icon">📁</div>
+            <div class="quick-create-icon">${iconSvg('folderOpen', 18)}</div>
             <div class="quick-create-name">项目材料</div>
             <div class="quick-create-desc">生成项目交付文档</div>
           </div>
@@ -363,7 +419,7 @@
     return `
       <div class="top-scenarios-section">
         <div class="section-header">
-          <span class="section-title">🔥 我的常用场景</span>
+          <span class="section-title">${iconSvg('flame', 14)} 我的常用场景</span>
         </div>
         <div class="top-scenarios-list">
           ${topScenarios.map((s, i) => `
@@ -427,6 +483,14 @@
         vscode.postMessage({ type: 'track:scenario', scenarioId });
       });
     });
+
+    document.querySelectorAll('.dashboard-footer-links a').forEach(a => {
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        const action = a.dataset.action;
+        showToast('info', action === 'docs' ? '文档功能即将推出' : '支持功能即将推出');
+      });
+    });
   }
 
   function renderClusterDetail() {
@@ -449,7 +513,7 @@
             return `
               <div class="cluster-card" data-agent-id="${agent.id}">
                 <div class="cluster-header">
-                  <span class="cluster-icon">🤖</span>
+                  <span class="cluster-icon">${iconSvg('sparkles', 14)}</span>
                   <span class="cluster-name">${escapeHtml(agent.name)}</span>
                 </div>
                 <div class="cluster-desc">${escapeHtml(agent.description)}</div>
@@ -460,7 +524,7 @@
               </div>
               ${agentSkills.map(skill => `
                 <div class="list-item" data-skill-id="${skill.id}" style="margin-left: 16px;">
-                  <span class="list-icon">⚡</span>
+                  <span class="list-icon">${iconSvg('fileText', 14)}</span>
                   <div class="list-content">
                     <div class="list-title">${escapeHtml(skill.name)}</div>
                     <div class="list-meta">${escapeHtml(skill.description)}</div>
@@ -503,7 +567,7 @@
           <div class="skill-meta">
             <span>版本: ${skill.version}</span>
             <span>${skill.date}</span>
-            ${isChecklist ? '<span class="skill-type-badge">📋 检查清单</span>' : ''}
+            ${isChecklist ? `<span class="skill-type-badge">${iconSvg('listChecks', 11)} 检查清单</span>` : ''}
           </div>
           <div class="skill-tags">
             ${skill.tags.map(t => `<span class="skill-tag">#${escapeHtml(t)}</span>`).join('')}
@@ -511,14 +575,14 @@
           </div>
         </div>
         <div style="display: flex; gap: 8px; margin-bottom: 12px; font-size: 11px; color: var(--fg-secondary);">
-          ${skill.estimatedTime ? `<span>⏱ 预计: ${skill.estimatedTime}</span>` : ''}
-          <span>${skill.standalone ? '🔗 可独立使用' : '🔗 需配合智能体'}</span>
+          ${skill.estimatedTime ? `<span>${iconSvg('clock', 11)} 预计: ${skill.estimatedTime}</span>` : ''}
+          <span>${iconSvg('check', 11)} ${skill.standalone ? '可独立使用' : '需配合智能体'}</span>
         </div>
         <div class="skill-actions">
-          <button class="btn" id="btn-copy">📋 复制 Prompt</button>
-          <button class="btn" id="btn-install-claude">⬇️ 安装到 Claude</button>
-          <button class="btn" id="btn-install-cursor">⬇️ 安装到 Cursor</button>
-          <button class="btn ${isFav ? 'btn-primary' : ''}" id="btn-favorite">${isFav ? '⭐ 已收藏' : '☆ 收藏'}</button>
+          <button class="btn" id="btn-copy">${iconSvg('clipboard', 13)} 复制 Prompt</button>
+          <button class="btn" id="btn-install-claude">${iconSvg('download', 13)} 安装到 Claude</button>
+          <button class="btn" id="btn-install-cursor">${iconSvg('download', 13)} 安装到 Cursor</button>
+          <button class="btn ${isFav ? 'btn-primary' : ''}" id="btn-favorite">${iconSvg('star', 13)} ${isFav ? '已收藏' : '收藏'}</button>
         </div>
         <div class="skill-content" id="skill-content">
           ${isChecklist ? renderChecklist(skill.content) : markdownToHtml(skill.content)}
@@ -738,11 +802,11 @@
     return `
       <div class="favorites-page">
         <div class="section-header">
-          <span class="section-title">⭐ 我的收藏</span>
+          <span class="section-title">${iconSvg('star', 14)} 我的收藏</span>
         </div>
         ${favSkills.length > 0 ? favSkills.map(s => `
           <div class="list-item" data-skill-id="${s.id}">
-            <span class="list-icon">⚡</span>
+            <span class="list-icon">${iconSvg('fileText', 14)}</span>
             <div class="list-content">
               <div class="list-title">${escapeHtml(s.name)}</div>
               <div class="list-meta">${escapeHtml(s.description)}</div>
@@ -769,7 +833,7 @@
     return `
       <div class="settings-page">
         <div class="section-header">
-          <span class="section-title">⚙ 设置</span>
+          <span class="section-title">${iconSvg('settings', 14)} 设置</span>
         </div>
 
         <div class="setting-group">
@@ -791,7 +855,7 @@
         </div>
 
         <div class="setting-group">
-          <div class="setting-group-title">📦 行业知识包</div>
+          <div class="setting-group-title">${iconSvg('package', 14)} 行业知识包</div>
           <div class="setting-desc">加载行业专属的智能体和技能</div>
           <div id="industry-packages-list">
             <div class="industry-package-item">
@@ -810,11 +874,11 @@
         </div>
 
         <div class="setting-group">
-          <div class="setting-group-title">📥 批量导入</div>
+          <div class="setting-group-title">${iconSvg('download', 14)} 批量导入</div>
           <div class="setting-desc">从目录或 JSON 导入扩展层 Skill</div>
           <div style="margin-top: 8px;">
             <button class="btn" id="btn-import-skills">
-              <span>📂</span> 选择导入目录
+              <span>${iconSvg('folderOpen', 14)}</span> 选择导入目录
             </button>
           </div>
         </div>

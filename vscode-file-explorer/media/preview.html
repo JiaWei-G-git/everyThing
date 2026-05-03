@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 技能知识库 — 浏览器预览</title>
+  <link rel="stylesheet" href="./dashboard.css">
+  <style>
+    /* 浏览器无 VS Code 主题变量，强制暗色背景 */
+    body {
+      background: #1e1e1e;
+      color: #cccccc;
+      min-height: 100vh;
+      padding-top: 26px;
+    }
+    .preview-banner {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 999;
+      background: #f5a623; color: #1e1e1e;
+      padding: 4px 12px; font-size: 11px; font-family: monospace;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .preview-banner button {
+      background: rgba(0,0,0,0.15); border: 1px solid rgba(0,0,0,0.3);
+      color: #1e1e1e; padding: 2px 8px; font-size: 11px; cursor: pointer; border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+  <div class="preview-banner">
+    <span>🛠 浏览器预览模式 (mock 数据 / 无 VS Code 后端) — 编辑 dashboard.js / dashboard.css 后刷新即可看到效果</span>
+    <button onclick="location.reload()">刷新</button>
+  </div>
+
+  <nav class="top-nav">
+    <button class="nav-btn active" data-route="/dashboard" title="首页">
+      <span class="nav-icon">🏠</span>
+      <span class="nav-label">首页</span>
+    </button>
+    <button class="nav-btn" data-route="/search" title="搜索">
+      <span class="nav-icon">🔍</span>
+      <span class="nav-label">搜索</span>
+    </button>
+    <button class="nav-btn" data-route="/favorites" title="收藏">
+      <span class="nav-icon">⭐</span>
+      <span class="nav-label">收藏</span>
+    </button>
+    <button class="nav-btn" data-route="/settings" title="设置">
+      <span class="nav-icon">⚙</span>
+      <span class="nav-label">设置</span>
+    </button>
+  </nav>
+
+  <main id="app"></main>
+  <div id="toast-container"></div>
+
+  <script>
+    // ========== Mock VS Code Webview API ==========
+    let mockSettings = { localPath: '', defaultInstallTarget: 'claude-code' };
+
+    window.acquireVsCodeApi = () => ({
+      postMessage: (msg) => {
+        console.log('[mock postMessage]', msg);
+        switch (msg.type) {
+          case 'ready':
+            setTimeout(sendInit, 30);
+            break;
+          case 'switch:viewMode':
+            console.log('  → viewMode switched to', msg.mode);
+            break;
+          case 'track:scenario':
+            console.log('  → scenario tracked:', msg.scenarioId);
+            break;
+          case 'open:skill':
+            // 触发 skill detail 时,后端无操作,前端已 navigateTo('/skill')
+            break;
+          case 'get:settings':
+            window.postMessage({ type: 'settings:data', data: mockSettings }, '*');
+            break;
+          case 'save:settings':
+            mockSettings = msg.data;
+            break;
+          case 'install:skill':
+            window.postMessage({ type: 'install:result', data: { success: true, message: `[预览] 已模拟安装到 ${msg.target}` } }, '*');
+            break;
+          case 'copy:prompt':
+            window.postMessage({ type: 'copy:result', data: { message: '[预览] 已复制（实际无操作）' } }, '*');
+            break;
+          case 'toggle:favorite':
+            const idx = mockState.favorites.indexOf(msg.skillId);
+            if (idx >= 0) mockState.favorites.splice(idx, 1);
+            else mockState.favorites.push(msg.skillId);
+            sendInitState();
+            break;
+          case 'search:query':
+            handleSearch(msg.query);
+            break;
+        }
+      },
+      getState: () => null,
+      setState: () => {}
+    });
+
+    // ========== Mock 数据 ==========
+    const checklistContent = `# 检查清单：采集故障排查
+
+按以下步骤逐项确认。
+
+## 步骤 1：确认故障现象
+- [ ] 终端完全离线（ping 不通）
+- [ ] 仅召测失败（ping 通但业务不通）
+- [ ] 采集率下降而非完全中断
+
+## 步骤 2：检查网络层
+- [ ] Redis 集群连接状态正常
+- [ ] 采集服务进程在运行
+- [ ] 端口未被占用或防火墙拦截
+- [ ] 网络连通性测试通过
+
+## 步骤 3：检查业务层
+- [ ] 采集任务配置正确且已下发
+- [ ] 终端档案信息完整且有效
+- [ ] 日志无异常报错或超时
+- [ ] 数据库连接正常
+
+## 步骤 4：兜底与上报
+- [ ] 已尝试重启采集服务
+- [ ] 已记录故障时间窗口与影响范围
+- [ ] 已上报二线 / 知识库归档`;
+
+    const normalSkillContent = `# 技能内容
+
+## 适用场景
+
+✅ **适合使用**：
+- 场景 A
+- 场景 B
+
+## 使用方式
+
+1. 第一步
+2. 第二步
+
+\`\`\`
+sample code block
+\`\`\`
+`;
+
+    const mockKB = {
+      clusters: [
+        { id: '01-需求工程', name: '需求工程', description: '需求采集、分析、规格化',
+          agents: ['需求采集智能体', '需求分析智能体'], skills: ['会议纪要提取', '需求拆解'] },
+        { id: '02-设计工程', name: '设计工程', description: '原型、UI、架构设计',
+          agents: ['原型设计智能体'], skills: ['根据需求生成原型'] },
+        { id: '03-开发工程', name: '开发工程', description: '架构、编码、API 设计',
+          agents: ['架构设计智能体'], skills: ['API设计'] },
+        { id: '04-测试工程', name: '测试工程', description: '测试用例、自动化',
+          agents: ['测试设计智能体'], skills: ['测试用例生成'] },
+        { id: '05-运维交付', name: '运维交付', description: 'CI/CD、部署、监控',
+          agents: ['部署智能体'], skills: ['CI-CD配置', '采集故障排查'] },
+        { id: '06-专项能力', name: '专项能力', description: '日志分析、诊断',
+          agents: ['代码诊断智能体'], skills: ['日志分析'] }
+      ],
+      agents: [
+        { id: '需求采集智能体', name: '需求采集智能体', description: '从客户访谈采集需求', cluster: '01-需求工程', roles: [], skills: ['会议纪要提取'], filePath: '' },
+        { id: '需求分析智能体', name: '需求分析智能体', description: '分析需求转化为故事', cluster: '01-需求工程', roles: [], skills: ['需求拆解'], filePath: '' },
+        { id: '原型设计智能体', name: '原型设计智能体', description: '生成产品原型', cluster: '02-设计工程', roles: [], skills: ['根据需求生成原型'], filePath: '' },
+        { id: '架构设计智能体', name: '架构设计智能体', description: '系统架构设计', cluster: '03-开发工程', roles: [], skills: ['API设计'], filePath: '' },
+        { id: '测试设计智能体', name: '测试设计智能体', description: '测试方案设计', cluster: '04-测试工程', roles: [], skills: ['测试用例生成'], filePath: '' },
+        { id: '部署智能体', name: '部署智能体', description: 'CI/CD 配置', cluster: '05-运维交付', roles: [], skills: ['CI-CD配置', '采集故障排查'], filePath: '' },
+        { id: '代码诊断智能体', name: '代码诊断智能体', description: '代码与日志诊断', cluster: '06-专项能力', roles: [], skills: ['日志分析'], filePath: '' }
+      ],
+      skills: [
+        { id: '会议纪要提取', name: '会议纪要提取', description: '从会议记录提取需求要点',
+          type: 'skill', version: '1.0.0', date: '2026-04-30', parentAgent: '需求采集智能体',
+          cluster: '01-需求工程', standalone: true, tags: ['需求', '会议'],
+          scenarioTags: ['写文档', '管项目'], source: 'core',
+          input: '会议记录文本', output: '结构化需求要点', estimatedTime: '10-15分钟',
+          filePath: '', content: normalSkillContent },
+        { id: '需求拆解', name: '需求拆解', description: '将模糊需求拆解为用户故事',
+          type: 'skill', version: '1.0.0', date: '2026-04-30', parentAgent: '需求分析智能体',
+          cluster: '01-需求工程', standalone: true, tags: ['需求', '分析'],
+          scenarioTags: ['做设计', '管项目'], source: 'core',
+          estimatedTime: '20-40分钟',
+          filePath: '', content: normalSkillContent },
+        { id: '根据需求生成原型', name: '根据需求生成原型', description: '基于需求文档生成原型',
+          type: 'skill', version: '1.0.0', date: '2026-04-30', parentAgent: '原型设计智能体',
+          cluster: '02-设计工程', standalone: true, tags: ['设计', '原型'],
+          scenarioTags: ['做设计'], source: 'core',
+          estimatedTime: '30-60分钟',
+          filePath: '', content: normalSkillContent },
+        { id: 'API设计', name: 'API设计', description: '设计 RESTful API 规范',
+          type: 'skill', version: '1.0.0', date: '2026-04-30', parentAgent: '架构设计智能体',
+          cluster: '03-开发工程', standalone: true, tags: ['开发', 'API'],
+          scenarioTags: ['写代码', '做设计'], source: 'core',
+          estimatedTime: '15-30分钟',
+          filePath: '', content: normalSkillContent },
+        { id: '测试用例生成', name: '测试用例生成', description: '根据需求生成测试用例',
+          type: 'skill', version: '1.0.0', date: '2026-04-30', parentAgent: '测试设计智能体',
+          cluster: '04-测试工程', standalone: true, tags: ['测试', '用例'],
+          scenarioTags: ['测试质量'], source: 'core',
+          estimatedTime: '10-20分钟',
+          filePath: '', content: normalSkillContent },
+        { id: 'CI-CD配置', name: 'CI/CD 配置', description: '配置持续集成与部署流水线',
+          type: 'skill', version: '1.0.0', date: '2026-04-30', parentAgent: '部署智能体',
+          cluster: '05-运维交付', standalone: true, tags: ['运维', 'CI/CD'],
+          scenarioTags: ['查故障', '写代码'], source: 'core',
+          estimatedTime: '20-40分钟',
+          filePath: '', content: normalSkillContent },
+        { id: '日志分析', name: '日志分析', description: '分析系统日志定位根因',
+          type: 'skill', version: '1.0.0', date: '2026-04-30', parentAgent: '代码诊断智能体',
+          cluster: '06-专项能力', standalone: true, tags: ['运维', '日志'],
+          scenarioTags: ['查故障'], source: 'core',
+          estimatedTime: '15-30分钟',
+          filePath: '', content: normalSkillContent },
+        { id: '采集故障排查', name: '采集故障排查', description: '终端离线、召测失败排查流程',
+          type: 'checklist', version: '1.0.0', date: '2026-05-03', parentAgent: '部署智能体',
+          cluster: '05-运维交付', standalone: true, tags: ['运维', '采集', '故障排查'],
+          scenarioTags: ['查故障'], source: 'core',
+          estimatedTime: '15分钟',
+          filePath: '', content: checklistContent }
+      ]
+    };
+
+    const mockState = {
+      recent: [
+        { skillId: 'API设计', skillName: 'API 设计', agentName: '架构设计智能体', clusterName: '开发工程', timestamp: Date.now() - 3600000 },
+        { skillId: '采集故障排查', skillName: '采集故障排查', agentName: '部署智能体', clusterName: '运维交付', timestamp: Date.now() - 86400000 }
+      ],
+      favorites: ['会议纪要提取'],
+      stats: { clusterCount: 6, agentCount: 7, skillCount: 8, scenarioCount: 8 },
+      usageStats: { skillUsage: {}, scenarioUsage: { 'write-doc': 5, 'troubleshoot': 3 }, lastUsed: Date.now() },
+      topScenarios: [
+        { id: 'write-doc', name: '写文档', count: 5 },
+        { id: 'troubleshoot', name: '查故障', count: 3 }
+      ],
+      viewMode: 'role'
+    };
+
+    function sendInit() {
+      window.postMessage({ type: 'init:data', data: { clusters: mockKB.clusters, agents: mockKB.agents, skills: mockKB.skills } }, '*');
+      setTimeout(sendInitState, 20);
+    }
+
+    function sendInitState() {
+      window.postMessage({ type: 'init:state', data: mockState }, '*');
+    }
+
+    function handleSearch(query) {
+      const q = query.toLowerCase();
+      const results = mockKB.skills
+        .filter(s => s.name.toLowerCase().includes(q) || (s.description||'').toLowerCase().includes(q) || (s.tags||[]).some(t => t.toLowerCase().includes(q)) || (s.scenarioTags||[]).some(t => t.toLowerCase().includes(q)))
+        .map(s => ({ skill: s, score: 1, matchedFields: ['名称'] }));
+      window.postMessage({ type: 'search:result', data: results }, '*');
+    }
+  </script>
+
+  <script src="./dashboard.js"></script>
+</body>
+</html>

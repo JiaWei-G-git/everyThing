@@ -2,7 +2,7 @@
   "name": "ai-knowledge-base",
   "displayName": "AI 技能知识库",
   "description": "团队 AI 技能知识库平台",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "publisher": "your-publisher-name",
   "license": "MIT",
   "engines": {
