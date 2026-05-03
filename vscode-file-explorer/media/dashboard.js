@@ -5,6 +5,10 @@
     recent: [],
     favorites: [],
     stats: {},
+    usageStats: { skillUsage: {}, scenarioUsage: {}, lastUsed: 0 },
+    topScenarios: [],
+    viewMode: 'role',
+    scenarios: [],
     settings: {},
     searchResults: [],
     currentClusterId: null,
@@ -24,6 +28,13 @@
         state.recent = message.data.recent;
         state.favorites = message.data.favorites;
         state.stats = message.data.stats;
+        state.usageStats = message.data.usageStats || state.usageStats;
+        state.topScenarios = message.data.topScenarios || [];
+        state.viewMode = message.data.viewMode || 'role';
+        render();
+        break;
+      case 'scenarios:data':
+        state.scenarios = message.data;
         render();
         break;
       case 'search:result':
@@ -122,7 +133,6 @@
   function renderDashboard() {
     const { clusters, agents, skills } = state.data;
     const recent = state.recent.slice(0, 4);
-    const hotSkills = getHotSkills(skills);
 
     return `
       <div class="dashboard-page">
@@ -162,30 +172,27 @@
               <div class="stat-label">技能</div>
               <div class="stat-change">+12 较上月</div>
             </div>
+            <div class="stat-card">
+              <div class="stat-number">${state.stats.scenarioCount || 8}</div>
+              <div class="stat-label">场景</div>
+            </div>
           </div>
         </div>
-        <div class="clusters-section">
-          <div class="section-header">
-            <span class="section-title">📋 选择你的角色，快速开始</span>
-          </div>
-          <div class="clusters-grid">
-            ${clusters.map(c => {
-              const clusterAgents = c.agents.map(id => agents.find(a => a.id === id)).filter(Boolean);
-              return `
-                <div class="cluster-card" data-cluster-id="${c.id}">
-                  <div class="cluster-header">
-                    <span class="cluster-icon">⚡</span>
-                    <span class="cluster-name">${escapeHtml(c.name)}</span>
-                  </div>
-                  <div class="cluster-desc">${escapeHtml(c.description)}</div>
-                  <div class="cluster-footer">
-                    <span class="cluster-count">${clusterAgents.length} 个智能体</span>
-                    <span class="cluster-enter">进入集群 →</span>
-                  </div>
-                </div>
-              `;
-            }).join('')}
-          </div>
+
+        <div class="view-mode-tabs">
+          <button class="view-mode-btn ${state.viewMode === 'role' ? 'active' : ''}" data-mode="role">
+            <span>🏷️</span> 按角色浏览
+          </button>
+          <button class="view-mode-btn ${state.viewMode === 'scenario' ? 'active' : ''}" data-mode="scenario">
+            <span>🎯</span> 按场景浏览
+          </button>
+        </div>
+
+        <div class="view-mode-content">
+          ${state.viewMode === 'role'
+            ? renderRoleView(clusters, agents, skills)
+            : renderScenarioView(skills)
+          }
         </div>
         <div class="recent-section">
           <div class="section-header">
@@ -203,19 +210,8 @@
             </div>
           `).join('') : '<div style="padding: 12px; color: var(--fg-secondary); font-size: 12px;">暂无使用记录</div>'}
         </div>
-        <div class="hot-section">
-          <div class="section-header">
-            <span class="section-title">🔥 热门技能</span>
-            <button class="section-action" id="btn-all-hot">查看全部</button>
-          </div>
-          ${hotSkills.slice(0, 5).map((s, i) => `
-            <div class="hot-item" data-skill-id="${s.id}">
-              <span class="hot-rank">${i + 1}</span>
-              <span class="hot-name">${escapeHtml(s.name)}</span>
-              <span class="hot-count">${s.count || 0} 次</span>
-            </div>
-          `).join('')}
-        </div>
+        ${renderQuickCreate()}
+        ${renderMyTopScenarios()}
         <div class="guide-section">
           <div class="guide-title">🚀 新手上路</div>
           <div class="guide-desc">只需 4 步，开始使用 AI 技能知识库</div>
@@ -258,9 +254,142 @@
     `;
   }
 
+  function renderRoleView(clusters, agents, skills) {
+    // 开发工程集群永远排第一
+    const sortedClusters = [...clusters].sort((a, b) => {
+      if (a.id === '03-开发工程') return -1;
+      if (b.id === '03-开发工程') return 1;
+      return a.id.localeCompare(b.id);
+    });
+
+    return `
+      <div class="clusters-section">
+        <div class="section-header">
+          <span class="section-title">📋 选择你的角色，快速开始</span>
+        </div>
+        <div class="clusters-grid">
+          ${sortedClusters.map(c => {
+            const clusterAgents = c.agents.map(id => agents.find(a => a.id === id)).filter(Boolean);
+            const clusterSkills = c.skills.map(id => skills.find(s => s.id === id)).filter(Boolean);
+            return `
+              <div class="cluster-card" data-cluster-id="${c.id}">
+                <div class="cluster-header">
+                  <span class="cluster-icon">⚡</span>
+                  <span class="cluster-name">${escapeHtml(c.name)}</span>
+                  ${c.id === '03-开发工程' ? '<span class="cluster-badge">核心</span>' : ''}
+                </div>
+                <div class="cluster-desc">${escapeHtml(c.description)}</div>
+                <div class="cluster-footer">
+                  <span class="cluster-count">${clusterAgents.length} 个智能体 · ${clusterSkills.length} 个技能</span>
+                  <span class="cluster-enter">进入 →</span>
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  function renderScenarioView(skills) {
+    const scenarios = state.scenarios.length > 0 ? state.scenarios : [
+      { id: 'write-doc', name: '写文档', icon: '📝', description: '周报、会议纪要、项目材料、测试报告' },
+      { id: 'troubleshoot', name: '查故障', icon: '🔧', description: '排查、巡检、日志分析' },
+      { id: 'write-code', name: '写代码', icon: '💻', description: '生成、Review、Bug 定位' },
+      { id: 'data-work', name: '搞数据', icon: '🗄️', description: 'SQL、报表、迁移、清理' },
+      { id: 'design', name: '做设计', icon: '📐', description: '原型、数模、架构、接口' },
+      { id: 'manage-project', name: '管项目', icon: '📊', description: '计划、跟踪、汇报' },
+      { id: 'test-quality', name: '测试质量', icon: '✅', description: '用例、审查、验证' },
+      { id: 'knowledge', name: '知识检索', icon: '📚', description: '问答、文档整理' }
+    ];
+
+    return `
+      <div class="scenarios-section">
+        <div class="section-header">
+          <span class="section-title">💡 你在做什么？选择一个场景开始</span>
+        </div>
+        <div class="scenarios-grid">
+          ${scenarios.map(s => {
+            const skillCount = skills.filter(skill =>
+              (skill.scenarioTags || []).some(t => t.toLowerCase() === s.id.toLowerCase() || t === s.name)
+            ).length;
+            return `
+              <div class="scenario-card" data-scenario-id="${s.id}">
+                <div class="scenario-icon">${s.icon}</div>
+                <div class="scenario-name">${escapeHtml(s.name)}</div>
+                <div class="scenario-desc">${escapeHtml(s.description)}</div>
+                <div class="scenario-count">${skillCount} 个技能</div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  function renderQuickCreate() {
+    return `
+      <div class="quick-create-section">
+        <div class="section-header">
+          <span class="section-title">⚡ 快速创建</span>
+        </div>
+        <div class="quick-create-grid">
+          <div class="quick-create-card" data-action="写周报">
+            <div class="quick-create-icon">📝</div>
+            <div class="quick-create-name">写周报</div>
+            <div class="quick-create-desc">一键生成工作周报</div>
+          </div>
+          <div class="quick-create-card" data-action="会议纪要">
+            <div class="quick-create-icon">📋</div>
+            <div class="quick-create-name">会议纪要</div>
+            <div class="quick-create-desc">整理会议要点</div>
+          </div>
+          <div class="quick-create-card" data-action="项目材料">
+            <div class="quick-create-icon">📁</div>
+            <div class="quick-create-name">项目材料</div>
+            <div class="quick-create-desc">生成项目交付文档</div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderMyTopScenarios() {
+    const topScenarios = state.topScenarios || [];
+    if (topScenarios.length === 0) {
+      return '';
+    }
+
+    return `
+      <div class="top-scenarios-section">
+        <div class="section-header">
+          <span class="section-title">🔥 我的常用场景</span>
+        </div>
+        <div class="top-scenarios-list">
+          ${topScenarios.map((s, i) => `
+            <div class="top-scenario-item" data-scenario-id="${s.id}">
+              <span class="top-scenario-rank">${i + 1}</span>
+              <span class="top-scenario-name">${escapeHtml(s.name)}</span>
+              <span class="top-scenario-count">${s.count} 次</span>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }
+
   function attachDashboardEvents() {
     const searchBox = document.getElementById('dashboard-search-box');
     if (searchBox) searchBox.addEventListener('click', () => navigateTo('/search'));
+
+    document.querySelectorAll('.view-mode-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const mode = btn.dataset.mode;
+        state.viewMode = mode;
+        vscode.postMessage({ type: 'switch:viewMode', mode });
+        render();
+      });
+    });
 
     document.querySelectorAll('.cluster-card').forEach(card => {
       card.addEventListener('click', () => {
@@ -277,11 +406,25 @@
       });
     });
 
-    document.querySelectorAll('.hot-item').forEach(item => {
+    document.querySelectorAll('.scenario-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const scenarioId = card.dataset.scenarioId;
+        vscode.postMessage({ type: 'track:scenario', scenarioId });
+        showToast('info', `场景「${card.querySelector('.scenario-name')?.textContent || scenarioId}」详情页待实施`);
+      });
+    });
+
+    document.querySelectorAll('.quick-create-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const action = card.dataset.action;
+        showToast('info', `${action} 功能即将推出`);
+      });
+    });
+
+    document.querySelectorAll('.top-scenario-item').forEach(item => {
       item.addEventListener('click', () => {
-        state.currentSkillId = item.dataset.skillId;
-        navigateTo('/skill');
-        vscode.postMessage({ type: 'open:skill', skillId: item.dataset.skillId });
+        const scenarioId = item.dataset.scenarioId;
+        vscode.postMessage({ type: 'track:scenario', scenarioId });
       });
     });
   }
@@ -349,6 +492,8 @@
     if (!skill) return '<div class="error-page">技能未找到</div>';
 
     const isFav = state.favorites.includes(skill.id);
+    const isChecklist = skill.type === 'checklist';
+    const scenarioTags = skill.scenarioTags || [];
 
     return `
       <div class="skill-detail">
@@ -358,9 +503,11 @@
           <div class="skill-meta">
             <span>版本: ${skill.version}</span>
             <span>${skill.date}</span>
+            ${isChecklist ? '<span class="skill-type-badge">📋 检查清单</span>' : ''}
           </div>
           <div class="skill-tags">
             ${skill.tags.map(t => `<span class="skill-tag">#${escapeHtml(t)}</span>`).join('')}
+            ${scenarioTags.map(t => `<span class="skill-tag scenario-tag">${escapeHtml(t)}</span>`).join('')}
           </div>
         </div>
         <div style="display: flex; gap: 8px; margin-bottom: 12px; font-size: 11px; color: var(--fg-secondary);">
@@ -374,8 +521,73 @@
           <button class="btn ${isFav ? 'btn-primary' : ''}" id="btn-favorite">${isFav ? '⭐ 已收藏' : '☆ 收藏'}</button>
         </div>
         <div class="skill-content" id="skill-content">
-          ${markdownToHtml(skill.content)}
+          ${isChecklist ? renderChecklist(skill.content) : markdownToHtml(skill.content)}
         </div>
+      </div>
+    `;
+  }
+
+  function renderChecklist(content) {
+    if (!content) return '';
+
+    const lines = content.split('\n');
+    const steps = [];
+    let currentStep = null;
+
+    for (const line of lines) {
+      const stepMatch = line.match(/^##\s+(.+)$/);
+      if (stepMatch) {
+        if (currentStep) steps.push(currentStep);
+        currentStep = { title: stepMatch[1].trim(), items: [] };
+        continue;
+      }
+
+      const itemMatch = line.match(/^-\s*\[([ x])\]\s*(.+)$/);
+      if (itemMatch && currentStep) {
+        currentStep.items.push({
+          checked: itemMatch[1] === 'x',
+          text: itemMatch[2].trim()
+        });
+      }
+    }
+    if (currentStep) steps.push(currentStep);
+
+    if (steps.length === 0) {
+      return '<div class="checklist-empty">⚠️ 未识别到检查清单步骤（需要 ## 标题 + - [ ] 项格式）</div>';
+    }
+
+    const totalItems = steps.reduce((sum, s) => sum + s.items.length, 0);
+    const checkedItems = steps.reduce((sum, s) => sum + s.items.filter(i => i.checked).length, 0);
+    const progress = totalItems > 0 ? Math.round((checkedItems / totalItems) * 100) : 0;
+
+    return `
+      <div class="checklist-container">
+        <div class="checklist-progress">
+          <div class="checklist-progress-bar">
+            <div class="checklist-progress-fill" style="width: ${progress}%"></div>
+          </div>
+          <div class="checklist-progress-text">${progress}% (${checkedItems}/${totalItems})</div>
+        </div>
+        ${steps.map((step, stepIndex) => `
+          <div class="checklist-step">
+            <div class="checklist-step-header">
+              <span class="checklist-step-toggle">▶</span>
+              <span class="checklist-step-title">${escapeHtml(step.title)}</span>
+              <span class="checklist-step-count">${step.items.filter(i => i.checked).length}/${step.items.length}</span>
+            </div>
+            <div class="checklist-step-content">
+              ${step.items.map((item, itemIndex) => `
+                <label class="checklist-item">
+                  <input type="checkbox" class="checklist-checkbox"
+                    data-step="${stepIndex}" data-item="${itemIndex}"
+                    ${item.checked ? 'checked' : ''}>
+                  <span class="checklist-item-text">${escapeHtml(item.text)}</span>
+                </label>
+              `).join('')}
+            </div>
+          </div>
+        `).join('')}
+        ${progress === 100 && totalItems > 0 ? '<div class="checklist-complete">✅ 全部完成</div>' : ''}
       </div>
     `;
   }
@@ -394,6 +606,71 @@
     document.getElementById('btn-favorite')?.addEventListener('click', () => {
       vscode.postMessage({ type: 'toggle:favorite', skillId: state.currentSkillId });
     });
+
+    // 检查清单交互
+    document.querySelectorAll('.checklist-step-header').forEach(header => {
+      header.addEventListener('click', () => {
+        const step = header.closest('.checklist-step');
+        const content = step.querySelector('.checklist-step-content');
+        const toggle = header.querySelector('.checklist-step-toggle');
+        const isExpanded = content.style.display !== 'none';
+        content.style.display = isExpanded ? 'none' : 'block';
+        toggle.textContent = isExpanded ? '▶' : '▼';
+      });
+    });
+
+    document.querySelectorAll('.checklist-checkbox').forEach(checkbox => {
+      checkbox.addEventListener('change', () => {
+        // v0.2.0：仅更新 UI，不持久化
+        updateChecklistProgress();
+      });
+    });
+
+    // 默认展开第一个或仍有未勾选项的步骤
+    document.querySelectorAll('.checklist-step').forEach((step, index) => {
+      const content = step.querySelector('.checklist-step-content');
+      const toggle = step.querySelector('.checklist-step-toggle');
+      const hasUnchecked = step.querySelectorAll('.checklist-checkbox:not(:checked)').length > 0;
+      if (index === 0 || hasUnchecked) {
+        content.style.display = 'block';
+        toggle.textContent = '▼';
+      } else {
+        content.style.display = 'none';
+        toggle.textContent = '▶';
+      }
+    });
+  }
+
+  function updateChecklistProgress() {
+    const checkboxes = document.querySelectorAll('.checklist-checkbox');
+    const total = checkboxes.length;
+    const checked = document.querySelectorAll('.checklist-checkbox:checked').length;
+    const progress = total > 0 ? Math.round((checked / total) * 100) : 0;
+
+    const fill = document.querySelector('.checklist-progress-fill');
+    const text = document.querySelector('.checklist-progress-text');
+    if (fill) fill.style.width = `${progress}%`;
+    if (text) text.textContent = `${progress}% (${checked}/${total})`;
+
+    document.querySelectorAll('.checklist-step').forEach(step => {
+      const stepCheckboxes = step.querySelectorAll('.checklist-checkbox');
+      const stepChecked = step.querySelectorAll('.checklist-checkbox:checked').length;
+      const countEl = step.querySelector('.checklist-step-count');
+      if (countEl) countEl.textContent = `${stepChecked}/${stepCheckboxes.length}`;
+    });
+
+    const container = document.querySelector('.checklist-container');
+    let completeEl = container?.querySelector('.checklist-complete');
+    if (progress === 100 && total > 0) {
+      if (!completeEl) {
+        completeEl = document.createElement('div');
+        completeEl.className = 'checklist-complete';
+        completeEl.textContent = '✅ 全部完成';
+        container?.appendChild(completeEl);
+      }
+    } else if (completeEl) {
+      completeEl.remove();
+    }
   }
 
   function renderSearchPage() {
@@ -494,21 +771,55 @@
         <div class="section-header">
           <span class="section-title">⚙ 设置</span>
         </div>
-        <div class="setting-item">
-          <label class="setting-label">本地知识库路径</label>
-          <div class="setting-desc">留空则使用内置模板</div>
-          <input type="text" class="setting-input" id="setting-path" value="${escapeHtml(state.settings.localPath || '')}" placeholder="例如: C:\\Users\\name\\my-knowledge-base">
+
+        <div class="setting-group">
+          <div class="setting-group-title">基础设置</div>
+          <div class="setting-item">
+            <label class="setting-label">本地知识库路径</label>
+            <div class="setting-desc">留空则使用内置模板</div>
+            <input type="text" class="setting-input" id="setting-path" value="${escapeHtml(state.settings.localPath || '')}" placeholder="例如: C:\\Users\\name\\my-knowledge-base">
+          </div>
+          <div class="setting-item">
+            <label class="setting-label">默认安装目标</label>
+            <div class="setting-desc">技能安装的默认平台</div>
+            <select class="setting-select" id="setting-target">
+              <option value="claude-code" ${state.settings.defaultInstallTarget === 'claude-code' ? 'selected' : ''}>Claude Code</option>
+              <option value="cursor" ${state.settings.defaultInstallTarget === 'cursor' ? 'selected' : ''}>Cursor</option>
+              <option value="generic" ${state.settings.defaultInstallTarget === 'generic' ? 'selected' : ''}>通用</option>
+            </select>
+          </div>
         </div>
-        <div class="setting-item">
-          <label class="setting-label">默认安装目标</label>
-          <div class="setting-desc">技能安装的默认平台</div>
-          <select class="setting-select" id="setting-target">
-            <option value="claude-code" ${state.settings.defaultInstallTarget === 'claude-code' ? 'selected' : ''}>Claude Code</option>
-            <option value="cursor" ${state.settings.defaultInstallTarget === 'cursor' ? 'selected' : ''}>Cursor</option>
-            <option value="generic" ${state.settings.defaultInstallTarget === 'generic' ? 'selected' : ''}>通用</option>
-          </select>
+
+        <div class="setting-group">
+          <div class="setting-group-title">📦 行业知识包</div>
+          <div class="setting-desc">加载行业专属的智能体和技能</div>
+          <div id="industry-packages-list">
+            <div class="industry-package-item">
+              <div class="industry-package-info">
+                <div class="industry-package-name">☑️ 电力行业 <span class="industry-package-version">v1.0.0</span></div>
+                <div class="industry-package-meta">3 个集群 · 12 个技能（示例占位，待 Task 10 接通）</div>
+              </div>
+              <button class="btn industry-package-btn" disabled>禁用</button>
+            </div>
+          </div>
+          <div style="margin-top: 8px;">
+            <button class="btn" id="btn-add-industry">
+              <span>+</span> 添加行业知识包
+            </button>
+          </div>
         </div>
-        <div style="margin-top: 8px;">
+
+        <div class="setting-group">
+          <div class="setting-group-title">📥 批量导入</div>
+          <div class="setting-desc">从目录或 JSON 导入扩展层 Skill</div>
+          <div style="margin-top: 8px;">
+            <button class="btn" id="btn-import-skills">
+              <span>📂</span> 选择导入目录
+            </button>
+          </div>
+        </div>
+
+        <div style="margin-top: 16px;">
           <button class="btn btn-primary" id="btn-save-settings">保存设置</button>
         </div>
       </div>
@@ -524,6 +835,14 @@
         data: { localPath: path, defaultInstallTarget: target }
       });
       showToast('success', '设置已保存');
+    });
+
+    document.getElementById('btn-add-industry')?.addEventListener('click', () => {
+      showToast('info', '添加行业知识包功能即将推出（待 Task 10 接通）');
+    });
+
+    document.getElementById('btn-import-skills')?.addEventListener('click', () => {
+      showToast('info', '批量导入功能即将推出');
     });
   }
 

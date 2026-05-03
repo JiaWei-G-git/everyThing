@@ -180,3 +180,392 @@ body {
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--fg-secondary); }
+
+/* 双分类导航 Tab */
+.view-mode-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: var(--gap);
+  background: var(--bg-secondary);
+  padding: 4px;
+  border-radius: var(--radius);
+}
+
+.view-mode-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--fg-secondary);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.view-mode-btn:hover {
+  background: var(--bg-hover);
+  color: var(--fg-primary);
+}
+
+.view-mode-btn.active {
+  background: var(--bg-active);
+  color: var(--fg-primary);
+  font-weight: 500;
+}
+
+.view-mode-content {
+  margin-bottom: var(--gap);
+}
+
+.scenario-placeholder {
+  padding: 24px;
+  text-align: center;
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  color: var(--fg-secondary);
+  font-size: 13px;
+  border: 1px dashed var(--border-color);
+}
+
+/* 集群核心标签 */
+.cluster-badge {
+  padding: 1px 6px;
+  background: var(--fg-accent);
+  color: white;
+  border-radius: 10px;
+  font-size: 9px;
+  font-weight: 600;
+  margin-left: auto;
+}
+
+/* 场景浏览网格 */
+.scenarios-section {
+  margin-bottom: var(--gap);
+}
+
+.scenarios-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px;
+}
+
+.scenario-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 12px;
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: 1px solid transparent;
+  text-align: center;
+}
+
+.scenario-card:hover {
+  background: var(--bg-hover);
+  border-color: var(--border-color);
+  transform: translateY(-2px);
+}
+
+.scenario-icon {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.scenario-name {
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.scenario-desc {
+  font-size: 10px;
+  color: var(--fg-secondary);
+  line-height: 1.4;
+}
+
+.scenario-count {
+  font-size: 10px;
+  color: var(--fg-accent);
+  margin-top: 6px;
+}
+
+/* 快速创建 */
+.quick-create-section {
+  margin-bottom: var(--gap);
+}
+
+.quick-create-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 10px;
+}
+
+.quick-create-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 14px 10px;
+  background: var(--bg-secondary);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: center;
+}
+
+.quick-create-card:hover {
+  background: var(--bg-hover);
+  border-color: var(--fg-accent);
+}
+
+.quick-create-icon {
+  font-size: 24px;
+  margin-bottom: 6px;
+}
+
+.quick-create-name {
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+
+.quick-create-desc {
+  font-size: 10px;
+  color: var(--fg-secondary);
+}
+
+/* 我的常用场景 */
+.top-scenarios-section {
+  margin-bottom: var(--gap);
+}
+
+.top-scenarios-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.top-scenario-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.top-scenario-item:hover {
+  background: var(--bg-hover);
+}
+
+.top-scenario-rank {
+  width: 20px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--fg-accent);
+}
+
+.top-scenario-name {
+  flex: 1;
+  font-size: 13px;
+}
+
+.top-scenario-count {
+  font-size: 11px;
+  color: var(--fg-secondary);
+}
+
+/* 检查清单 */
+.checklist-container {
+  background: var(--bg-secondary);
+  border-radius: var(--radius);
+  padding: 16px;
+}
+
+.checklist-empty {
+  padding: 16px;
+  text-align: center;
+  color: var(--warning);
+  font-size: 12px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius);
+}
+
+.checklist-progress {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.checklist-progress-bar {
+  flex: 1;
+  height: 6px;
+  background: var(--card-bg);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.checklist-progress-fill {
+  height: 100%;
+  background: var(--success);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.checklist-progress-text {
+  font-size: 12px;
+  color: var(--fg-secondary);
+  white-space: nowrap;
+}
+
+.checklist-step {
+  margin-bottom: 8px;
+}
+
+.checklist-step-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.checklist-step-header:hover {
+  background: var(--bg-hover);
+}
+
+.checklist-step-toggle {
+  font-size: 10px;
+  color: var(--fg-secondary);
+  width: 14px;
+  text-align: center;
+}
+
+.checklist-step-title {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.checklist-step-count {
+  font-size: 11px;
+  color: var(--fg-secondary);
+}
+
+.checklist-step-content {
+  padding: 8px 8px 8px 30px;
+  display: none;
+}
+
+.checklist-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 6px 0;
+  cursor: pointer;
+}
+
+.checklist-checkbox {
+  margin-top: 2px;
+  width: 14px;
+  height: 14px;
+  accent-color: var(--fg-accent);
+  cursor: pointer;
+}
+
+.checklist-item-text {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--fg-primary);
+}
+
+.checklist-complete {
+  text-align: center;
+  padding: 12px;
+  background: var(--success);
+  color: #1e1e1e;
+  border-radius: var(--radius);
+  font-size: 13px;
+  font-weight: 500;
+  margin-top: 12px;
+}
+
+/* 技能类型标签 */
+.skill-type-badge {
+  padding: 2px 8px;
+  background: var(--warning);
+  color: #1e1e1e;
+  border-radius: 12px;
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.scenario-tag {
+  background: var(--bg-active);
+}
+
+/* 设置页分组 */
+.setting-group {
+  margin-bottom: var(--gap);
+  padding: var(--gap);
+  background: var(--card-bg);
+  border-radius: var(--radius);
+}
+
+.setting-group-title {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: var(--fg-primary);
+}
+
+.industry-package-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius);
+  margin-bottom: 6px;
+}
+
+.industry-package-info {
+  flex: 1;
+}
+
+.industry-package-name {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.industry-package-version {
+  font-size: 10px;
+  color: var(--fg-secondary);
+  font-weight: normal;
+}
+
+.industry-package-meta {
+  font-size: 11px;
+  color: var(--fg-secondary);
+  margin-top: 2px;
+}
+
+.industry-package-btn {
+  padding: 4px 10px;
+  font-size: 11px;
+}
