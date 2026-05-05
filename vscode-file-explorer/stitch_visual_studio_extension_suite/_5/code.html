@@ -1,0 +1,357 @@
+<html class="dark"><head>
+<meta charset="utf-8"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "background": "#101419",
+            "secondary": "#c8c6c7",
+            "primary-container": "#007acc",
+            "on-primary": "#003258",
+            "on-secondary": "#303031",
+            "secondary-container": "#474648",
+            "outline-variant": "#404751",
+            "tertiary-fixed-dim": "#ffb784",
+            "on-primary-container": "#ffffff",
+            "on-surface": "#e0e2ea",
+            "on-error": "#690005",
+            "inverse-surface": "#e0e2ea",
+            "surface-dim": "#101419",
+            "inverse-on-surface": "#2d3136",
+            "on-secondary-fixed-variant": "#474648",
+            "surface-container-low": "#181c21",
+            "on-tertiary-container": "#ffffff",
+            "on-primary-fixed": "#001d36",
+            "surface": "#101419",
+            "tertiary": "#ffb784",
+            "primary-fixed-dim": "#9fcaff",
+            "primary-fixed": "#d1e4ff",
+            "outline": "#8a919d",
+            "on-tertiary-fixed": "#301400",
+            "surface-tint": "#9fcaff",
+            "tertiary-container": "#b95e01",
+            "on-secondary-container": "#b6b4b5",
+            "tertiary-fixed": "#ffdcc6",
+            "on-error-container": "#ffdad6",
+            "on-background": "#e0e2ea",
+            "error-container": "#93000a",
+            "surface-bright": "#36393f",
+            "on-primary-fixed-variant": "#00497d",
+            "primary": "#9fcaff",
+            "secondary-fixed-dim": "#c8c6c7",
+            "on-surface-variant": "#c0c7d3",
+            "surface-container-highest": "#31353b",
+            "surface-variant": "#31353b",
+            "on-tertiary-fixed-variant": "#713700",
+            "surface-container-high": "#272a30",
+            "on-secondary-fixed": "#1b1b1c",
+            "inverse-primary": "#0061a4",
+            "surface-container-lowest": "#0b0e13",
+            "secondary-fixed": "#e4e2e3",
+            "surface-container": "#1c2025",
+            "error": "#ffb4ab",
+            "on-tertiary": "#4f2500"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "unit": "4px",
+            "md": "12px",
+            "sidebar-padding": "12px",
+            "xs": "4px",
+            "sm": "8px",
+            "lg": "16px"
+          },
+          "fontFamily": {
+            "title-md": ["Inter"],
+            "label-xs": ["Inter"],
+            "code-sm": ["Monaco, Menlo, Consolas, 'Courier New', monospace"],
+            "body-sm": ["Inter"]
+          },
+          "fontSize": {
+            "title-md": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+            "label-xs": ["11px", {"lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+            "code-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+            "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      font-size: 16px;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 10px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #1e1e1e;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #3c3c3c;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #4f4f4f;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-[#1e1e1e] text-on-surface font-body-sm h-screen overflow-hidden flex flex-col">
+<!-- TopAppBar -->
+<header class="bg-[#1e1e1e] text-[#007acc] font-['Inter'] text-[11px] font-bold tracking-wider uppercase rounded-none border-b border-[#3c3c3c] shadow-none flex items-center justify-between px-3 h-9 w-full">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="hub">hub</span>
+<span class="text-[13px] font-semibold text-gray-200">AI SKILLS</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-gray-400 cursor-pointer hover:text-white transition-colors duration-100 ease-in-out" data-icon="settings">settings</span>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<!-- NavigationDrawer -->
+<aside class="bg-[#1e1e1e] border-r border-[#3c3c3c] flex flex-col w-64 h-full hidden md:flex">
+<div class="px-4 py-3">
+<span class="text-[11px] font-bold text-gray-500 uppercase tracking-tighter">KNOWLEDGE BASE</span>
+</div>
+<nav class="flex-1">
+<div class="flex flex-col w-full h-full">
+<a class="flex items-center gap-3 px-4 py-2 text-gray-400 hover:text-gray-200 hover:bg-[#2a2d2e] cursor-pointer active:opacity-80 transition-colors duration-100 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="grid_view">grid_view</span>
+<span class="font-['Inter'] text-[13px]">Scenarios</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-gray-400 hover:text-gray-200 hover:bg-[#2a2d2e] cursor-pointer active:opacity-80 transition-colors duration-100 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="account_tree">account_tree</span>
+<span class="font-['Inter'] text-[13px]">Clusters</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-gray-400 hover:text-gray-200 hover:bg-[#2a2d2e] cursor-pointer active:opacity-80 transition-colors duration-100 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+<span class="font-['Inter'] text-[13px]">Search</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-gray-400 hover:text-gray-200 hover:bg-[#2a2d2e] cursor-pointer active:opacity-80 transition-colors duration-100 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="fact_check">fact_check</span>
+<span class="font-['Inter'] text-[13px]">Checklist</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 bg-[#252526] text-white border-l-2 border-[#007acc] font-medium cursor-pointer active:opacity-80 transition-colors duration-100 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-['Inter'] text-[13px]">Settings</span>
+</a>
+</div>
+</nav>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col min-w-0 bg-[#1e1e1e]">
+<!-- Settings Header -->
+<div class="px-6 py-4 flex items-center justify-between border-b border-[#3c3c3c]">
+<div>
+<h1 class="font-title-md text-title-md text-on-surface">Settings</h1>
+<p class="text-[11px] text-gray-500 mt-1">Configure your AI Skill Knowledge Base environment</p>
+</div>
+<div class="flex gap-2">
+<button class="bg-[#252526] border border-[#3c3c3c] text-on-surface px-3 py-1 text-label-xs hover:bg-[#2a2d2e] transition-colors rounded-none">Reset</button>
+<button class="bg-primary-container text-on-primary-container px-3 py-1 text-label-xs font-semibold hover:opacity-90 transition-opacity rounded-none">Save Changes</button>
+</div>
+</div>
+<!-- Settings Content -->
+<div class="flex-1 overflow-y-auto custom-scrollbar">
+<div class="max-w-3xl mx-auto px-6 py-8 space-y-12">
+<!-- Basic Settings Section -->
+<section>
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-[#007acc]" data-icon="tune">tune</span>
+<h2 class="text-title-md font-semibold text-gray-200">Basic Settings</h2>
+</div>
+<div class="space-y-6 ml-6">
+<div class="group">
+<label class="block text-label-xs font-medium text-gray-400 mb-2 uppercase tracking-tight">Local Library Path</label>
+<div class="flex gap-2">
+<input class="flex-1 bg-[#252526] border border-[#3c3c3c] text-on-surface font-code-sm text-code-sm px-3 py-2 focus:ring-1 focus:ring-[#007acc] focus:border-[#007acc] outline-none" type="text" value="C:\Users\Dev\Documents\AI_Skills\Library"/>
+<button class="bg-[#252526] border border-[#3c3c3c] px-3 flex items-center hover:bg-[#2a2d2e] transition-colors">
+<span class="material-symbols-outlined text-gray-400" data-icon="folder_open">folder_open</span>
+</button>
+</div>
+<p class="text-[11px] text-gray-500 mt-2 italic">The root directory where all skill manifests and local models are stored.</p>
+</div>
+<div class="group">
+<label class="block text-label-xs font-medium text-gray-400 mb-2 uppercase tracking-tight">Default Install Target</label>
+<select class="w-full bg-[#252526] border border-[#3c3c3c] text-on-surface font-body-sm text-body-sm px-3 py-2 focus:ring-1 focus:ring-[#007acc] focus:border-[#007acc] outline-none appearance-none">
+<option>Workspace Root</option>
+<option selected="">Global User Storage</option>
+<option>Project-Specific .ai_skills</option>
+<option>Virtual Environment</option>
+</select>
+</div>
+</div>
+</section>
+<!-- Industry Packages Section -->
+<section>
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-[#007acc]" data-icon="inventory_2">inventory_2</span>
+<h2 class="text-title-md font-semibold text-gray-200">Industry Packages</h2>
+</div>
+<div class="space-y-2 ml-6">
+<!-- Package Item 1 -->
+<div class="bg-[#252526] border border-[#3c3c3c] p-4 flex items-center justify-between group hover:border-primary-container transition-colors">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 bg-[#1e1e1e] border border-[#3c3c3c] flex items-center justify-center">
+<span class="material-symbols-outlined text-gray-400" data-icon="bolt">bolt</span>
+</div>
+<div>
+<h3 class="text-body-sm font-semibold text-on-surface">Power Industry v1.0.0</h3>
+<p class="text-[11px] text-gray-500">Domain-specific models for electrical grid optimization and monitoring.</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center cursor-pointer">
+<div class="w-8 h-4 bg-primary-container rounded-full relative">
+<div class="absolute right-0.5 top-0.5 w-3 h-3 bg-white rounded-full shadow-sm"></div>
+</div>
+</div>
+<span class="text-label-xs font-bold text-[#007acc]">ENABLED</span>
+</div>
+</div>
+<!-- Package Item 2 -->
+<div class="bg-[#252526] border border-[#3c3c3c] p-4 flex items-center justify-between group opacity-60">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 bg-[#1e1e1e] border border-[#3c3c3c] flex items-center justify-center">
+<span class="material-symbols-outlined text-gray-500" data-icon="biotech">biotech</span>
+</div>
+<div>
+<h3 class="text-body-sm font-semibold text-on-surface">Bio-Tech Analysis v0.8.4</h3>
+<p class="text-[11px] text-gray-500">Processing pipelines for genetic sequencing and clinical trial data.</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center cursor-pointer">
+<div class="w-8 h-4 bg-gray-600 rounded-full relative">
+<div class="absolute left-0.5 top-0.5 w-3 h-3 bg-white rounded-full shadow-sm"></div>
+</div>
+</div>
+<span class="text-label-xs font-bold text-gray-500">DISABLED</span>
+</div>
+</div>
+<!-- Package Item 3 -->
+<div class="bg-[#252526] border border-[#3c3c3c] p-4 flex items-center justify-between group hover:border-primary-container transition-colors">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 bg-[#1e1e1e] border border-[#3c3c3c] flex items-center justify-center">
+<span class="material-symbols-outlined text-gray-400" data-icon="account_balance">account_balance</span>
+</div>
+<div>
+<h3 class="text-body-sm font-semibold text-on-surface">FinTech Compliance v2.1.2</h3>
+<p class="text-[11px] text-gray-500">Regulatory checks and automated auditing tools for financial datasets.</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center cursor-pointer">
+<div class="w-8 h-4 bg-primary-container rounded-full relative">
+<div class="absolute right-0.5 top-0.5 w-3 h-3 bg-white rounded-full shadow-sm"></div>
+</div>
+</div>
+<span class="text-label-xs font-bold text-[#007acc]">ENABLED</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Import Section -->
+<section>
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-[#007acc]" data-icon="publish">publish</span>
+<h2 class="text-title-md font-semibold text-gray-200">Import</h2>
+</div>
+<div class="ml-6">
+<div class="border border-dashed border-[#3c3c3c] p-8 flex flex-col items-center justify-center space-y-4 hover:bg-[#252526] hover:border-[#4f4f4f] transition-all cursor-pointer">
+<span class="material-symbols-outlined text-gray-500 text-3xl" data-icon="upload_file">upload_file</span>
+<div class="text-center">
+<p class="text-body-sm text-gray-200">Import existing skill libraries from disk</p>
+<p class="text-[11px] text-gray-500">Accepts .json, .yaml, and bundled package folders</p>
+</div>
+<button class="bg-[#252526] border border-[#3c3c3c] text-on-surface px-6 py-2 text-label-xs font-semibold hover:bg-[#2a2d2e] transition-colors rounded-none flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="file_open">file_open</span>
+                  Choose Directory
+                </button>
+</div>
+</div>
+</section>
+</div>
+</div>
+<!-- Footer Info -->
+<footer class="px-6 py-2 border-t border-[#3c3c3c] bg-[#1e1e1e] flex items-center justify-between">
+<div class="flex items-center gap-4 text-[10px] text-gray-500 uppercase font-medium tracking-widest">
+<div class="flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-green-500"></span>
+            CONNECTED: LOCAL_HOST_8080
+          </div>
+<div>VERSION: 1.4.2-STABLE</div>
+</div>
+<div class="text-[10px] text-gray-500">
+          Last sync: 2 minutes ago
+        </div>
+</footer>
+</main>
+<!-- Contextual Sidebar Info (Bento style right side) -->
+<aside class="hidden xl:flex w-72 border-l border-[#3c3c3c] flex-col p-4 space-y-4 overflow-y-auto bg-[#1e1e1e]">
+<div class="bg-[#252526] border border-[#3c3c3c] p-4">
+<h3 class="text-label-xs font-bold text-gray-500 uppercase mb-2">System Status</h3>
+<div class="space-y-3">
+<div class="flex justify-between items-center">
+<span class="text-label-xs text-gray-400">Library Sync</span>
+<span class="text-label-xs text-green-400">Healthy</span>
+</div>
+<div class="h-1 bg-[#3c3c3c] w-full">
+<div class="h-1 bg-[#007acc] w-3/4"></div>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-label-xs text-gray-400">Memory Usage</span>
+<span class="text-label-xs text-on-surface">428MB</span>
+</div>
+</div>
+</div>
+<div class="relative group h-48 border border-[#3c3c3c] overflow-hidden">
+<img class="w-full h-full object-cover opacity-40 grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500" data-alt="A macro photograph of advanced computer processor architecture with neon blue light pulses flowing through crystalline circuitry. The atmosphere is technical, sophisticated, and dark, emphasizing the hidden power of artificial intelligence processing. Crisp lines and deep shadows reflect a professional, high-performance computing environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAD5DQK8Xol4YAZdWSiZ1mX155bUPS_ttfaau9vt-733hiX2iDSijqjz3_xl24xQ3NMviQHU7jwqhTpDcKj_4iFo-tO5km3apzRHGiJKbMbldlhlAaTajzV555Zvwky3xUNNkxvsl9c9cGYM49tid5Hfnr3iaacFG3c_pOQQ-eh5PEXNXCReA-ScX2xkq9nSy9V8jzG9dsC0r0Lha67k6_tAsyKr58G6CMMkriRoNtnly-Xo0BWutAqLAFDWDY8W4mQwC2xHreDbTA"/>
+<div class="absolute inset-0 bg-gradient-to-t from-[#1e1e1e] to-transparent"></div>
+<div class="absolute bottom-3 left-3">
+<span class="text-[10px] font-bold bg-[#007acc] text-white px-2 py-0.5">PREMIUM FEATURE</span>
+<p class="text-body-sm font-semibold mt-1">Cloud Sync Enabled</p>
+</div>
+</div>
+<div class="bg-[#252526] border border-[#3c3c3c] p-4">
+<h3 class="text-label-xs font-bold text-gray-500 uppercase mb-2">Need Help?</h3>
+<p class="text-[11px] text-gray-400 leading-relaxed mb-3">Check the documentation for cluster configuration and manifest schema definitions.</p>
+<button class="w-full border border-[#3c3c3c] py-2 text-label-xs font-semibold hover:bg-[#2a2d2e] transition-colors">Documentation</button>
+</div>
+</aside>
+</div>
+<!-- Mobile Navigation Bar -->
+<nav class="md:hidden bg-[#1e1e1e] border-t border-[#3c3c3c] flex items-center justify-around h-14">
+<button class="flex flex-col items-center gap-1 text-gray-400">
+<span class="material-symbols-outlined" data-icon="grid_view">grid_view</span>
+<span class="text-[9px] uppercase font-bold">Scenarios</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-gray-400">
+<span class="material-symbols-outlined" data-icon="account_tree">account_tree</span>
+<span class="text-[9px] uppercase font-bold">Clusters</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-gray-400">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+<span class="text-[9px] uppercase font-bold">Search</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-[#007acc]">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="text-[9px] uppercase font-bold">Settings</span>
+</button>
+</nav>
+</body></html>

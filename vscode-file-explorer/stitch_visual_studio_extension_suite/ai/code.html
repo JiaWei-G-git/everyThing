@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed-dim": "#c8c6c7",
+                        "primary": "#9fcaff",
+                        "on-tertiary-container": "#ffffff",
+                        "on-tertiary-fixed-variant": "#713700",
+                        "outline": "#8a919d",
+                        "primary-fixed-dim": "#9fcaff",
+                        "tertiary": "#ffb784",
+                        "inverse-primary": "#0061a4",
+                        "surface-dim": "#101419",
+                        "surface-container-highest": "#31353b",
+                        "on-tertiary-fixed": "#301400",
+                        "surface-container-low": "#181c21",
+                        "on-primary": "#003258",
+                        "on-primary-container": "#ffffff",
+                        "on-primary-fixed-variant": "#00497d",
+                        "error": "#ffb4ab",
+                        "inverse-on-surface": "#2d3136",
+                        "tertiary-fixed": "#ffdcc6",
+                        "on-secondary": "#303031",
+                        "secondary-fixed": "#e4e2e3",
+                        "background": "#101419",
+                        "on-secondary-fixed": "#1b1b1c",
+                        "on-secondary-container": "#b6b4b5",
+                        "surface-bright": "#36393f",
+                        "on-primary-fixed": "#001d36",
+                        "tertiary-fixed-dim": "#ffb784",
+                        "inverse-surface": "#e0e2ea",
+                        "error-container": "#93000a",
+                        "outline-variant": "#404751",
+                        "secondary": "#c8c6c7",
+                        "on-secondary-fixed-variant": "#474648",
+                        "on-error-container": "#ffdad6",
+                        "surface-container-high": "#272a30",
+                        "on-background": "#e0e2ea",
+                        "surface-container": "#1c2025",
+                        "tertiary-container": "#b95e01",
+                        "primary-fixed": "#d1e4ff",
+                        "secondary-container": "#474648",
+                        "on-surface": "#e0e2ea",
+                        "on-tertiary": "#4f2500",
+                        "on-error": "#690005",
+                        "primary-container": "#007acc",
+                        "surface-tint": "#9fcaff",
+                        "surface-container-lowest": "#0b0e13",
+                        "surface-variant": "#31353b",
+                        "on-surface-variant": "#c0c7d3",
+                        "surface": "#101419"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "sidebar-padding": "12px",
+                        "md": "12px",
+                        "sm": "8px",
+                        "lg": "16px",
+                        "xs": "4px"
+                    },
+                    "fontFamily": {
+                        "body-sm": ["Inter"],
+                        "label-xs": ["Inter"],
+                        "code-sm": ["Monaco, Menlo, Consolas, 'Courier New', monospace"],
+                        "title-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                        "label-xs": ["11px", {"lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                        "code-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                        "title-md": ["16px", {"lineHeight": "24px", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+            font-size: 16px;
+        }
+        body {
+            background-color: #1e1e1e;
+            color: #cccccc;
+            -webkit-font-smoothing: antialiased;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #1e1e1e;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #3c3c3c;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #4f4f4f;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="font-body-sm text-body-sm min-h-screen max-w-[550px] mx-auto overflow-x-hidden border-x border-[#3c3c3c] flex flex-col">
+<!-- TopAppBar -->
+<header class="bg-[#1e1e1e] text-[#007acc] font-['Inter'] text-[13px] font-semibold tracking-tight docked full-width top-0 border-b border-[#3c3c3c] flex items-center justify-between px-3 h-9 w-full shrink-0 z-50">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#007acc]" data-icon="bolt">bolt</span>
+<span class="text-[#cccccc] font-bold text-xs uppercase tracking-wider">AI 技能知识库</span>
+</div>
+<div class="text-[#969696] font-code-sm text-[10px]">v0.2.0</div>
+</header>
+<main class="flex-1 overflow-y-auto custom-scrollbar p-sidebar-padding space-y-lg">
+<!-- Search Section -->
+<section class="space-y-sm">
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3 text-[#858585]" data-icon="search">search</span>
+<input class="w-full bg-[#252526] border border-[#3c3c3c] rounded-DEFAULT py-1.5 pl-9 pr-3 text-body-sm text-[#e0e2ea] placeholder-[#858585] focus:outline-none focus:border-[#007acc] transition-colors duration-150" placeholder="快速搜索技能或智能体..." type="text"/>
+</div>
+</section>
+<!-- Stats Grid -->
+<section class="grid grid-cols-4 gap-xs">
+<div class="bg-[#252526] border border-[#3c3c3c] p-2 flex flex-col items-center justify-center rounded-DEFAULT">
+<span class="text-primary font-bold text-title-md">6</span>
+<span class="text-[#858585] text-[10px] uppercase font-semibold">集群</span>
+</div>
+<div class="bg-[#252526] border border-[#3c3c3c] p-2 flex flex-col items-center justify-center rounded-DEFAULT">
+<span class="text-primary font-bold text-title-md">12</span>
+<span class="text-[#858585] text-[10px] uppercase font-semibold">智能体</span>
+</div>
+<div class="bg-[#252526] border border-[#3c3c3c] p-2 flex flex-col items-center justify-center rounded-DEFAULT">
+<span class="text-primary font-bold text-title-md">48</span>
+<span class="text-[#858585] text-[10px] uppercase font-semibold">技能</span>
+</div>
+<div class="bg-[#252526] border border-[#3c3c3c] p-2 flex flex-col items-center justify-center rounded-DEFAULT">
+<span class="text-primary font-bold text-title-md">8</span>
+<span class="text-[#858585] text-[10px] uppercase font-semibold">场景</span>
+</div>
+</section>
+<!-- View Mode Tabs -->
+<section class="flex gap-xs bg-[#252526] p-0.5 rounded-DEFAULT border border-[#3c3c3c]">
+<button class="flex-1 py-1 px-3 text-label-xs bg-[#37373d] text-[#ffffff] rounded-DEFAULT transition-colors">按角色浏览</button>
+<button class="flex-1 py-1 px-3 text-label-xs text-[#969696] hover:text-[#ffffff] transition-colors">按场景浏览</button>
+</section>
+<!-- Role View Grid -->
+<section class="space-y-sm">
+<div class="flex justify-between items-center px-1">
+<h2 class="font-bold text-[#cccccc] text-xs uppercase tracking-wide">角色集群</h2>
+<span class="text-[10px] text-[#007acc] hover:underline cursor-pointer">查看全部</span>
+</div>
+<div class="grid grid-cols-1 gap-sm">
+<!-- Featured Card -->
+<div class="bg-[#252526] border-l-2 border-l-[#007acc] border-[#3c3c3c] p-md rounded-DEFAULT hover:bg-[#2a2d2e] transition-colors cursor-pointer group">
+<div class="flex justify-between items-start mb-sm">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-DEFAULT bg-[#1e1e1e] flex items-center justify-center border border-[#3c3c3c]">
+<span class="material-symbols-outlined text-[#007acc]" data-icon="developer_mode">developer_mode</span>
+</div>
+<div>
+<h3 class="font-title-md text-sm text-[#ffffff] leading-none">03-开发工程</h3>
+<p class="text-label-xs text-[#858585] mt-1">软件设计与实现</p>
+</div>
+</div>
+<span class="bg-[#00497d] text-white text-[10px] font-bold px-1.5 py-0.5 rounded-DEFAULT">CORE</span>
+</div>
+<div class="flex items-center gap-lg border-t border-[#3c3c3c] pt-sm mt-sm">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[#858585]" data-icon="smart_toy">smart_toy</span>
+<span class="text-label-xs">4 智能体</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[#858585]" data-icon="terminal">terminal</span>
+<span class="text-label-xs">12 技能</span>
+</div>
+</div>
+</div>
+<!-- Secondary Cards -->
+<div class="grid grid-cols-2 gap-sm">
+<div class="bg-[#252526] border border-[#3c3c3c] p-sm rounded-DEFAULT hover:bg-[#2a2d2e] transition-colors cursor-pointer flex flex-col gap-xs">
+<div class="flex items-center justify-between">
+<span class="material-symbols-outlined text-secondary" data-icon="assignment">assignment</span>
+<span class="text-[10px] text-[#858585]">2 智能体</span>
+</div>
+<h4 class="text-label-xs text-[#ffffff]">01-项目规划</h4>
+</div>
+<div class="bg-[#252526] border border-[#3c3c3c] p-sm rounded-DEFAULT hover:bg-[#2a2d2e] transition-colors cursor-pointer flex flex-col gap-xs">
+<div class="flex items-center justify-between">
+<span class="material-symbols-outlined text-secondary" data-icon="biotech">biotech</span>
+<span class="text-[10px] text-[#858585]">3 智能体</span>
+</div>
+<h4 class="text-label-xs text-[#ffffff]">02-测试工程</h4>
+</div>
+</div>
+</div>
+</section>
+<!-- Recently Used -->
+<section class="space-y-xs">
+<h2 class="font-bold text-[#cccccc] text-xs uppercase tracking-wide px-1 flex items-center gap-2"><span class="material-symbols-outlined text-[14px]" data-icon="history">history</span> 最近使用</h2>
+<div class="bg-[#1e1e1e] rounded-DEFAULT overflow-hidden border border-[#3c3c3c] divide-y divide-[#3c3c3c]">
+<div class="flex items-center justify-between px-3 py-2 hover:bg-[#2a2d2e] transition-colors cursor-pointer group">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#858585]" data-icon="rate_review">rate_review</span>
+<span class="text-body-sm text-[#cccccc]">代码评审</span>
+</div>
+<span class="text-[10px] text-[#616161]">5 分钟前</span>
+</div>
+<div class="flex items-center justify-between px-3 py-2 hover:bg-[#2a2d2e] transition-colors cursor-pointer group">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#858585]" data-icon="bug_report">bug_report</span>
+<span class="text-body-sm text-[#cccccc]">Bug 报告生成器</span>
+</div>
+<span class="text-[10px] text-[#616161]">2 小时前</span>
+</div>
+</div>
+</section>
+<!-- Quick Create -->
+<section class="space-y-sm">
+<h2 class="font-bold text-[#cccccc] text-xs uppercase tracking-wide px-1">快速模板</h2>
+<div class="grid grid-cols-3 gap-xs">
+<button class="flex flex-col items-center justify-center gap-1 p-2 border border-dashed border-[#3c3c3c] rounded-DEFAULT hover:bg-[#252526] hover:border-[#007acc] transition-all group">
+<span class="material-symbols-outlined text-[#858585] group-hover:text-primary" data-icon="add">add</span>
+<span class="text-[10px] text-[#858585] text-center leading-tight">写周报</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-1 p-2 border border-dashed border-[#3c3c3c] rounded-DEFAULT hover:bg-[#252526] hover:border-[#007acc] transition-all group">
+<span class="material-symbols-outlined text-[#858585] group-hover:text-primary" data-icon="add">add</span>
+<span class="text-[10px] text-[#858585] text-center leading-tight">会议纪要</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-1 p-2 border border-dashed border-[#3c3c3c] rounded-DEFAULT hover:bg-[#252526] hover:border-[#007acc] transition-all group">
+<span class="material-symbols-outlined text-[#858585] group-hover:text-primary" data-icon="add">add</span>
+<span class="text-[10px] text-[#858585] text-center leading-tight">项目材料</span>
+</button>
+</div>
+</section>
+<!-- Onboarding -->
+<section class="bg-[#252526] border border-[#3c3c3c] rounded-lg p-md overflow-hidden relative group">
+<div class="absolute top-0 right-0 p-4 opacity-5 pointer-events-none transform translate-x-4 -translate-y-4">
+<span class="material-symbols-outlined !text-6xl text-primary" data-icon="rocket_launch">rocket_launch</span>
+</div>
+<div class="relative z-10">
+<h3 class="font-bold text-[#ffffff] text-sm flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary" data-icon="auto_awesome">auto_awesome</span>
+                    Getting Started
+                </h3>
+<div class="space-y-2">
+<div class="flex items-center gap-3">
+<div class="w-5 h-5 rounded-full bg-[#007acc] text-white flex items-center justify-center text-[10px] font-bold">1</div>
+<span class="text-body-sm text-[#cccccc]">Configure your AI Provider</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-5 h-5 rounded-full border border-[#3c3c3c] text-[#858585] flex items-center justify-center text-[10px] font-bold">2</div>
+<span class="text-body-sm text-[#858585]">Connect project repository</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-5 h-5 rounded-full border border-[#3c3c3c] text-[#858585] flex items-center justify-center text-[10px] font-bold">3</div>
+<span class="text-body-sm text-[#858585]">Invite team members</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-5 h-5 rounded-full border border-[#3c3c3c] text-[#858585] flex items-center justify-center text-[10px] font-bold">4</div>
+<span class="text-body-sm text-[#858585]">Execute first skill chain</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="bg-[#1e1e1e] text-[#007acc] fixed bottom-0 w-full z-50 border-t border-[#3c3c3c] flex justify-around items-center h-12 shrink-0">
+<button class="flex flex-col items-center justify-center text-[#ffffff] bg-[#37373d] w-full h-full transition-colors duration-150">
+<span class="material-symbols-outlined" data-icon="home" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-['Inter'] text-[11px] mt-0.5">首页</span>
+</button>
+<button class="flex flex-col items-center justify-center text-[#858585] hover:text-[#cccccc] w-full h-full transition-colors duration-150">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+<span class="font-['Inter'] text-[11px] mt-0.5">探索</span>
+</button>
+<button class="flex flex-col items-center justify-center text-[#858585] hover:text-[#cccccc] w-full h-full transition-colors duration-150">
+<span class="material-symbols-outlined" data-icon="star">star</span>
+<span class="font-['Inter'] text-[11px] mt-0.5">收藏</span>
+</button>
+<button class="flex flex-col items-center justify-center text-[#858585] hover:text-[#cccccc] w-full h-full transition-colors duration-150">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-['Inter'] text-[11px] mt-0.5">设置</span>
+</button>
+</nav>
+<!-- Footer Space -->
+<footer class="bg-[#1e1e1e] w-full py-2 mb-12 border-t border-[#3c3c3c] flex flex-col items-center gap-1 px-4 text-center shrink-0">
+<div class="font-['Inter'] text-[10px] text-[#616161]">v0.2.0 AI Skill KB</div>
+<div class="flex gap-4">
+<a class="font-['Inter'] text-[10px] text-[#616161] hover:text-[#cccccc] transition-opacity duration-200" href="#">文档</a>
+<a class="font-['Inter'] text-[10px] text-[#616161] hover:text-[#cccccc] transition-opacity duration-200" href="#">支持</a>
+</div>
+</footer>
+</body></html>

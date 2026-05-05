@@ -1,0 +1,270 @@
+<html class="dark"><head>
+<meta charset="utf-8"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "background": "#101419",
+            "secondary": "#c8c6c7",
+            "primary-container": "#007acc",
+            "on-primary": "#003258",
+            "on-secondary": "#303031",
+            "secondary-container": "#474648",
+            "outline-variant": "#404751",
+            "tertiary-fixed-dim": "#ffb784",
+            "on-primary-container": "#ffffff",
+            "on-surface": "#e0e2ea",
+            "on-error": "#690005",
+            "inverse-surface": "#e0e2ea",
+            "surface-dim": "#101419",
+            "inverse-on-surface": "#2d3136",
+            "on-secondary-fixed-variant": "#474648",
+            "surface-container-low": "#181c21",
+            "on-tertiary-container": "#ffffff",
+            "on-primary-fixed": "#001d36",
+            "surface": "#101419",
+            "tertiary": "#ffb784",
+            "primary-fixed-dim": "#9fcaff",
+            "primary-fixed": "#d1e4ff",
+            "outline": "#8a919d",
+            "on-tertiary-fixed": "#301400",
+            "surface-tint": "#9fcaff",
+            "tertiary-container": "#b95e01",
+            "on-secondary-container": "#b6b4b5",
+            "tertiary-fixed": "#ffdcc6",
+            "on-error-container": "#ffdad6",
+            "on-background": "#e0e2ea",
+            "error-container": "#93000a",
+            "surface-bright": "#36393f",
+            "on-primary-fixed-variant": "#00497d",
+            "primary": "#9fcaff",
+            "secondary-fixed-dim": "#c8c6c7",
+            "on-surface-variant": "#c0c7d3",
+            "surface-container-highest": "#31353b",
+            "surface-variant": "#31353b",
+            "on-tertiary-fixed-variant": "#713700",
+            "surface-container-high": "#272a30",
+            "on-secondary-fixed": "#1b1b1c",
+            "inverse-primary": "#0061a4",
+            "surface-container-lowest": "#0b0e13",
+            "secondary-fixed": "#e4e2e3",
+            "surface-container": "#1c2025",
+            "error": "#ffb4ab",
+            "on-tertiary": "#4f2500"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "unit": "4px",
+            "md": "12px",
+            "sidebar-padding": "12px",
+            "xs": "4px",
+            "sm": "8px",
+            "lg": "16px"
+          },
+          "fontFamily": {
+            "title-md": ["Inter"],
+            "label-xs": ["Inter"],
+            "code-sm": ["Monaco, Menlo, Consolas, 'Courier New', monospace"],
+            "body-sm": ["Inter"]
+          },
+          "fontSize": {
+            "title-md": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+            "label-xs": ["11px", {"lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+            "code-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+            "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      font-size: 16px;
+    }
+    .markdown-body h1 { @apply font-title-md text-title-md text-on-surface mb-md mt-lg; }
+    .markdown-body h2 { @apply font-title-md text-[14px] text-on-surface-variant mb-sm mt-md border-b border-outline-variant pb-xs; }
+    .markdown-body p { @apply font-body-sm text-body-sm text-on-surface-variant mb-md leading-relaxed; }
+    .markdown-body ul { @apply list-disc ml-lg mb-md text-on-surface-variant font-body-sm; }
+    .markdown-body li { @apply mb-xs; }
+    .markdown-body code:not(pre code) { @apply bg-surface-container-highest px-xs rounded text-primary font-code-sm; }
+    .markdown-body pre { @apply bg-[#1e1e1e] border border-outline-variant p-md rounded-none mb-md overflow-x-auto; }
+    .markdown-body pre code { @apply font-code-sm text-on-surface leading-normal; }
+    
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 10px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #3c3c3c; }
+    ::-webkit-scrollbar-thumb:hover { background: #4f4f4f; }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-[#1e1e1e] text-on-surface flex flex-col h-screen overflow-hidden select-none">
+<!-- TopAppBar Execution -->
+<header class="bg-[#1e1e1e] text-[#007acc] font-['Inter'] text-[11px] font-bold tracking-wider uppercase rounded-none border-b border-[#3c3c3c] shadow-none flex items-center justify-between px-3 h-9 w-full shrink-0">
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined" data-icon="hub">hub</span>
+<span class="text-[13px] font-semibold text-gray-200 lowercase">AI SKILLS</span>
+</div>
+<div class="flex items-center gap-md">
+<button class="transition-colors duration-100 ease-in-out hover:bg-[#2a2d2e] hover:text-white p-xs flex items-center">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<!-- NavigationDrawer Execution (Suppressed on detail view as per UX rules for task focus) -->
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col overflow-hidden bg-background">
+<!-- Skill Header / Navigation Bar -->
+<nav class="h-12 flex items-center justify-between px-md border-b border-outline-variant bg-surface-container-low shrink-0">
+<div class="flex items-center gap-md">
+<button class="flex items-center gap-xs text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+<span class="font-label-xs text-label-xs">BACK TO LIBRARY</span>
+</button>
+<div class="w-px h-4 bg-outline-variant"></div>
+<div class="flex items-center gap-sm">
+<span class="font-title-md text-title-md">Typescript Refactor Pro</span>
+<span class="font-label-xs text-label-xs bg-surface-container-highest px-xs rounded text-outline">v1.4.2</span>
+</div>
+</div>
+<div class="flex items-center gap-sm">
+<button class="flex items-center gap-xs font-label-xs text-label-xs text-on-surface-variant hover:text-tertiary transition-colors">
+<span class="material-symbols-outlined" data-icon="star">star</span>
+<span>FAVORITE</span>
+</button>
+</div>
+</nav>
+<!-- Scrollable Area -->
+<div class="flex-1 overflow-y-auto">
+<div class="max-w-4xl mx-auto px-lg py-lg">
+<!-- Metadata Bento Header -->
+<div class="grid grid-cols-12 gap-md mb-lg">
+<div class="col-span-12 md:col-span-8 flex flex-col gap-sm">
+<div class="flex flex-wrap gap-xs">
+<span class="bg-primary-container/10 text-primary border border-primary/20 px-sm py-1 rounded-full font-label-xs text-[10px] uppercase">Refactoring</span>
+<span class="bg-surface-container-highest text-on-surface-variant border border-outline-variant px-sm py-1 rounded-full font-label-xs text-[10px] uppercase">Typescript</span>
+<span class="bg-surface-container-highest text-on-surface-variant border border-outline-variant px-sm py-1 rounded-full font-label-xs text-[10px] uppercase">Clean Code</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant max-w-2xl">
+                Highly specialized skill for transforming legacy JavaScript patterns into robust, type-safe TypeScript architectures. Optimizes for performance, readability, and IDE-assisted developer experience.
+              </p>
+</div>
+<!-- Quick Actions Panel -->
+<div class="col-span-12 md:col-span-4 flex flex-col gap-xs">
+<button class="bg-primary-container hover:bg-primary-fixed-dim text-on-primary-container h-8 flex items-center justify-center gap-xs font-label-xs rounded-none transition-colors">
+<span class="material-symbols-outlined" data-icon="content_copy">content_copy</span>
+                COPY PROMPT
+              </button>
+<div class="grid grid-cols-2 gap-xs">
+<button class="border border-outline-variant hover:bg-surface-container-highest text-on-surface h-8 flex items-center justify-center gap-xs font-label-xs rounded-none transition-colors">
+<span class="material-symbols-outlined" data-icon="bolt">bolt</span>
+                  CLAUDE
+                </button>
+<button class="border border-outline-variant hover:bg-surface-container-highest text-on-surface h-8 flex items-center justify-center gap-xs font-label-xs rounded-none transition-colors">
+<span class="material-symbols-outlined" data-icon="terminal">terminal</span>
+                  CURSOR
+                </button>
+</div>
+</div>
+</div>
+<!-- Markdown Content -->
+<article class="markdown-body">
+<h1>Typescript Refactor Pro</h1>
+<p>This AI skill leverages advanced static analysis heuristics to provide structural refactoring suggestions. It focuses on converting untyped objects to strict interfaces and replacing complex conditional logic with polymorphic patterns.</p>
+<h2>Key Features</h2>
+<ul>
+<li><strong>Interface Generation:</strong> Automatically infers shapes from usage and generates optimal TypeScript interfaces.</li>
+<li><strong>Generic Optimization:</strong> Identifies opportunities for re-usable generic components and utility types.</li>
+<li><strong>Type Narrowing:</strong> Implements user-defined type guards to eliminate 'any' and 'unknown' casts.</li>
+<li><strong>Standard Compliance:</strong> Adheres to the latest TSConfig strictness guidelines.</li>
+</ul>
+<h2>The System Prompt</h2>
+<div class="relative group">
+<div class="absolute right-md top-md opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="bg-[#2d2d2d] border border-[#3c3c3c] p-xs text-on-surface-variant hover:text-white flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px]" data-icon="content_copy">content_copy</span>
+<span class="font-label-xs text-[10px]">COPY CODE</span>
+</button>
+</div>
+<pre><code class="language-typescript">/* System Prompt: Typescript Refactor Pro */
+const refactorRules = {
+  strictMode: true,
+  preferInterfaces: true,
+  noImplicitAny: "error",
+  enforceFunctionalPatterns: true
+};
+
+/**
+ * Your task is to analyze the provided code snippet and 
+ * suggest a refactored version that improves type-safety 
+ * without introducing runtime overhead.
+ */
+function applyRefactorHeuristic(code: string): string {
+  // 1. Identify implicit 'any' types
+  // 2. Generate descriptive interfaces
+  // 3. Convert function declarations to arrow functions where appropriate
+  // 4. Implement exhaustive check patterns for unions
+  return refactor(code);
+}</code></pre>
+</div>
+<h2>Usage Guide</h2>
+<p>To use this skill effectively, provide the LLM with a specific file context or a code block. For best results, also include the <code>tsconfig.json</code> settings you are targeting.</p>
+<div class="bg-surface-container-low border-l-2 border-primary p-md mt-md">
+<div class="flex items-center gap-xs text-primary mb-xs">
+<span class="material-symbols-outlined" data-icon="info">info</span>
+<span class="font-label-xs font-bold">PRO TIP</span>
+</div>
+<p class="font-body-sm text-on-surface-variant italic mb-0">
+                "Combine this skill with 'Unit Test Generator' to ensure the refactored types maintain behavior parity across your test suite."
+              </p>
+</div>
+</article>
+<!-- Footer Metadata -->
+<footer class="mt-lg pt-lg border-t border-outline-variant flex flex-wrap justify-between items-center gap-md">
+<div class="flex items-center gap-lg">
+<div class="flex flex-col">
+<span class="font-label-xs text-[10px] text-outline uppercase">Published</span>
+<span class="font-body-sm text-on-surface">Oct 24, 2023</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-xs text-[10px] text-outline uppercase">Author</span>
+<div class="flex items-center gap-xs">
+<div class="w-4 h-4 rounded-full bg-secondary-container flex items-center justify-center">
+<span class="font-label-xs text-[8px] text-white">TS</span>
+</div>
+<span class="font-body-sm text-on-surface">DevSystems.ai</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<div class="flex -space-x-2">
+<div class="w-6 h-6 rounded-full border-2 border-background bg-surface-container-highest flex items-center justify-center">
+<span class="text-[8px]">+12</span>
+</div>
+<img class="w-6 h-6 rounded-full border-2 border-background" data-alt="A professional headshot of a software engineer with glasses, looking directly at the camera with a neutral expression. The background is a blurred office environment with cool blue and grey tones, creating a high-tech corporate aesthetic. The lighting is soft and even, highlighting facial details with clarity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEea_trKKmShnmGvzHUM3RVpw_KnhQQUuAfuMgofdg1JDOoC31acCGCNNX9dxZmfPU-zkDs5AF_j0LtzpXszv4JGCFX4TdvNlp-iVpEWYTy-Tb4XsjDF4n5nV9Ka5bdPVaqwf2hNbkGTJ28jn7nL1_vewHNfLJ7-VDoQZ24NnWOMSTLkRklM6MxGAiZaSj3ThnOaU6S0d_xa8_oVVKmtQZ5MKU8LsrC5qhYOYWR51Z3uGdNGDpJenI5IVIY5Xqn3w9rxiv9dpG4hI"/>
+<img class="w-6 h-6 rounded-full border-2 border-background" data-alt="A portrait of a diverse female developer smiling warmly, set against a dark, minimalist backdrop. She has vibrant lighting reflecting off her features, utilizing a palette of deep blues and soft whites to match a professional dark-mode UI design. The mood is confident and efficient." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA_WAsiDiNH0Jz879uPCT_W-zSvn8e9cdlSCqfyoNzeiYMe0F6atBVg9gbfq4JBzQHIL1azjH-JBAqZpb-ljNofiaBjPP6oWnX91PqD6Xbghp_IwJC3G6PMRVTbh8ePyihwbsrNOKKHt0h5zaqByGdAi5gSU2gLZjudG_UBU-rYh2Q_BxvghhG0lXOBPpAXZ94i3xZA0Vss-Wg8bzKKmgpVx-lc_By_J9o-_3TSWLkW7ZILzyZ0Av5qhC9PW_NAD7HdumM7gj0iySE"/>
+</div>
+<span class="font-label-xs text-outline">USED BY 2.4k DEVELOPERS</span>
+</div>
+</footer>
+</div>
+</div>
+</main>
+</div>
+</body></html>

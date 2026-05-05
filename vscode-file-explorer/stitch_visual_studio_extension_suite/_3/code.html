@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+            font-size: 16px;
+        }
+        body {
+            background-color: #1e1e1e;
+            color: #e0e2ea;
+            -webkit-font-smoothing: antialiased;
+        }
+        .vs-scrollbar::-webkit-scrollbar {
+            width: 10px;
+        }
+        .vs-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .vs-scrollbar::-webkit-scrollbar-thumb {
+            background: #333333;
+        }
+        .vs-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #444444;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "background": "#101419",
+                        "secondary": "#c8c6c7",
+                        "primary-container": "#007acc",
+                        "on-primary": "#003258",
+                        "on-secondary": "#303031",
+                        "secondary-container": "#474648",
+                        "outline-variant": "#404751",
+                        "tertiary-fixed-dim": "#ffb784",
+                        "on-primary-container": "#ffffff",
+                        "on-surface": "#e0e2ea",
+                        "on-error": "#690005",
+                        "inverse-surface": "#e0e2ea",
+                        "surface-dim": "#101419",
+                        "inverse-on-surface": "#2d3136",
+                        "on-secondary-fixed-variant": "#474648",
+                        "surface-container-low": "#181c21",
+                        "on-tertiary-container": "#ffffff",
+                        "on-primary-fixed": "#001d36",
+                        "surface": "#101419",
+                        "tertiary": "#ffb784",
+                        "primary-fixed-dim": "#9fcaff",
+                        "primary-fixed": "#d1e4ff",
+                        "outline": "#8a919d",
+                        "on-tertiary-fixed": "#301400",
+                        "surface-tint": "#9fcaff",
+                        "tertiary-container": "#b95e01",
+                        "on-secondary-container": "#b6b4b5",
+                        "tertiary-fixed": "#ffdcc6",
+                        "on-error-container": "#ffdad6",
+                        "on-background": "#e0e2ea",
+                        "error-container": "#93000a",
+                        "surface-bright": "#36393f",
+                        "on-primary-fixed-variant": "#00497d",
+                        "primary": "#9fcaff",
+                        "secondary-fixed-dim": "#c8c6c7",
+                        "on-surface-variant": "#c0c7d3",
+                        "surface-container-highest": "#31353b",
+                        "surface-variant": "#31353b",
+                        "on-tertiary-fixed-variant": "#713700",
+                        "surface-container-high": "#272a30",
+                        "on-secondary-fixed": "#1b1b1c",
+                        "inverse-primary": "#0061a4",
+                        "surface-container-lowest": "#0b0e13",
+                        "secondary-fixed": "#e4e2e3",
+                        "surface-container": "#1c2025",
+                        "error": "#ffb4ab",
+                        "on-tertiary": "#4f2500"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "md": "12px",
+                        "sidebar-padding": "12px",
+                        "xs": "4px",
+                        "sm": "8px",
+                        "lg": "16px"
+                    },
+                    "fontFamily": {
+                        "title-md": ["Inter"],
+                        "label-xs": ["Inter"],
+                        "code-sm": ["Monaco, Menlo, Consolas, 'Courier New', monospace"],
+                        "body-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "title-md": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                        "label-xs": ["11px", {"lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                        "code-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                        "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-sm vs-scrollbar">
+<!-- Top Navigation Header -->
+<header class="bg-[#1e1e1e] text-[#007acc] font-['Inter'] text-[13px] font-semibold tracking-tight border-b border-[#3c3c3c] flex items-center justify-between px-3 h-9 w-full fixed top-0 z-50">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#007acc]" data-icon="bolt">bolt</span>
+<span class="text-[#cccccc] font-bold text-xs uppercase tracking-wider">AI Skill Knowledge Base</span>
+</div>
+<div class="text-[#616161] font-code-sm text-xs">v0.2.0</div>
+</header>
+<main class="pt-9 pb-12 min-h-screen">
+<!-- Breadcrumb / Back Button Section -->
+<nav class="flex items-center gap-2 px-md py-sm bg-[#252526] border-b border-[#3c3c3c]">
+<button class="flex items-center text-[#969696] hover:text-[#ffffff] transition-colors duration-150">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+<span class="ml-1 font-label-xs text-label-xs uppercase tracking-wide">Back</span>
+</button>
+<span class="text-[#616161] text-xs">/</span>
+<span class="text-[#cccccc] font-label-xs text-label-xs">Clusters</span>
+</nav>
+<!-- Cluster Hero Section -->
+<section class="px-md py-lg space-y-sm">
+<h1 class="font-title-md text-title-md text-[#ffffff] flex items-center gap-2">
+<span class="material-symbols-outlined text-[#007acc]" data-icon="folder_zip">folder_zip</span>
+                03-Development Engineering
+            </h1>
+<p class="text-[#969696] font-body-sm text-body-sm leading-relaxed max-w-xl">
+                Core engineering capabilities focusing on CI/CD pipelines, automated infrastructure provisioning, and technical health monitoring. This cluster coordinates high-performance deployment strategies and environment parity across development lifecycles.
+            </p>
+</section>
+<!-- Search / Filter (Explorer Style) -->
+<div class="px-md mb-lg">
+<div class="relative flex items-center group">
+<span class="absolute left-2 material-symbols-outlined text-[#858585] group-focus-within:text-[#007acc]" data-icon="search">search</span>
+<input class="w-full bg-[#252526] border border-[#3c3c3c] rounded-DEFAULT pl-8 pr-3 py-1 text-xs text-[#cccccc] focus:ring-1 focus:ring-[#007acc] focus:border-[#007acc] outline-none placeholder:text-[#616161]" placeholder="Search agents or skills..." type="text"/>
+</div>
+</div>
+<!-- Agent List (Bento-ish Grid / Hierarchical) -->
+<div class="px-md space-y-lg">
+<!-- Agent Card 1 -->
+<div class="bg-[#252526] border border-[#3c3c3c] rounded-lg overflow-hidden transition-all duration-150">
+<div class="flex items-center justify-between p-sm border-b border-[#3c3c3c] bg-[#2d2d2d]">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="smart_toy">smart_toy</span>
+<span class="font-semibold text-[#ffffff] font-title-md text-body-sm">Pipeline_Architect_V4</span>
+</div>
+<span class="px-2 py-0.5 bg-[#00497d]/30 text-primary-fixed-dim text-[10px] font-bold rounded-full border border-primary-fixed-dim/20 uppercase tracking-tighter">Active</span>
+</div>
+<div class="p-0">
+<!-- Nested Skills List -->
+<div class="flex flex-col">
+<div class="group flex items-center px-md py-2 border-l-2 border-transparent hover:border-[#007acc] hover:bg-[#2a2d2e] cursor-pointer transition-colors border-b border-[#333333]">
+<span class="material-symbols-outlined text-[#858585] group-hover:text-[#ffffff] mr-2" data-icon="chevron_right">chevron_right</span>
+<span class="material-symbols-outlined text-[#007acc] mr-2" data-icon="schema">schema</span>
+<div class="flex-1">
+<div class="text-[#cccccc] group-hover:text-[#ffffff] font-code-sm text-code-sm">YAML Configuration Analysis</div>
+<div class="text-[#616161] text-[10px]">Validates syntactical integrity across multi-stage CI manifests.</div>
+</div>
+<span class="text-[#616161] text-[10px] group-hover:text-[#9fcaff]">100% Match</span>
+</div>
+<div class="group flex items-center px-md py-2 border-l-2 border-transparent hover:border-[#007acc] hover:bg-[#2a2d2e] cursor-pointer transition-colors border-b border-[#333333]">
+<span class="material-symbols-outlined text-[#858585] group-hover:text-[#ffffff] mr-2" data-icon="chevron_right">chevron_right</span>
+<span class="material-symbols-outlined text-tertiary mr-2" data-icon="speed">speed</span>
+<div class="flex-1">
+<div class="text-[#cccccc] group-hover:text-[#ffffff] font-code-sm text-code-sm">Latency Optimization Engine</div>
+<div class="text-[#616161] text-[10px]">Optimizes container build cache layers for speed.</div>
+</div>
+<span class="text-[#616161] text-[10px]">92% Mastery</span>
+</div>
+<div class="group flex items-center px-md py-2 border-l-2 border-transparent hover:border-[#007acc] hover:bg-[#2a2d2e] cursor-pointer transition-colors">
+<span class="material-symbols-outlined text-[#858585] group-hover:text-[#ffffff] mr-2" data-icon="chevron_right">chevron_right</span>
+<span class="material-symbols-outlined text-error mr-2" data-icon="security">security</span>
+<div class="flex-1">
+<div class="text-[#cccccc] group-hover:text-[#ffffff] font-code-sm text-code-sm">Secret Leakage Auditing</div>
+<div class="text-[#616161] text-[10px]">Scans commit history for exposed environment credentials.</div>
+</div>
+<span class="text-[#616161] text-[10px]">88% Mastery</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Agent Card 2 -->
+<div class="bg-[#252526] border border-[#3c3c3c] rounded-lg overflow-hidden">
+<div class="flex items-center justify-between p-sm border-b border-[#3c3c3c] bg-[#2d2d2d]">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="cloud_done">cloud_done</span>
+<span class="font-semibold text-[#ffffff] font-title-md text-body-sm">Infra_Provisioner_GPT</span>
+</div>
+<span class="px-2 py-0.5 bg-[#474648] text-[#cccccc] text-[10px] font-bold rounded-full border border-[#3c3c3c] uppercase tracking-tighter">Standby</span>
+</div>
+<div class="p-0">
+<div class="flex flex-col">
+<div class="group flex items-center px-md py-2 border-l-2 border-transparent hover:border-[#007acc] hover:bg-[#2a2d2e] cursor-pointer transition-colors border-b border-[#333333]">
+<span class="material-symbols-outlined text-[#858585] group-hover:text-[#ffffff] mr-2" data-icon="chevron_right">chevron_right</span>
+<span class="material-symbols-outlined text-on-tertiary-fixed-variant mr-2" data-icon="terminal">terminal</span>
+<div class="flex-1">
+<div class="text-[#cccccc] group-hover:text-[#ffffff] font-code-sm text-code-sm">Terraform State Management</div>
+<div class="text-[#616161] text-[10px]">Calculates resource diffs for complex cloud environments.</div>
+</div>
+<span class="text-[#616161] text-[10px]">95% Mastery</span>
+</div>
+<div class="group flex items-center px-md py-2 border-l-2 border-transparent hover:border-[#007acc] hover:bg-[#2a2d2e] cursor-pointer transition-colors">
+<span class="material-symbols-outlined text-[#858585] group-hover:text-[#ffffff] mr-2" data-icon="chevron_right">chevron_right</span>
+<span class="material-symbols-outlined text-on-primary-fixed-variant mr-2" data-icon="hub">hub</span>
+<div class="flex-1">
+<div class="text-[#cccccc] group-hover:text-[#ffffff] font-code-sm text-code-sm">Kubernetes Cluster Scaffolding</div>
+<div class="text-[#616161] text-[10px]">Deploys pre-configured Helm charts with networking.</div>
+</div>
+<span class="text-[#616161] text-[10px]">74% Mastery</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Visualization Section (Modern Pattern) -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md pt-lg">
+<div class="bg-[#252526] border border-[#3c3c3c] rounded-lg p-md h-32 flex flex-col justify-between">
+<div>
+<span class="text-[10px] text-[#858585] uppercase tracking-widest font-bold">Cluster Health</span>
+<div class="text-xl font-bold text-primary">94.2%</div>
+</div>
+<div class="w-full bg-[#3c3c3c] h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[94%]"></div>
+</div>
+</div>
+<div class="bg-[#252526] border border-[#3c3c3c] rounded-lg p-md h-32 flex flex-col justify-between overflow-hidden relative">
+<div class="z-10">
+<span class="text-[10px] text-[#858585] uppercase tracking-widest font-bold">Recent Activity</span>
+<div class="text-xs text-[#cccccc] mt-1 italic">32 skills executed in the last 1h</div>
+</div>
+<!-- Abstract Background Pattern -->
+<div class="absolute right-0 bottom-0 opacity-10 pointer-events-none">
+<span class="material-symbols-outlined text-[80px]" data-icon="insights">insights</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer Information -->
+<footer class="bg-[#1e1e1e] border-t border-[#3c3c3c] flex flex-col items-center gap-1 px-4 py-2 text-center fixed bottom-12 w-full z-40">
+<div class="flex gap-4">
+<a class="text-[#616161] font-['Inter'] text-[10px] hover:text-[#cccccc] transition-opacity duration-200" href="#">Documentation</a>
+<a class="text-[#616161] font-['Inter'] text-[10px] hover:text-[#cccccc] transition-opacity duration-200" href="#">Support</a>
+</div>
+<div class="text-[#616161] font-['Inter'] text-[10px]">v0.2.0 AI Skill KB</div>
+</footer>
+<!-- Bottom Navigation Bar -->
+<nav class="bg-[#1e1e1e] border-t border-[#3c3c3c] flex justify-around items-center h-12 w-full fixed bottom-0 z-50">
+<button class="flex items-center justify-center w-full h-full text-[#ffffff] bg-[#37373d]">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+</button>
+<button class="flex items-center justify-center w-full h-full text-[#858585] hover:text-[#cccccc] active:opacity-80">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+<button class="flex items-center justify-center w-full h-full text-[#858585] hover:text-[#cccccc] active:opacity-80">
+<span class="material-symbols-outlined" data-icon="star">star</span>
+</button>
+<button class="flex items-center justify-center w-full h-full text-[#858585] hover:text-[#cccccc] active:opacity-80">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+</nav>
+</body></html>

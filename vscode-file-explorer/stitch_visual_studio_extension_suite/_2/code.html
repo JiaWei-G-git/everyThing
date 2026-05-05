@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+            font-size: 16px;
+        }
+        body {
+            background-color: #1e1e1e;
+            color: #cccccc;
+            -webkit-font-smoothing: antialiased;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #1e1e1e;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #3c3c3c;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #4f4f4f;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "background": "#101419",
+                        "secondary": "#c8c6c7",
+                        "primary-container": "#007acc",
+                        "on-primary": "#003258",
+                        "on-secondary": "#303031",
+                        "secondary-container": "#474648",
+                        "outline-variant": "#404751",
+                        "tertiary-fixed-dim": "#ffb784",
+                        "on-primary-container": "#ffffff",
+                        "on-surface": "#e0e2ea",
+                        "on-error": "#690005",
+                        "inverse-surface": "#e0e2ea",
+                        "surface-dim": "#101419",
+                        "inverse-on-surface": "#2d3136",
+                        "on-secondary-fixed-variant": "#474648",
+                        "surface-container-low": "#181c21",
+                        "on-tertiary-container": "#ffffff",
+                        "on-primary-fixed": "#001d36",
+                        "surface": "#101419",
+                        "tertiary": "#ffb784",
+                        "primary-fixed-dim": "#9fcaff",
+                        "primary-fixed": "#d1e4ff",
+                        "outline": "#8a919d",
+                        "on-tertiary-fixed": "#301400",
+                        "surface-tint": "#9fcaff",
+                        "tertiary-container": "#b95e01",
+                        "on-secondary-container": "#b6b4b5",
+                        "tertiary-fixed": "#ffdcc6",
+                        "on-error-container": "#ffdad6",
+                        "on-background": "#e0e2ea",
+                        "error-container": "#93000a",
+                        "surface-bright": "#36393f",
+                        "on-primary-fixed-variant": "#00497d",
+                        "primary": "#9fcaff",
+                        "secondary-fixed-dim": "#c8c6c7",
+                        "on-surface-variant": "#c0c7d3",
+                        "surface-container-highest": "#31353b",
+                        "surface-variant": "#31353b",
+                        "on-tertiary-fixed-variant": "#713700",
+                        "surface-container-high": "#272a30",
+                        "on-secondary-fixed": "#1b1b1c",
+                        "inverse-primary": "#0061a4",
+                        "surface-container-lowest": "#0b0e13",
+                        "secondary-fixed": "#e4e2e3",
+                        "surface-container": "#1c2025",
+                        "error": "#ffb4ab",
+                        "on-tertiary": "#4f2500"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "md": "12px",
+                        "sidebar-padding": "12px",
+                        "xs": "4px",
+                        "sm": "8px",
+                        "lg": "16px"
+                    },
+                    "fontFamily": {
+                        "title-md": ["Inter"],
+                        "label-xs": ["Inter"],
+                        "code-sm": ["Monaco, Menlo, Consolas, 'Courier New', monospace"],
+                        "body-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "title-md": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                        "label-xs": ["11px", {"lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                        "code-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                        "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background selection:bg-primary-container selection:text-on-primary-container custom-scrollbar">
+<!-- Top Navigation Bar -->
+<header class="bg-[#1e1e1e] border-b border-[#3c3c3c] flex items-center justify-between px-3 h-9 w-full fixed top-0 z-50">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#007acc]" data-icon="bolt">bolt</span>
+<span class="font-['Inter'] text-[13px] font-semibold tracking-tight text-[#cccccc] font-bold text-xs uppercase tracking-wider">AI Skill Knowledge Base</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="font-['Inter'] text-[13px] font-semibold tracking-tight text-[#969696]">v0.2.0</span>
+</div>
+</header>
+<main class="pt-9 pb-12 min-h-screen">
+<!-- Content Container -->
+<div class="px-sidebar-padding py-lg flex flex-col gap-lg">
+<!-- Back Action -->
+<button class="flex items-center gap-xs text-secondary hover:text-on-background transition-colors duration-150 group">
+<span class="material-symbols-outlined text-[16px] group-hover:-translate-x-1 transition-transform" data-icon="arrow_back">arrow_back</span>
+<span class="font-label-xs text-label-xs">Back to Skills</span>
+</button>
+<!-- Skill Header Card -->
+<div class="bg-[#252526] border border-[#3c3c3c] rounded p-sm flex flex-col gap-sm">
+<div class="flex justify-between items-start">
+<div class="flex flex-col gap-xs">
+<div class="flex items-center gap-sm">
+<span class="bg-[#007acc] text-[#ffffff] px-2 py-0.5 rounded-sm font-label-xs text-[10px] uppercase tracking-wider">Checklist</span>
+<div class="flex gap-xs">
+<span class="text-primary font-label-xs text-label-xs">#Troubleshoot</span>
+<span class="text-primary font-label-xs text-label-xs">#Maintenance</span>
+</div>
+</div>
+<h1 class="font-title-md text-title-md text-on-surface">故障排查检查清单</h1>
+</div>
+<div class="flex gap-xs">
+<button class="w-8 h-8 flex items-center justify-center hover:bg-[#3c3c3c] rounded transition-colors" title="Favorite">
+<span class="material-symbols-outlined text-secondary" data-icon="star">star</span>
+</button>
+</div>
+</div>
+<!-- Action Bar -->
+<div class="flex gap-sm mt-xs">
+<button class="flex-1 bg-primary-container text-on-primary-container h-8 rounded flex items-center justify-center gap-xs font-label-xs text-label-xs hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined" data-icon="install_desktop">install_desktop</span>
+                        Install
+                    </button>
+<button class="flex-1 border border-[#3c3c3c] text-secondary h-8 rounded flex items-center justify-center gap-xs font-label-xs text-label-xs hover:bg-[#3c3c3c] transition-colors">
+<span class="material-symbols-outlined" data-icon="content_copy">content_copy</span>
+                        Copy
+                    </button>
+</div>
+</div>
+<!-- Progress Tracker Section -->
+<section class="flex flex-col gap-sm">
+<div class="flex justify-between items-end">
+<span class="font-label-xs text-label-xs text-secondary uppercase tracking-widest">Progress</span>
+<span class="font-code-sm text-code-sm text-primary">25% Complete</span>
+</div>
+<div class="h-1 w-full bg-[#3c3c3c] rounded-full overflow-hidden">
+<div class="h-full bg-[#007acc] transition-all duration-500" style="width: 25%"></div>
+</div>
+</section>
+<!-- Checklist Steps -->
+<div class="flex flex-col gap-sm">
+<!-- Step 1: Expanded -->
+<div class="bg-[#252526] border border-[#3c3c3c] rounded overflow-hidden">
+<button class="w-full px-sm py-sm flex items-center gap-sm bg-[#2d2d2d] border-b border-[#3c3c3c]">
+<span class="material-symbols-outlined text-secondary" data-icon="expand_more">expand_more</span>
+<div class="flex items-center gap-xs">
+<span class="font-code-sm text-code-sm text-[#007acc] font-bold">01</span>
+<span class="font-body-sm text-body-sm text-on-surface font-semibold">Confirm Symptoms</span>
+</div>
+<span class="ml-auto material-symbols-outlined text-[#007acc]" data-icon="error" data-weight="fill">error</span>
+</button>
+<div class="p-sm flex flex-col gap-md">
+<p class="font-body-sm text-body-sm text-secondary leading-relaxed">
+                            Start by identifying the specific failure modes observed by the user or reported in the system logs.
+                        </p>
+<div class="flex flex-col gap-sm">
+<label class="flex items-center gap-sm group cursor-pointer">
+<div class="w-4 h-4 border border-[#007acc] rounded-sm flex items-center justify-center bg-[#007acc]">
+<span class="material-symbols-outlined text-[12px] text-white" data-icon="check">check</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface line-through opacity-50">Terminal Offline</span>
+</label>
+<label class="flex items-center gap-sm group cursor-pointer">
+<div class="w-4 h-4 border border-[#3c3c3c] rounded-sm flex items-center justify-center hover:border-[#007acc] transition-colors"></div>
+<span class="font-body-sm text-body-sm text-on-surface group-hover:text-primary transition-colors">Collection Failed</span>
+</label>
+<label class="flex items-center gap-sm group cursor-pointer">
+<div class="w-4 h-4 border border-[#3c3c3c] rounded-sm flex items-center justify-center hover:border-[#007acc] transition-colors"></div>
+<span class="font-body-sm text-body-sm text-on-surface group-hover:text-primary transition-colors">Latency Spike (&gt;500ms)</span>
+</label>
+</div>
+<!-- Technical Hint Card -->
+<div class="bg-[#1e1e1e] p-xs border-l-2 border-[#007acc] flex gap-sm">
+<span class="material-symbols-outlined text-primary text-[14px]" data-icon="info">info</span>
+<span class="font-code-sm text-code-sm text-secondary">Check `systemctl status skill-agent` for initial state.</span>
+</div>
+</div>
+</div>
+<!-- Step 2: Collapsed -->
+<div class="bg-[#252526] border border-[#3c3c3c] rounded overflow-hidden">
+<button class="w-full px-sm py-sm flex items-center gap-sm hover:bg-[#2a2d2e] transition-colors">
+<span class="material-symbols-outlined text-secondary" data-icon="chevron_right">chevron_right</span>
+<div class="flex items-center gap-xs">
+<span class="font-code-sm text-code-sm text-[#969696] font-bold">02</span>
+<span class="font-body-sm text-body-sm text-secondary">Network Environment Scan</span>
+</div>
+</button>
+</div>
+<!-- Step 3: Collapsed -->
+<div class="bg-[#252526] border border-[#3c3c3c] rounded overflow-hidden">
+<button class="w-full px-sm py-sm flex items-center gap-sm hover:bg-[#2a2d2e] transition-colors">
+<span class="material-symbols-outlined text-secondary" data-icon="chevron_right">chevron_right</span>
+<div class="flex items-center gap-xs">
+<span class="font-code-sm text-code-sm text-[#969696] font-bold">03</span>
+<span class="font-body-sm text-body-sm text-secondary">Log Extraction &amp; Analysis</span>
+</div>
+</button>
+</div>
+</div>
+<!-- Context Image (System State) -->
+<div class="relative w-full aspect-video rounded-lg overflow-hidden border border-[#3c3c3c] mt-md">
+<img alt="System Environment" class="w-full h-full object-cover grayscale opacity-40" data-alt="A highly detailed close-up of a modern server rack with blinking blue and green LED indicators in a dark, high-tech data center environment. The lighting is moody and focused, highlighting the metallic textures and complex cabling. The overall aesthetic is professional, technical, and clean, perfectly matching a VS Code dark theme interface with primary blue accents. The scene conveys a sense of high-performance computing and organized system maintenance." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB26_p4MZv6VBOINa1G_asobrbC2Pzv7HZ5jre8pdbx4jNNumFy_FmBbAiu2tB7pEZ38lEwmqvpdi1YebS_RTcLM_Upe0rbH8pld4EVb8IC4s56LgFUlBk1Xk6Rg5eDajAG98C23sLNwf79LCTzxhwMPL0tuETEDDsqASj8nK8WQ8GGbkQwfu4swUwiKFF_y6V0yA_okzEf_k4MbynIYLDouBkeZuXSSVzMoDPofa25PBHKhVSA3ipHcxJFX611tki8PbvJWFzahMM"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background to-transparent flex items-end p-sm">
+<span class="font-label-xs text-[10px] text-primary uppercase bg-background/80 px-1 py-0.5 rounded">Live Monitor</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-[#1e1e1e] border-t border-[#3c3c3c] flex flex-col items-center gap-1 px-4 text-center w-full py-2 mb-12">
+<span class="font-['Inter'] text-[10px] text-[#616161]">v0.2.0 AI Skill KB</span>
+<div class="flex gap-lg">
+<a class="font-['Inter'] text-[10px] text-[#616161] hover:text-[#cccccc] transition-opacity duration-200" href="#">Documentation</a>
+<a class="font-['Inter'] text-[10px] text-[#616161] hover:text-[#cccccc] transition-opacity duration-200" href="#">Support</a>
+</div>
+</footer>
+<!-- Bottom Navigation Bar (Mobile Viewport Emphasis) -->
+<nav class="bg-[#1e1e1e] border-t border-[#3c3c3c] fixed bottom-0 w-full z-50 flex justify-around items-center h-12 w-full">
+<button class="flex items-center justify-center w-full h-full text-[#858585] hover:text-[#cccccc] active:opacity-80">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+</button>
+<button class="flex items-center justify-center w-full h-full text-[#858585] hover:text-[#cccccc] active:opacity-80">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+<button class="flex items-center justify-center w-full h-full text-[#ffffff] bg-[#37373d] active:opacity-80">
+<span class="material-symbols-outlined" data-icon="star">star</span>
+</button>
+<button class="flex items-center justify-center w-full h-full text-[#858585] hover:text-[#cccccc] active:opacity-80">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+</nav>
+</body></html>

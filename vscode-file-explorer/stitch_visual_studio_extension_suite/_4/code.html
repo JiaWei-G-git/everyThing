@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "background": "#1e1e1e",
+                    "secondary": "#c8c6c7",
+                    "primary-container": "#007acc",
+                    "on-primary": "#003258",
+                    "on-secondary": "#303031",
+                    "secondary-container": "#474648",
+                    "outline-variant": "#3c3c3c",
+                    "tertiary-fixed-dim": "#ffb784",
+                    "on-primary-container": "#ffffff",
+                    "on-surface": "#cccccc",
+                    "on-error": "#690005",
+                    "inverse-surface": "#e0e2ea",
+                    "surface-dim": "#1e1e1e",
+                    "inverse-on-surface": "#2d3136",
+                    "on-secondary-fixed-variant": "#474648",
+                    "surface-container-low": "#252526",
+                    "on-tertiary-container": "#ffffff",
+                    "on-primary-fixed": "#001d36",
+                    "surface": "#1e1e1e",
+                    "tertiary": "#ffb784",
+                    "primary-fixed-dim": "#9fcaff",
+                    "primary-fixed": "#d1e4ff",
+                    "outline": "#3c3c3c",
+                    "on-tertiary-fixed": "#301400",
+                    "surface-tint": "#007acc",
+                    "tertiary-container": "#b95e01",
+                    "on-secondary-container": "#b6b4b5",
+                    "tertiary-fixed": "#ffdcc6",
+                    "on-error-container": "#ffdad6",
+                    "on-background": "#cccccc",
+                    "error-container": "#93000a",
+                    "surface-bright": "#36393f",
+                    "on-primary-fixed-variant": "#00497d",
+                    "primary": "#007acc",
+                    "secondary-fixed-dim": "#c8c6c7",
+                    "on-surface-variant": "#cccccc",
+                    "surface-container-highest": "#31353b",
+                    "surface-variant": "#252526",
+                    "on-tertiary-fixed-variant": "#713700",
+                    "surface-container-high": "#2d2d2d",
+                    "on-secondary-fixed": "#1b1b1c",
+                    "inverse-primary": "#0061a4",
+                    "surface-container-lowest": "#1e1e1e",
+                    "secondary-fixed": "#e4e2e3",
+                    "surface-container": "#252526",
+                    "error": "#ffb4ab",
+                    "on-tertiary": "#4f2500"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0px",
+                    "lg": "2px",
+                    "xl": "4px",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "unit": "4px",
+                    "md": "12px",
+                    "sidebar-padding": "12px",
+                    "xs": "4px",
+                    "sm": "8px",
+                    "lg": "16px"
+            },
+            "fontFamily": {
+                    "title-md": ["Inter"],
+                    "label-xs": ["Inter"],
+                    "code-sm": ["Monaco, Menlo, Consolas, 'Courier New', monospace"],
+                    "body-sm": ["Inter"]
+            },
+            "fontSize": {
+                    "title-md": ["13px", {"lineHeight": "18px", "fontWeight": "600"}],
+                    "label-xs": ["11px", {"lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                    "code-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                    "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+            font-size: 16px;
+        }
+        .vs-code-scrollbar::-webkit-scrollbar {
+            width: 10px;
+        }
+        .vs-code-scrollbar::-webkit-scrollbar-thumb {
+            background-color: rgba(121, 121, 121, 0.4);
+        }
+        .vs-code-scrollbar::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(100, 100, 100, 0.7);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-[#1e1e1e] text-[#cccccc] font-body-sm h-screen flex overflow-hidden">
+<!-- Navigation Drawer -->
+<aside class="flex flex-col w-[260px] h-full bg-[#1e1e1e] border-r border-[#3c3c3c]">
+<div class="flex items-center px-3 h-9 w-full">
+<span class="text-[11px] font-bold text-gray-500 uppercase tracking-tighter">KNOWLEDGE BASE</span>
+</div>
+<nav class="flex flex-col w-full h-full">
+<div class="flex items-center px-4 py-2 text-gray-400 hover:bg-[#2a2d2e] cursor-pointer active:opacity-80 transition-colors duration-100 ease-in-out font-body-sm text-[13px]">
+<span class="material-symbols-outlined mr-2" data-icon="grid_view">grid_view</span>
+<span>Scenarios</span>
+</div>
+<div class="flex items-center px-4 py-2 text-gray-400 hover:bg-[#2a2d2e] cursor-pointer active:opacity-80 transition-colors duration-100 ease-in-out font-body-sm text-[13px]">
+<span class="material-symbols-outlined mr-2" data-icon="account_tree">account_tree</span>
+<span>Clusters</span>
+</div>
+<!-- Search Tab: Active -->
+<div class="flex items-center px-4 py-2 bg-[#252526] text-white border-l-2 border-[#007acc] font-medium cursor-pointer active:opacity-80 transition-colors duration-100 ease-in-out font-body-sm text-[13px]">
+<span class="material-symbols-outlined mr-2 text-[#007acc]" data-icon="search">search</span>
+<span>Search</span>
+</div>
+<div class="flex items-center px-4 py-2 text-gray-400 hover:bg-[#2a2d2e] cursor-pointer active:opacity-80 transition-colors duration-100 ease-in-out font-body-sm text-[13px]">
+<span class="material-symbols-outlined mr-2" data-icon="fact_check">fact_check</span>
+<span>Checklist</span>
+</div>
+<div class="mt-auto flex items-center px-4 py-2 text-gray-400 hover:bg-[#2a2d2e] cursor-pointer active:opacity-80 transition-colors duration-100 ease-in-out font-body-sm text-[13px]">
+<span class="material-symbols-outlined mr-2" data-icon="settings">settings</span>
+<span>Settings</span>
+</div>
+</nav>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col h-full bg-[#1e1e1e]">
+<!-- TopAppBar -->
+<header class="flex items-center justify-between px-3 h-9 w-full bg-[#1e1e1e] border-b border-[#3c3c3c]">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#007acc]" data-icon="hub">hub</span>
+<h1 class="font-['Inter'] text-[11px] font-bold tracking-wider uppercase text-gray-200">AI SKILLS</h1>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-gray-400 hover:text-white cursor-pointer transition-colors duration-100" data-icon="settings">settings</span>
+</div>
+</header>
+<!-- Search Interface Section -->
+<div class="flex-1 overflow-y-auto vs-code-scrollbar">
+<div class="max-w-2xl mx-auto w-full px-lg py-lg space-y-lg">
+<!-- Quick Pick Styled Search Input -->
+<div class="space-y-sm">
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-gray-500" data-icon="search">search</span>
+</div>
+<input autofocus="" class="block w-full bg-[#252526] border border-[#007acc] text-[#cccccc] text-body-sm px-10 py-2 focus:ring-0 focus:border-[#007acc] outline-none" placeholder="Search skills, agents, or tags..." type="text"/>
+<div class="absolute inset-y-0 right-0 pr-3 flex items-center gap-1">
+<kbd class="px-1.5 py-0.5 rounded-sm bg-[#3c3c3c] text-[10px] text-gray-400 border border-[#454545]">ESC</kbd>
+</div>
+</div>
+</div>
+<!-- Recent Searches Section -->
+<section class="space-y-sm">
+<div class="flex items-center justify-between">
+<h2 class="text-label-xs font-bold text-gray-500 uppercase tracking-tighter">Recent Searches</h2>
+<button class="text-[10px] text-[#007acc] hover:underline">Clear all</button>
+</div>
+<div class="flex flex-wrap gap-2">
+<div class="flex items-center gap-2 px-2 py-1 bg-[#252526] border border-[#3c3c3c] hover:border-gray-500 cursor-pointer transition-colors group">
+<span class="material-symbols-outlined text-gray-500" data-icon="history">history</span>
+<span class="text-body-sm text-gray-300">python-data-analyst</span>
+<span class="material-symbols-outlined text-gray-600 hover:text-gray-300 ml-1 opacity-0 group-hover:opacity-100" data-icon="close">close</span>
+</div>
+<div class="flex items-center gap-2 px-2 py-1 bg-[#252526] border border-[#3c3c3c] hover:border-gray-500 cursor-pointer transition-colors group">
+<span class="material-symbols-outlined text-gray-500" data-icon="history">history</span>
+<span class="text-body-sm text-gray-300">vector-db-optimization</span>
+<span class="material-symbols-outlined text-gray-600 hover:text-gray-300 ml-1 opacity-0 group-hover:opacity-100" data-icon="close">close</span>
+</div>
+<div class="flex items-center gap-2 px-2 py-1 bg-[#252526] border border-[#3c3c3c] hover:border-gray-500 cursor-pointer transition-colors group">
+<span class="material-symbols-outlined text-gray-500" data-icon="history">history</span>
+<span class="text-body-sm text-gray-300">tag:deployment</span>
+<span class="material-symbols-outlined text-gray-600 hover:text-gray-300 ml-1 opacity-0 group-hover:opacity-100" data-icon="close">close</span>
+</div>
+</div>
+</section>
+<!-- Search Results Section -->
+<section class="space-y-sm">
+<h2 class="text-label-xs font-bold text-gray-500 uppercase tracking-tighter">Results (6)</h2>
+<div class="space-y-1">
+<!-- Result Item 1 -->
+<div class="group flex items-start gap-3 p-3 bg-[#252526] border border-transparent hover:border-[#3c3c3c] hover:bg-[#2a2d2e] cursor-pointer transition-all">
+<div class="w-10 h-10 flex-shrink-0 bg-[#31353b] flex items-center justify-center border border-[#3c3c3c]">
+<span class="material-symbols-outlined text-[#007acc] scale-125" data-icon="javascript">javascript</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between mb-1">
+<h3 class="text-body-sm font-semibold text-white truncate">Node.js Performance <span class="text-[#007acc] bg-[#007acc]/10 px-0.5">Analyst</span></h3>
+<span class="text-[11px] text-gray-500 font-code-sm">Skill ID: ND-772</span>
+</div>
+<p class="text-label-xs text-gray-400 line-clamp-1 mb-2">Automated performance monitoring and bottleneck <span class="text-white font-medium">analysis</span> for high-scale microservices.</p>
+<div class="flex gap-2">
+<span class="px-1.5 py-0.5 rounded-sm bg-[#3c3c3c] text-[10px] text-gray-300">#backend</span>
+<span class="px-1.5 py-0.5 rounded-sm bg-[#3c3c3c] text-[10px] text-gray-300">#optimization</span>
+</div>
+</div>
+<div class="opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-gray-400 hover:text-[#007acc]" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+<!-- Result Item 2 -->
+<div class="group flex items-start gap-3 p-3 bg-[#252526] border border-transparent hover:border-[#3c3c3c] hover:bg-[#2a2d2e] cursor-pointer transition-all">
+<div class="w-10 h-10 flex-shrink-0 bg-[#31353b] flex items-center justify-center border border-[#3c3c3c]">
+<span class="material-symbols-outlined text-[#ffb784] scale-125" data-icon="robot_2">robot_2</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between mb-1">
+<h3 class="text-body-sm font-semibold text-white truncate">LLM Fine-tuning <span class="text-[#007acc] bg-[#007acc]/10 px-0.5">Assistant</span></h3>
+<span class="text-[11px] text-gray-500 font-code-sm">Agent ID: LLM-91</span>
+</div>
+<p class="text-label-xs text-gray-400 line-clamp-1 mb-2">A specialized agent designed to prepare datasets and run hyperparameter <span class="text-white font-medium">searches</span> for model tuning.</p>
+<div class="flex gap-2">
+<span class="px-1.5 py-0.5 rounded-sm bg-[#3c3c3c] text-[10px] text-gray-300">#ai-ops</span>
+<span class="px-1.5 py-0.5 rounded-sm bg-[#3c3c3c] text-[10px] text-gray-300">#training</span>
+</div>
+</div>
+<div class="opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-gray-400 hover:text-[#007acc]" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+<!-- Result Item 3 -->
+<div class="group flex items-start gap-3 p-3 bg-[#252526] border border-transparent hover:border-[#3c3c3c] hover:bg-[#2a2d2e] cursor-pointer transition-all">
+<div class="w-10 h-10 flex-shrink-0 bg-[#31353b] flex items-center justify-center border border-[#3c3c3c]">
+<span class="material-symbols-outlined text-[#4ade80] scale-125" data-icon="security">security</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between mb-1">
+<h3 class="text-body-sm font-semibold text-white truncate">Secure Code <span class="text-[#007acc] bg-[#007acc]/10 px-0.5">Scanner</span></h3>
+<span class="text-[11px] text-gray-500 font-code-sm">Skill ID: SEC-02</span>
+</div>
+<p class="text-label-xs text-gray-400 line-clamp-1 mb-2">Integrates static <span class="text-white font-medium">analysis</span> tools to find vulnerabilities in pull requests before merge.</p>
+<div class="flex gap-2">
+<span class="px-1.5 py-0.5 rounded-sm bg-[#3c3c3c] text-[10px] text-gray-300">#security</span>
+<span class="px-1.5 py-0.5 rounded-sm bg-[#3c3c3c] text-[10px] text-gray-300">#cicd</span>
+</div>
+</div>
+<div class="opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-gray-400 hover:text-[#007acc]" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Bento Grid for Discovery Suggestions -->
+<section class="space-y-sm pt-4">
+<h2 class="text-label-xs font-bold text-gray-500 uppercase tracking-tighter">Explore by Category</h2>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+<div class="relative h-24 bg-gradient-to-br from-[#1c2025] to-[#252526] border border-[#3c3c3c] p-3 overflow-hidden hover:border-[#007acc] transition-colors cursor-pointer">
+<span class="text-label-xs font-bold text-gray-400 uppercase">DevOps</span>
+<p class="text-body-sm text-white mt-1">Infrastructure automation</p>
+<span class="material-symbols-outlined absolute -bottom-1 -right-1 text-[#3c3c3c] text-5xl opacity-20" data-icon="terminal">terminal</span>
+</div>
+<div class="relative h-24 bg-gradient-to-br from-[#1c2025] to-[#252526] border border-[#3c3c3c] p-3 overflow-hidden hover:border-[#007acc] transition-colors cursor-pointer">
+<span class="text-label-xs font-bold text-gray-400 uppercase">Frontend</span>
+<p class="text-body-sm text-white mt-1">Component architecture</p>
+<span class="material-symbols-outlined absolute -bottom-1 -right-1 text-[#3c3c3c] text-5xl opacity-20" data-icon="auto_awesome_mosaic">auto_awesome_mosaic</span>
+</div>
+<div class="relative h-24 bg-gradient-to-br from-[#1c2025] to-[#252526] border border-[#3c3c3c] p-3 overflow-hidden hover:border-[#007acc] transition-colors cursor-pointer">
+<span class="text-label-xs font-bold text-gray-400 uppercase">Data Sci</span>
+<p class="text-body-sm text-white mt-1">Model interpretability</p>
+<span class="material-symbols-outlined absolute -bottom-1 -right-1 text-[#3c3c3c] text-5xl opacity-20" data-icon="query_stats">query_stats</span>
+</div>
+</div>
+</section>
+<!-- Visual Asset / Empty State Alternative -->
+<div class="py-8 flex flex-col items-center justify-center text-center space-y-4 opacity-50">
+<div class="w-full h-32 rounded-lg overflow-hidden border border-[#3c3c3c]">
+<img class="w-full h-full object-cover grayscale brightness-50 contrast-125" data-alt="A macro close-up of a high-tech obsidian circuit board with microscopic glowing blue fiber-optic trails pulse-scanning through deep etched grooves. The lighting is low and cinematic, with sharp blue highlights cutting through a heavy dark atmosphere. The image represents the inner digital search process of an advanced artificial intelligence network, evoking a sense of deep machine intelligence and complex data retrieval." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB6ECe0y_KzBGOw-7filsWLwXH1Oz565Yk1iVGsd4OSo1o69m-a6jOBEmmrgVIxpc8djzpf4LOjF7gCBxsJHv0Cdw3p6r-VlueRaN42L-pUzJYyjabIlsGgO4sPCHxA16jPei1h1OvSBB2WUhQ8VWxgpSg3dVuXUhYB6hGKe1xNpHHfKQlA_HU-N0bMK5jwkW3GLodET9VivIxEogeoMpugM_NcuSK8wtdutYU8U_5Vv-Nf1dsC3NzknHD7cZOf0le51xjTJXOWU-c"/>
+</div>
+<div>
+<p class="text-body-sm text-gray-500">Can't find what you're looking for?</p>
+<p class="text-label-xs text-[#007acc] hover:underline cursor-pointer">Request a new skill integration</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Sticky Progress Footer -->
+<footer class="h-8 border-t border-[#3c3c3c] bg-[#1e1e1e] flex items-center justify-between px-3 text-[11px] text-gray-500 font-code-sm">
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[#007acc] !text-[12px]" data-icon="sync">sync</span>
+<span>Ready</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined !text-[12px]" data-icon="code">code</span>
+<span>Knowledge Base: v4.2.0</span>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined !text-[12px]" data-icon="notifications">notifications</span>
+<span>0</span>
+</div>
+</div>
+</footer>
+</main>
+</body></html>

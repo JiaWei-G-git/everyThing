@@ -738,14 +738,55 @@
   }
 
   function renderSearchPage() {
+    const recentSearches = ['python-data-analyst', 'vector-db-optimization', 'tag:deployment'];
+    const categories = [
+      { id: 'devops', name: 'DevOps', desc: '基础设施自动化', icon: 'terminal' },
+      { id: 'frontend', name: 'Frontend', desc: '组件架构', icon: 'layout' },
+      { id: 'datasci', name: 'Data Sci', desc: '模型可解释性', icon: 'barChart' }
+    ];
     return `
       <div class="search-page">
-        <div class="search-box">
-          <span>${iconSvg('search', 14)}</span>
-          <input type="text" placeholder="输入技能名称、标签或关键词..." id="search-input">
+        <div class="search-input-wrapper">
+          <div class="search-input-icon">${iconSvg('search', 16)}</div>
+          <div class="search-box">
+            <input type="text" placeholder="搜索技能、智能体或标签..." id="search-input" autofocus>
+          </div>
+          <div class="search-input-hint">
+            <span class="search-kbd">ESC</span>
+          </div>
         </div>
-        <div class="search-results" id="search-results">
-          <div style="padding: 12px; color: var(--fg-secondary); font-size: 12px;">输入关键词开始搜索</div>
+
+        <div class="recent-searches-section">
+          <div class="recent-searches-header">
+            <span class="recent-searches-label">最近搜索</span>
+            <button class="clear-searches-btn">清除全部</button>
+          </div>
+          <div class="recent-search-tags">
+            ${recentSearches.map(q => `
+              <div class="recent-search-tag" data-query="${q}">
+                <span class="icon">${iconSvg('clock', 12)}</span>
+                <span>${q}</span>
+                <span class="recent-search-tag-close">${iconSvg('x', 12)}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <div id="search-results">
+          <!-- results injected here -->
+        </div>
+
+        <div class="explore-categories-section">
+          <div class="explore-categories-label">按分类浏览</div>
+          <div class="explore-categories-grid">
+            ${categories.map(c => `
+              <div class="explore-category-card" data-category="${c.id}">
+                <div class="explore-category-name">${c.name}</div>
+                <div class="explore-category-desc">${c.desc}</div>
+                <div class="explore-category-bg-icon">${iconSvg(c.icon, 24)}</div>
+              </div>
+            `).join('')}
+          </div>
         </div>
       </div>
     `;
@@ -774,19 +815,55 @@
     if (!container) return;
 
     if (state.searchResults.length === 0) {
-      container.innerHTML = '<div style="padding: 12px; color: var(--fg-secondary); font-size: 12px;">未找到匹配结果</div>';
+      if (state.lastSearchQuery) {
+        container.innerHTML = `
+          <div class="search-results-section">
+            <div class="search-results-label">结果 (0)</div>
+            <div style="padding: 24px; text-align: center; color: var(--fg-secondary); font-size: 13px;">未找到匹配结果</div>
+          </div>
+        `;
+      } else {
+        container.innerHTML = '';
+      }
       return;
     }
 
-    container.innerHTML = state.searchResults.map(r => `
-      <div class="result-item" data-skill-id="${r.skill.id}">
-        <div class="result-title">${escapeHtml(r.skill.name)}</div>
-        <div class="result-desc">${escapeHtml(r.skill.description)}</div>
-        <div class="result-match">匹配: ${r.matchedFields.join(', ')}</div>
-      </div>
-    `).join('');
+    const iconMap = { skill: 'fileText', agent: 'bot', checklist: 'checkSquare' };
+    const iconColors = { skill: '#007acc', agent: '#ffb784', checklist: '#4ade80' };
 
-    container.querySelectorAll('.result-item').forEach(item => {
+    container.innerHTML = `
+      <div class="search-results-section">
+        <div class="search-results-label">结果 (${state.searchResults.length})</div>
+        <div class="search-results-list">
+          ${state.searchResults.map(r => {
+            const s = r.skill;
+            const type = s.type || 'skill';
+            const icon = iconMap[type] || 'fileText';
+            const iconColor = iconColors[type] || '#007acc';
+            return `
+              <div class="search-result-item" data-skill-id="${s.id}">
+                <div class="search-result-icon-box" style="color: ${iconColor}">
+                  ${iconSvg(icon, 18)}
+                </div>
+                <div class="search-result-content">
+                  <div class="search-result-title-row">
+                    <div class="search-result-title">${escapeHtml(s.name)} <span class="highlight">${type === 'agent' ? '助手' : type === 'checklist' ? '清单' : ''}</span></div>
+                    <span class="search-result-id">ID: ${s.id.substring(0, 6).toUpperCase()}</span>
+                  </div>
+                  <div class="search-result-desc">${escapeHtml(s.description || '')} <span class="highlight">搜索</span>匹配</div>
+                  <div class="search-result-tags">
+                    ${(s.tags || []).map(t => `<span class="search-result-tag">#${t}</span>`).join('')}
+                  </div>
+                </div>
+                <div class="search-result-arrow">${iconSvg('chevronRight', 16)}</div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      </div>
+    `;
+
+    container.querySelectorAll('.search-result-item').forEach(item => {
       item.addEventListener('click', () => {
         state.currentSkillId = item.dataset.skillId;
         navigateTo('/skill');
@@ -832,59 +909,101 @@
     vscode.postMessage({ type: 'get:settings' });
     return `
       <div class="settings-page">
-        <div class="section-header">
-          <span class="section-title">${iconSvg('settings', 14)} 设置</span>
-        </div>
-
-        <div class="setting-group">
-          <div class="setting-group-title">基础设置</div>
-          <div class="setting-item">
-            <label class="setting-label">本地知识库路径</label>
-            <div class="setting-desc">留空则使用内置模板</div>
-            <input type="text" class="setting-input" id="setting-path" value="${escapeHtml(state.settings.localPath || '')}" placeholder="例如: C:\\Users\\name\\my-knowledge-base">
+        <div class="settings-header">
+          <div>
+            <h1 class="settings-title">设置</h1>
+            <p class="settings-subtitle">配置 AI 技能知识库环境</p>
           </div>
-          <div class="setting-item">
-            <label class="setting-label">默认安装目标</label>
-            <div class="setting-desc">技能安装的默认平台</div>
-            <select class="setting-select" id="setting-target">
-              <option value="claude-code" ${state.settings.defaultInstallTarget === 'claude-code' ? 'selected' : ''}>Claude Code</option>
-              <option value="cursor" ${state.settings.defaultInstallTarget === 'cursor' ? 'selected' : ''}>Cursor</option>
-              <option value="generic" ${state.settings.defaultInstallTarget === 'generic' ? 'selected' : ''}>通用</option>
-            </select>
+          <div class="settings-header-actions">
+            <button class="btn btn-secondary" id="btn-reset-settings">重置</button>
+            <button class="btn btn-primary" id="btn-save-settings">保存更改</button>
           </div>
         </div>
 
         <div class="setting-group">
-          <div class="setting-group-title">${iconSvg('package', 14)} 行业知识包</div>
-          <div class="setting-desc">加载行业专属的智能体和技能</div>
-          <div id="industry-packages-list">
-            <div class="industry-package-item">
-              <div class="industry-package-info">
-                <div class="industry-package-name">☑️ 电力行业 <span class="industry-package-version">v1.0.0</span></div>
-                <div class="industry-package-meta">3 个集群 · 12 个技能（示例占位，待 Task 10 接通）</div>
+          <div class="setting-group-header">
+            ${iconSvg('tune', 16)}
+            <span class="setting-group-title">基础设置</span>
+          </div>
+          <div class="setting-group-body">
+            <div class="setting-item">
+              <label class="setting-label">本地知识库路径</label>
+              <div class="setting-input-row">
+                <input type="text" class="setting-input" id="setting-path" value="${escapeHtml(state.settings.localPath || '')}" placeholder="例如: C:\\Users\\name\\my-knowledge-base">
+                <button class="btn btn-icon" id="btn-browse-path" title="选择目录">
+                  ${iconSvg('folderOpen', 16)}
+                </button>
               </div>
-              <button class="btn industry-package-btn" disabled>禁用</button>
+              <p class="setting-help">所有技能清单和本地模型的根目录，留空则使用内置模板</p>
+            </div>
+            <div class="setting-item">
+              <label class="setting-label">默认安装目标</label>
+              <select class="setting-select" id="setting-target">
+                <option value="claude-code" ${state.settings.defaultInstallTarget === 'claude-code' ? 'selected' : ''}>Claude Code</option>
+                <option value="cursor" ${state.settings.defaultInstallTarget === 'cursor' ? 'selected' : ''}>Cursor</option>
+                <option value="generic" ${state.settings.defaultInstallTarget === 'generic' ? 'selected' : ''}>通用</option>
+              </select>
             </div>
           </div>
-          <div style="margin-top: 8px;">
-            <button class="btn" id="btn-add-industry">
-              <span>+</span> 添加行业知识包
-            </button>
+        </div>
+
+        <div class="setting-group">
+          <div class="setting-group-header">
+            ${iconSvg('package', 16)}
+            <span class="setting-group-title">行业知识包</span>
+          </div>
+          <div class="setting-group-body" id="industry-packages-list">
+            <div class="package-item">
+              <div class="package-item-main">
+                <div class="package-item-icon">${iconSvg('zap', 18)}</div>
+                <div class="package-item-info">
+                  <div class="package-item-name">电力行业 <span class="package-item-version">v1.0.0</span></div>
+                  <div class="package-item-desc">电网优化与监控的领域专属模型</div>
+                </div>
+              </div>
+              <div class="package-item-actions">
+                <div class="toggle-switch active" data-package="power">
+                  <div class="toggle-switch-track">
+                    <div class="toggle-switch-thumb"></div>
+                  </div>
+                </div>
+                <span class="package-status enabled">已启用</span>
+              </div>
+            </div>
           </div>
         </div>
 
         <div class="setting-group">
-          <div class="setting-group-title">${iconSvg('download', 14)} 批量导入</div>
-          <div class="setting-desc">从目录或 JSON 导入扩展层 Skill</div>
-          <div style="margin-top: 8px;">
-            <button class="btn" id="btn-import-skills">
-              <span>${iconSvg('folderOpen', 14)}</span> 选择导入目录
-            </button>
+          <div class="setting-group-header">
+            ${iconSvg('upload', 16)}
+            <span class="setting-group-title">导入</span>
+          </div>
+          <div class="setting-group-body">
+            <div class="import-dropzone" id="btn-import-skills">
+              ${iconSvg('uploadFile', 24)}
+              <div class="import-dropzone-text">
+                <p class="import-dropzone-title">从磁盘导入现有技能库</p>
+                <p class="import-dropzone-desc">支持 .json、.yaml 和打包文件夹</p>
+              </div>
+              <button class="btn btn-secondary">
+                ${iconSvg('folderOpen', 14)} 选择目录
+              </button>
+            </div>
           </div>
         </div>
 
-        <div style="margin-top: 16px;">
-          <button class="btn btn-primary" id="btn-save-settings">保存设置</button>
+        <div class="settings-footer">
+          <div class="settings-footer-left">
+            <div class="settings-footer-status">
+              <span class="status-dot online"></span>
+              <span>已连接: LOCAL</span>
+            </div>
+            <span class="settings-footer-sep">·</span>
+            <span>版本: v0.2.0</span>
+          </div>
+          <div class="settings-footer-right">
+            <span>最后同步: 刚刚</span>
+          </div>
         </div>
       </div>
     `;

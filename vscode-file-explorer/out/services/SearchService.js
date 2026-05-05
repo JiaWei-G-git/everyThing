@@ -30,6 +30,11 @@ class SearchService {
                 score += 7;
                 matchedFields.push('标签');
             }
+            // 场景标签匹配
+            if (skill.scenarioTags.some(t => t.toLowerCase().includes(lowerQuery))) {
+                score += 6;
+                matchedFields.push('场景');
+            }
             // 内容匹配
             if (skill.content.toLowerCase().includes(lowerQuery)) {
                 score += 3;
@@ -67,6 +72,10 @@ class SearchService {
     getSkillsByTag(tag) {
         const kb = this.knowledgeService.getKnowledgeBase();
         return kb.skills.filter(s => s.tags.some(t => t.toLowerCase() === tag.toLowerCase()));
+    }
+    getSkillsByScenario(scenarioId) {
+        const kb = this.knowledgeService.getKnowledgeBase();
+        return kb.skills.filter(s => s.scenarioTags.some(t => t.toLowerCase() === scenarioId.toLowerCase()));
     }
 }
 exports.SearchService = SearchService;
