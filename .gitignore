@@ -5,11 +5,29 @@
 
 # Environment
 .env
+.mcp.json
 
 # Hackathon submission materials
 黑客松提交材料.md
 *.mp4
 *.mov
+
+# Logs
+*.log
+
+# Temporary / debug files
+aaa.txt
+temp_prompt.txt
+check-syntax.js
+fix-dashboard.js
+doc_content.json
+
+# Preview screenshots
+preview-*.png
+
+# Archives & build artifacts
+*.rar
+*.vsix
 
 # OS
 .DS_Store

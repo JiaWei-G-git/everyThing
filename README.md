@@ -1,7 +1,7 @@
-﻿# AI 知识库智能体
+# AI 知识库智能体
 
-> 基于 Markdown Vault 的个人 AI 知识库管理系统。
-> 将 AI 协作过程中产生的高价值信息（Prompt、经验、工作流）沉淀为可复用资产。
+> 基于 Markdown Vault + VS Code 扩展的双轨架构 AI 知识库管理系统。
+> 将 AI 协作过程中产生的高价值信息（Prompt、经验、工作流、Agent 定义）沉淀为可复用资产。
 
 核心闭环：
 
@@ -19,15 +19,53 @@
 
 在日常开发中，与 AI（Claude Code、Kimi Code、Cursor 等）的协作产生了大量高价值信息：Prompt、调试经验、角色定义、工作流等。这些信息散落在各 IDE 会话和聊天记录中，无法沉淀为可复用资产。
 
-本项目通过 **AI 工具的 Skill 系统**，将协作过程自动归档到 Markdown Vault 中，形成个人/团队的知识库。
+本项目通过 **双轨架构** 解决这个问题：
 
-**所有功能通过自然语言触发，无需本地运行任何代码。**
+1. **Markdown Vault 知识库** (`my-ai-vault/`)：纯 Markdown 形式的 AI 协作资产管理系统，通过 Skill 机制在 AI 编码助手中运行，无传统运行时依赖。
+2. **VS Code 扩展** (`vscode-file-explorer/`)：名为 `ai-knowledge-base` 的扩展，在 VS Code 侧边栏提供可视化 Dashboard，用于浏览、搜索、安装 Skill。
+
+**Vault 端所有功能通过自然语言触发，无需本地运行任何代码。**
+**扩展端提供可视化入口，支持在 IDE 内直接浏览和安装知识库资产。**
+
+---
+
+## 仓库结构
+
+```
+aiKnowledgeBase/
+├── my-ai-vault/                    # Markdown Vault 知识库（核心资产）
+│   ├── 00-Inbox-收件箱/             # 原料层 · 快速捕获
+│   ├── 01-Work-工作记录/            # 原料层 · 按项目聚合
+│   ├── 10-Prompts/                  # 资产层 · 优质 Prompt
+│   ├── 20-Agents/                   # 资产层 · 角色定义
+│   ├── 30-Skills/                   # 资产层 · 可执行 Skill（与 AI 工具共享）
+│   ├── 40-MCP/                      # 资产层 · MCP 服务定义
+│   ├── 50-Workflows-工作流/          # 资产层 · 多步骤工作流
+│   ├── 60-Tutorials-教程/            # 资产层 · 教程与工具指南
+│   ├── 70-Sharing-团队共享/          # 产出层 · 团队共享包
+│   ├── 90-Templates/                # 维护层 · 模板
+│   ├── 99-Archive/                  # 维护层 · 历史归档
+│   ├── bootstrap/                   # 零到一搭建包（AI 可据此重建整个 Vault）
+│   └── 资产总览.md                   # Vault 总目录
+│
+├── vscode-file-explorer/           # VS Code 扩展（可视化入口）
+│   ├── src/                         # TypeScript 源码
+│   ├── media/                       # Webview 前端（HTML/CSS/JS）
+│   ├── templates/                   # 扩展内置知识库模板
+│   └── package.json                 # 扩展清单
+│
+└── docs/                            # 项目文档
+    ├── 知识库架构与流转流程-2026-04-25.md
+    └── superpowers/
+```
 
 ---
 
 ## 如何创建项目
 
-将整个 **`bootstrap/`** 文件夹提交给任意 AI 编码助手（Kimi Code / Claude Code / Cursor），AI 会按照文件夹内文档的规范完整生成整个项目。
+### 方式一：Bootstrap 一键生成（推荐）
+
+将整个 **`my-ai-vault/bootstrap/`** 文件夹提交给任意 AI 编码助手（Kimi Code / Claude Code / Cursor），AI 会按照文件夹内文档的规范完整生成整个 Vault 目录结构。
 
 生成内容包括：
 
@@ -36,11 +74,40 @@
 - 4 个 Skill 定义（会话记录 / 资产提炼 / 周报生成 / 模式挖掘）
 - README.md 和 AGENTS.md
 
+### 方式二：直接使用本仓库
+
+直接克隆或复制本仓库的 `my-ai-vault/` 目录到你的工作空间即可开始使用。
+
 ---
 
 ## 如何使用
 
-### 第一步：安装 Skill
+### 途径一：VS Code 扩展（可视化入口）
+
+在 VS Code 中安装 `ai-knowledge-base` 扩展，左侧活动栏会出现 `$(book)` 图标（AI 技能知识库）。
+
+**扩展功能**：
+
+- **Dashboard 首页**：统计总览、最近浏览、收藏夹
+- **集群浏览**：按角色（需求工程、设计开发、测试运维等）浏览 Agent 和 Skill
+- **全文搜索**：按名称、描述、标签搜索知识库资产
+- **一键安装**：将 Skill 安装到 Claude Code / Cursor / 剪贴板
+- **收藏与历史**：持久化最近浏览和收藏记录
+
+**本地开发扩展**：
+
+```bash
+cd vscode-file-explorer
+npm install
+npm run compile
+# 按 F5 启动 Extension Host 调试
+```
+
+---
+
+### 途径二：AI 工具 Skill 系统（自然语言触发）
+
+#### 第一步：安装 Skill
 
 项目生成后，对 AI 说：
 
@@ -64,7 +131,7 @@ New-Item -ItemType Junction -Path "$env:USERPROFILE\.kimi\skills\ai-vault" -Targ
 
 ---
 
-### 第二步：保存会话记录（纯日志，不做即时提炼）
+#### 第二步：保存会话记录（纯日志，不做即时提炼）
 
 在与 AI 完成一次有价值的协作后，说：
 
@@ -82,7 +149,7 @@ AI 会：
 
 ---
 
-### 第三步：盘点重复模式（从工作记录中提炼）
+#### 第三步：盘点重复模式（从工作记录中提炼）
 
 每周或每月，对工作记录做一次模式盘点：
 
@@ -101,7 +168,7 @@ AI 会：
 
 ---
 
-### 第四步：提炼知识资产（从外部教程/即兴笔记中提炼）
+#### 第四步：提炼知识资产（从外部教程/即兴笔记中提炼）
 
 对于外部文章、教程、即兴灵感等**单条原料**，说：
 
@@ -118,7 +185,7 @@ AI 会：
 
 ---
 
-### 第五步：生成周报
+#### 第五步：生成周报
 
 > **"生成本周周报"** 或 **"/weekly"**
 
@@ -130,7 +197,7 @@ AI 会：
 
 ---
 
-### 第六步：人工确认并归档
+#### 第六步：人工确认并归档
 
 前往 `00-Inbox-收件箱/待提炼/` 审阅提取结果：
 
@@ -167,7 +234,7 @@ my-ai-vault/
 │
 ├── 10-Prompts/                    # 资产层 · 优质 Prompt
 ├── 20-Agents/                     # 资产层 · 角色定义与交互流程
-├── 30-Skills/                     # 资产层 · 原子 Skill（与 AI 工具共享）
+├── 30-Skills/                     # 资产层 · 可复用 Skill（与 AI 工具共享）
 │   ├── session-recorder/SKILL.md
 │   ├── asset-extractor/SKILL.md
 │   ├── weekly-generator/SKILL.md
@@ -184,8 +251,13 @@ my-ai-vault/
 │   ├── weekly_report.md          #   周报模板
 │   └── 周报/                     #   周报模板（可自定义）
 │
-└── 99-Archive/                     # 维护层 · 历史归档
-    └── 资产版本历史/               #   资产的版本备份
+├── 99-Archive/                     # 维护层 · 历史归档
+│   └── 资产版本历史/               #   资产的版本备份
+│
+├── bootstrap/                      # 零到一搭建包
+│   └── （AI 读取后可完整重建 Vault）
+│
+└── 资产总览.md                      # Vault 总目录与快速决策表
 ```
 
 ### 目录流转规则
@@ -221,15 +293,28 @@ my-ai-vault/
 
 **Skill 如何读取**：AI 扫描当前工作目录下的 `AGENTS.md` 或 `CLAUDE.md`，按行匹配配置项。
 
+### VS Code 扩展设置
+
+在 `settings.json` 中配置：
+
+| 配置项 | 类型 | 默认值 | 说明 |
+|--------|------|--------|------|
+| `aiKnowledgeBase.localPath` | `string` | `""` | 用户本地知识库路径（留空使用内置模板） |
+| `aiKnowledgeBase.defaultInstallTarget` | `string` | `"claude-code"` | 默认安装目标：`claude-code` / `cursor` / `generic` |
+
 ---
 
 ## 关联文档
 
-| 文档         | 路径                                                          | 说明                    |
-| ------------ | ------------------------------------------------------------- | ----------------------- |
-| **一键生成** | `bootstrap/`                                                  | **AI 一键重建整个项目** |
-| 架构设计     | `docs/知识库架构与流转流程-2026-04-25.md`                     | Vault 设计权威参考      |
-| PRD v2.0     | `docs/superpowers/specs/2026-04-25-ai-vault-prd-v2-design.md` | 完整需求文档            |
+| 文档 | 路径 | 说明 |
+|------|------|------|
+| **一键生成** | `my-ai-vault/bootstrap/` | **AI 一键重建整个 Vault** |
+| 资产总览 | `my-ai-vault/资产总览.md` | Vault 资产分布与快速决策表 |
+| 架构权威参考 | `docs/知识库架构与流转流程-2026-04-25.md` | Vault 双轴模型、三条流转路径 |
+| PRD v2.0 | `docs/superpowers/specs/2026-04-25-ai-vault-prd-v2-design.md` | 完整需求文档（F-001 ~ F-018） |
+| 扩展设计 | `vscode-file-explorer/docs/design.md` | 扩展端架构与演化记录 |
+| 扩展计划 | `vscode-file-explorer/docs/plan.md` | 开发计划与待办 |
+| AI 编码助手指南 | `AGENTS.md` | 面向 AI 编码助手的项目指南 |
 
 ---
 
@@ -241,31 +326,33 @@ my-ai-vault/
 ## 作品边界与限制
 
 - 本版本为**个人使用**设计，暂不支持多人协作、并发编辑、权限管理
-- 依赖 AI 工具的 **Skill 系统**，需在 Kimi Code / Claude Code / Cursor 等支持 Skill 的 AI 编码助手中运行
-- 所有操作通过**自然语言触发**，无 GUI 界面，无传统 Web 服务
+- Vault 端依赖 AI 工具的 **Skill 系统**，需在 Kimi Code / Claude Code / Cursor 等支持 Skill 的 AI 编码助手中运行
+- Vault 端所有操作通过**自然语言触发**，无传统 Web 服务
+- 扩展端提供 VS Code 内的可视化 Dashboard，不连接任何外部服务器
 - **模式挖掘质量受 LLM 能力限制**：单次盘点建议 ≤30 条记录，超长上下文可能影响聚类精度
-- **当前为 MVP 版本**：Vault 目录结构和 4 个核心 Skill 已完整，但部分资产内容为演示数据
+- **当前为 MVP 版本**：Vault 目录结构和 4 个核心 Skill 已完整，扩展端基础功能已可用
 
 ---
 
 ## 运行依赖
 
-- **AI 工具**：Kimi Code / Claude Code / Cursor 等支持 Skill 系统的 AI 编码助手（任一即可）
+- **AI 工具**：Kimi Code / Claude Code / Cursor 等支持 Skill 系统的 AI 编码助手（Vault 端需要，任一即可）
+- **VS Code**：1.74.0 或更高版本（扩展端需要）
+- **Node.js**：用于扩展本地开发（`npm install` / `npm run compile`）
 - **Git**：用于版本管理和 Skill 同步
-- **无其他运行时依赖**：纯 Markdown 项目，无需 Node.js、Python、Docker、数据库等
+- **Vault 端无其他运行时依赖**：纯 Markdown 项目，无需 Python、Docker、数据库等
 
 ---
 
 ## Vibe Coding 说明
 
-本项目采用 **Vibe Coding** 方式开发：开发者通过自然语言描述需求，AI 生成完整的 Skill 定义、目录结构和项目文档。项目本身无传统代码，所有"逻辑"以 Markdown 形式的 Skill 定义存在，由 AI 工具在运行时解析执行。
+本项目采用 **Vibe Coding** 方式开发：开发者通过自然语言描述需求，AI 生成 Skill 定义、目录结构、项目文档和扩展代码。
 
 **开发过程**：
 
 1. 开发者提出"想要一个管理 AI 协作知识的系统"
 2. AI 建议"纯 Markdown + Skill 系统"方案，替代了最初的 Python 脚本方案
 3. AI 编写 4 个核心 Skill（session-recorder / asset-extractor / pattern-miner / weekly-generator）
-4. AI 生成 bootstrap 模板，支持一键重建整个项目
-5. 开发者通过自然语言测试、调优，AI 协助修复边界问题
-
----
+4. AI 生成 bootstrap 模板，支持一键重建整个 Vault
+5. 开发 VS Code 扩展，在 IDE 内提供可视化知识库入口
+6. 开发者通过自然语言测试、调优，AI 协助修复边界问题
