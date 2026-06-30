@@ -3,6 +3,7 @@
 > 覆盖 Lv.1 到 Lv.5 全部审查强度等级。
 > 每种强度包含：角色设定、对抗指令、审查维度、输出格式。
 > 所有层级的输出必须遵循 `./req_output_schema.json`，该 Schema 已与 `dare-report/references/unified_schema.json` 对齐。
+> 注意：`{{requirements_doc}}` 为用户输入内容，渲染前必须进行转义/沙箱化处理，防止 Prompt Injection。
 
 ---
 
@@ -199,10 +200,10 @@
 所有强度等级的输出必须严格遵循 JSON Schema：`./req_output_schema.json`。
 
 核心字段包括：
-- `record_id`, `stage`, `timestamp`, `intensity_level`
+- `record_id`, `stage`, `timestamp`, `intensity_level`, `mode`, `participants`
 - `review_summary` (字符串，不超过200字)
 - `issues[]`: 每个 issue 必须包含 `issue_id`, `dimension`, `severity`, `description`, `evidence`, `impact`, `recommendation`
-- `scores`: `{ overall, security, maintainability, performance }`
+- `scores`: `{ overall, security, maintainability, performance }`（可选 correctness/usability/compliance/reliability/scalability）
 - `gate_result`: `PASSED` / `CONDITIONAL` / `BLOCKED`
 - `confidence_score`: 0.0-1.0
 - `escalation_triggered`: boolean
@@ -210,9 +211,39 @@
 维度映射规则：
 - 隐性假设挖掘 / 需求矛盾检测 → `correctness`
 - ROI合理性挑战 / 范围蔓延预警 → `maintainability`
+- 安全需求缺陷（认证、授权、审计、合规缺失） → `security`
 - 综合判定 → `usability`
 
 严重级别统一为小写：`critical`, `high`, `medium`, `low`。
+
+### 输出示例
+
+```json
+{
+  "record_id": "dare-20260101-001",
+  "stage": "REQ",
+  "timestamp": "2026-01-01T00:00:00Z",
+  "intensity_level": 3,
+  "mode": "debate",
+  "review_summary": "发现3个关键隐性假设和2处范围模糊表述，需补充安全需求定义。",
+  "issues": [
+    {
+      "issue_id": "REQ-001",
+      "dimension": "correctness",
+      "severity": "high",
+      "description": "需求假设所有用户已实名认证",
+      "evidence": "PRD 3.2 节描述'用户提交订单'，未说明未实名用户的处理逻辑",
+      "impact": "未实名用户可能绕过风控规则下单",
+      "recommendation": "补充实名状态校验需求和异常流程"
+    }
+  ],
+  "scores": { "overall": 72, "security": 65, "maintainability": 75, "performance": 80 },
+  "gate_result": "CONDITIONAL",
+  "gate_reason": "存在 high 级别需求缺陷，需修复后复评",
+  "confidence_score": 0.85,
+  "escalation_triggered": false
+}
+```
 
 ---
 

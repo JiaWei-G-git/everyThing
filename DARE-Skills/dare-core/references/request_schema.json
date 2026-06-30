@@ -13,10 +13,10 @@
     },
     "mode": {
       "type": "string",
-      "enum": ["A", "B", "C"],
-      "description": "编排模式：A=单Agent自对抗，B=双Agent辩论，C=多Agent委员会。不指定时自动选择"
+      "enum": ["debate", "review", "audit", "council"],
+      "description": "编排模式：debate=双Agent辩论，review=单Agent审查，audit=深度审计，council=多Agent委员会。不指定时自动选择"
     },
-    "intensity": {
+    "intensity_level": {
       "type": "integer",
       "minimum": 1,
       "maximum": 5,
@@ -34,12 +34,31 @@
       "items": {
         "type": "object",
         "required": ["type", "content"],
+        "allOf": [
+          {
+            "if": {
+              "properties": { "type": { "const": "file_path" } }
+            },
+            "then": {
+              "properties": {
+                "content": {
+                  "type": "string",
+                  "pattern": "^(?!/|[A-Za-z]:\\\\|.*\\.\\.).*$",
+                  "description": "必须是仓库内的相对路径，禁止 .. 跳转和绝对路径"
+                }
+              }
+            }
+          }
+        ],
         "properties": {
           "type": {
             "type": "string",
             "enum": ["text", "code", "url", "file_path"]
           },
-          "content": { "type": "string" },
+          "content": {
+            "type": "string",
+            "description": "当 type=file_path 时，必须是仓库内的相对路径，禁止 .. 跳转"
+          },
           "metadata": { "type": "object" }
         }
       }

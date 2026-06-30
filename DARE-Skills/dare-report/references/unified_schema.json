@@ -39,7 +39,7 @@
     },
     "mode": {
       "type": "string",
-      "enum": ["debate", "review", "audit"],
+      "enum": ["debate", "review", "audit", "council"],
       "description": "Adversarial interaction mode"
     },
     "participants": {
@@ -84,10 +84,6 @@
       "type": "string",
       "description": "Human-readable explanation for the gate decision"
     },
-    "gate_reason": {
-      "type": "string",
-      "description": "Human-readable explanation for the gate decision"
-    },
     "confidence_score": {
       "type": "number",
       "minimum": 0,
@@ -109,11 +105,28 @@
     },
     "human_override": {
       "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["overridden_by", "override_reason", "original_gate_result", "overridden_at"],
       "properties": {
-        "overridden_by": { "type": "string" },
-        "override_reason": { "type": "string" },
-        "original_gate_result": { "type": "string" },
-        "overridden_at": { "type": "string", "format": "date-time" }
+        "overridden_by": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Identity of the human who overrode the gate decision"
+        },
+        "override_reason": {
+          "type": "string",
+          "minLength": 10,
+          "description": "Detailed written reason for the override"
+        },
+        "original_gate_result": {
+          "type": "string",
+          "enum": ["PASSED", "CONDITIONAL", "BLOCKED"],
+          "description": "Original gate result before override"
+        },
+        "overridden_at": {
+          "type": "string",
+          "format": "date-time"
+        }
       }
     },
     "feedback_score": {
@@ -129,6 +142,7 @@
   "definitions": {
     "issue": {
       "type": "object",
+      "additionalProperties": false,
       "required": ["issue_id", "dimension", "severity", "description", "evidence", "impact", "recommendation"],
       "properties": {
         "issue_id": {
@@ -146,9 +160,17 @@
           "enum": ["critical", "high", "medium", "low"],
           "description": "Issue severity level"
         },
+        "category": {
+          "type": "string",
+          "description": "Issue category, e.g., CWE-89, CWE-22, CODE_SMELL, PERFORMANCE"
+        },
         "description": {
           "type": "string",
           "description": "Detailed issue description"
+        },
+        "code_snippet": {
+          "type": "string",
+          "description": "Relevant code snippet (3-10 lines)"
         },
         "evidence": {
           "type": "string",
@@ -162,9 +184,18 @@
           "type": "string",
           "description": "Recommended fix or mitigation approach"
         },
+        "line_number": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Line number where the issue occurs"
+        },
         "location": {
           "type": "string",
           "description": "File path and line number, e.g., src/auth/login.ts:45"
+        },
+        "attack_vector": {
+          "type": "string",
+          "description": "Attack vector for security issues"
         },
         "recurring": {
           "type": "boolean",
@@ -217,6 +248,21 @@
           "type": "number",
           "minimum": 0,
           "maximum": 100
+        },
+        "correctness": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "usability": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "compliance": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
         }
       }
     },
@@ -262,8 +308,8 @@
           "description": "Ratio of recurring issues to total issues"
         },
         "fix_duration_hours": {
-          "type": "number",
-          "description": "Average fix duration in hours (if resolved)"
+          "type": ["number", "null"],
+          "description": "Average fix duration in hours (null if unresolved)"
         }
       }
     }

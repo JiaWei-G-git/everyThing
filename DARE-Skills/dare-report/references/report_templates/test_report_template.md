@@ -16,22 +16,18 @@
 
 ## Target Summary
 
-**Test Suite:** `{target.test_suite}`
+**Review Target:** `{target.file_path}`
 
-**Test Files:** `{target.test_files}`
+**Module:** `{target.module}`
 
-**Coverage Baseline:** `{coverage_baseline}`
-
-**Lines Changed:** `{lines_added} added, {lines_removed} removed`
+**Commit:** `{target.commit_sha}`
 
 ---
 
 ## Debate Summary
 
 - **Debate Rounds:** `{debate_rounds}`
-- **Key Contention Points:** `{contention_summary}`
-- **Boundary Conditions Challenged:** `{boundary_conditions}`
-- **Edge Cases Identified:** `{edge_cases}`
+- **Review Summary:** `{review_summary}`
 
 ---
 
@@ -40,39 +36,33 @@
 ### Critical Issues
 
 <!-- BEGIN CRITICAL_ISSUES -->
-| ID | Dimension | Severity | Test Case | Description | Evidence |
-|----|-----------|----------|-----------|-------------|----------|
-| `{issue_id}` | `{dimension}` | CRITICAL | `{test_case}` | `{description}` | `{evidence}` |
-
-**Impact:** `{impact}`
-**Recommendation:** `{recommendation}`
+| ID | Dimension | Description | Impact | Recommendation |
+|----|-----------|-------------|--------|----------------|
+| `{issue_id}` | `{dimension}` | `{description}` | `{impact}` | `{recommendation}` |
 <!-- END CRITICAL_ISSUES -->
 
 ### High Issues
 
 <!-- BEGIN HIGH_ISSUES -->
-| ID | Dimension | Severity | Test Case | Description | Evidence |
-|----|-----------|----------|-----------|-------------|----------|
-| `{issue_id}` | `{dimension}` | HIGH | `{test_case}` | `{description}` | `{evidence}` |
-
-**Impact:** `{impact}`
-**Recommendation:** `{recommendation}`
+| ID | Dimension | Description | Impact | Recommendation |
+|----|-----------|-------------|--------|----------------|
+| `{issue_id}` | `{dimension}` | `{description}` | `{impact}` | `{recommendation}` |
 <!-- END HIGH_ISSUES -->
 
 ### Medium Issues
 
 <!-- BEGIN MEDIUM_ISSUES -->
-| ID | Dimension | Severity | Test Case | Description | Recommendation |
-|----|-----------|----------|-----------|-------------|----------------|
-| `{issue_id}` | `{dimension}` | MEDIUM | `{test_case}` | `{description}` | `{recommendation}` |
+| ID | Dimension | Description | Impact | Recommendation |
+|----|-----------|-------------|--------|----------------|
+| `{issue_id}` | `{dimension}` | `{description}` | `{impact}` | `{recommendation}` |
 <!-- END MEDIUM_ISSUES -->
 
 ### Low Issues
 
 <!-- BEGIN LOW_ISSUES -->
-| ID | Dimension | Severity | Test Case | Description | Recommendation |
-|----|-----------|----------|-----------|-------------|----------------|
-| `{issue_id}` | `{dimension}` | LOW | `{test_case}` | `{description}` | `{recommendation}` |
+| ID | Dimension | Description | Impact | Recommendation |
+|----|-----------|-------------|--------|----------------|
+| `{issue_id}` | `{dimension}` | `{description}` | `{impact}` | `{recommendation}` |
 <!-- END LOW_ISSUES -->
 
 ---
@@ -80,23 +70,29 @@
 ## Test Quality Scores
 
 ```
-Overall:          {scores.overall}/100  {overall_bar}
-Coverage:         {scores.coverage}/100  {coverage_bar}
-Correctness:      {scores.correctness}/100  {correctness_bar}
-Maintainability:  {scores.maintainability}/100  {maintainability_bar}
-Reliability:      {scores.reliability}/100  {reliability_bar}
+Overall:         {scores.overall}/100  {overall_bar}
+Security:        {scores.security}/100  {security_bar}
+Maintainability: {scores.maintainability}/100  {maintainability_bar}
+Performance:     {scores.performance}/100  {performance_bar}
+Reliability:     {scores.reliability}/100  {reliability_bar}
 ```
+
+**Score Bars:** Use ASCII visualization (e.g., `████████░░ 80/100`)
+
+*注：Reliability 为可选维度，无数据时显示 N/A。Coverage 等测试专属指标见 `test_coverage_assessment` 扩展字段。*
 
 ---
 
 ## Coverage Analysis
 
+*以下数据来自 `test_coverage_assessment` 扩展字段，如未提供则显示 N/A。*
+
 | Coverage Type | Before | After | Delta |
 |---------------|--------|-------|-------|
-| Line Coverage | `{before_line}%` | `{after_line}%` | `{delta_line}%` |
-| Branch Coverage | `{before_branch}%` | `{after_branch}%` | `{delta_branch}%` |
-| Boundary Condition | `{before_boundary}%` | `{after_boundary}%` | `{delta_boundary}%` |
-| Edge Case | `{before_edge}%` | `{after_edge}%` | `{delta_edge}%` |
+| Line Coverage | `{test_coverage_assessment.before_line|N/A}%` | `{test_coverage_assessment.after_line|N/A}%` | `{test_coverage_assessment.delta_line|N/A}%` |
+| Branch Coverage | `{test_coverage_assessment.before_branch|N/A}%` | `{test_coverage_assessment.after_branch|N/A}%` | `{test_coverage_assessment.delta_branch|N/A}%` |
+| Boundary Condition | `{test_coverage_assessment.before_boundary|N/A}%` | `{test_coverage_assessment.after_boundary|N/A}%` | `{test_coverage_assessment.delta_boundary|N/A}%` |
+| Edge Case | `{test_coverage_assessment.before_edge|N/A}%` | `{test_coverage_assessment.after_edge|N/A}%` | `{test_coverage_assessment.delta_edge|N/A}%` |
 
 ---
 
@@ -137,10 +133,11 @@ Reliability:      {scores.reliability}/100  {reliability_bar}
 
 ## Missing Test Recommendations
 
-1. **Boundary Tests:** {boundary_test_recommendations}
-2. **Negative Tests:** {negative_test_recommendations}
-3. **Integration Tests:** {integration_test_recommendations}
-4. **Performance Tests:** {performance_test_recommendations}
+*以下建议来自 `recommended_coverage_target` 扩展字段。*
+
+1. {recommendation_1}
+2. {recommendation_2}
+3. {recommendation_3}
 
 ---
 

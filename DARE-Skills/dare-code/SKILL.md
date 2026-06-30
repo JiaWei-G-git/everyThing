@@ -38,7 +38,7 @@ gate_enabled: true
 gate_policy:
   critical_blocker: critical > 0 → BLOCKED
   high_threshold: high > 3 → BLOCKED
-  security_score: security_score < 70 → BLOCKED
+  security_score: scores.security < 70 → BLOCKED
   manual_override: 需二级审批 + 书面理由
 ```
 
@@ -81,7 +81,7 @@ keywords_in_diff: [password, secret, token, encrypt, hash, sudo, eval(, exec(]
 - `record_id`, `stage`, `timestamp`, `intensity_level`
 - `review_summary`（字符串，≤200字）
 - `issues[]`：每个 issue 包含 `issue_id`, `dimension`, `severity`, `description`, `evidence`, `impact`, `recommendation`
-- `scores`: `{ overall, security, maintainability, performance }`
+- `scores`: `{ overall, security, maintainability, performance, reliability?, scalability? }`（可选维度无数据时省略）
 - `gate_result`: `PASSED` / `CONDITIONAL` / `BLOCKED`
 - `confidence_score`: 0.0-1.0
 - `category`, `code_snippet`, `line_number`, `attack_vector`（CODE 阶段扩展）

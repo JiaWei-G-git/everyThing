@@ -36,7 +36,7 @@
     },
     "mode": {
       "type": "string",
-      "enum": ["debate", "review", "audit"]
+      "enum": ["debate", "review", "audit", "council"]
     },
     "participants": {
       "type": "array",
@@ -89,7 +89,30 @@
       "enum": ["L1", "L2", "L3", null]
     },
     "human_override": {
-      "type": ["object", "null"]
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["overridden_by", "override_reason", "original_gate_result", "overridden_at"],
+      "properties": {
+        "overridden_by": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Identity of the human who overrode the gate decision"
+        },
+        "override_reason": {
+          "type": "string",
+          "minLength": 10,
+          "description": "Detailed written reason for the override"
+        },
+        "original_gate_result": {
+          "type": "string",
+          "enum": ["PASSED", "CONDITIONAL", "BLOCKED"],
+          "description": "Original gate result before override"
+        },
+        "overridden_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
     },
     "feedback_score": {
       "type": ["integer", "null"],
@@ -168,6 +191,7 @@
   "definitions": {
     "issue": {
       "type": "object",
+      "additionalProperties": false,
       "required": ["issue_id", "dimension", "severity", "description", "evidence", "impact", "recommendation"],
       "properties": {
         "issue_id": {
@@ -176,19 +200,35 @@
         },
         "dimension": {
           "type": "string",
-          "enum": ["maintainability", "reliability", "scalability"],
-          "description": "technical_selection/tech_debt → maintainability; robustness → reliability; scalability → scalability"
+          "enum": ["security", "maintainability", "performance", "reliability", "scalability", "usability", "compliance", "correctness"],
+          "description": "technical_selection/tech_debt → maintainability; robustness → reliability; scalability → scalability; 安全架构缺陷 → security"
         },
         "severity": {
           "type": "string",
           "enum": ["critical", "high", "medium", "low"]
         },
+        "category": {
+          "type": "string",
+          "description": "问题分类，安全类使用 CWE 编号"
+        },
         "title": { "type": "string" },
         "description": { "type": "string" },
+        "code_snippet": {
+          "type": "string",
+          "description": "相关架构描述/设计片段"
+        },
         "evidence": { "type": "string" },
         "impact": { "type": "string" },
         "recommendation": { "type": "string" },
+        "line_number": {
+          "type": "integer",
+          "minimum": 1
+        },
         "location": { "type": "string" },
+        "attack_vector": {
+          "type": "string",
+          "description": "安全类问题的攻击向量"
+        },
         "recurring": { "type": "boolean", "default": false },
         "recurring_count": { "type": "integer", "minimum": 1 },
         "first_seen": { "type": "string", "format": "date-time" },
@@ -204,11 +244,14 @@
       "required": ["overall", "security", "maintainability", "performance"],
       "properties": {
         "overall": { "type": "number", "minimum": 0, "maximum": 100, "description": "architecture_health_score 映射" },
-        "security": { "type": "number", "minimum": 0, "maximum": 100, "description": "从 robustness/tech_debt 推导" },
+        "security": { "type": "number", "minimum": 0, "maximum": 100, "description": "从 robustness/tech_debt/安全架构评估推导" },
         "maintainability": { "type": "number", "minimum": 0, "maximum": 100, "description": "从 technical_selection/tech_debt 推导" },
         "performance": { "type": "number", "minimum": 0, "maximum": 100, "description": "从 scalability 推导" },
         "reliability": { "type": "number", "minimum": 0, "maximum": 100, "description": "从 robustness 推导" },
-        "scalability": { "type": "number", "minimum": 0, "maximum": 100, "description": "从 scalability 推导" }
+        "scalability": { "type": "number", "minimum": 0, "maximum": 100, "description": "从 scalability 推导" },
+        "correctness": { "type": "number", "minimum": 0, "maximum": 100 },
+        "usability": { "type": "number", "minimum": 0, "maximum": 100 },
+        "compliance": { "type": "number", "minimum": 0, "maximum": 100 }
       }
     },
     "metrics": {
@@ -217,7 +260,7 @@
         "issue_density": { "type": "number" },
         "critical_issue_ratio": { "type": "number" },
         "recurring_issue_ratio": { "type": "number" },
-        "fix_duration_hours": { "type": "number" }
+        "fix_duration_hours": { "type": ["number", "null"] }
       }
     }
   }

@@ -22,16 +22,12 @@
 
 **Module:** `{target.module}`
 
-**Lines Changed:** `{lines_added} added, {lines_removed} removed`
-
 ---
 
 ## Debate Summary
 
 - **Debate Rounds:** `{debate_rounds}`
-- **Key Contention Points:** `{contention_summary}`
-- **Devil's Arguments:** `{devil_arguments_summary}`
-- **Judge's Rulings:** `{judge_rulings_summary}`
+- **Review Summary:** `{review_summary}`
 
 ---
 
@@ -87,6 +83,10 @@ Performance:     {scores.performance}/100  {performance_bar}
 Reliability:     {scores.reliability}/100  {reliability_bar}
 ```
 
+**Score Bars:** Use ASCII visualization (e.g., `████████░░ 80/100`)
+
+*注：Reliability 为可选维度，无数据时显示 N/A。*
+
 ---
 
 ## Gate Result
@@ -121,14 +121,6 @@ Reliability:     {scores.reliability}/100  {reliability_bar}
 <!-- BEGIN RECURRING -->
 - `{issue_id}`: Recurred `{recurring_count}` times, first seen `{first_seen}`
 <!-- END RECURRING -->
-
----
-
-## Diff Summary
-
-```diff
-{diff_excerpt}
-```
 
 ---
 

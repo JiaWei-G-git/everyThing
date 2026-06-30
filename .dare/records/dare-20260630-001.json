@@ -1,0 +1,230 @@
+{
+  "record_id": "dare-20260630-001",
+  "stage": "CODE",
+  "timestamp": "2026-06-30T14:00:00Z",
+  "intensity_level": 5,
+  "mode": "audit",
+  "participants": ["Devil-Code", "Devil-Sec", "Devil-Maint", "Judge-Code"],
+  "target": {
+    "commit_sha": "79da1fa",
+    "file_path": "DARE-Skills/",
+    "module": "DARE-Skills"
+  },
+  "debate_rounds": 1,
+  "review_summary": "Lv.5委员会审查发现提交79da1fa存在3个critical、6个high及9个medium问题：Schema重复定义、字段命名与枚举不一致，Prompt输出示例与Schema冲突，存在Prompt注入、路径遍历、Gate绕过等安全风险，文档可维护性差。Lv.5下任何Medium+问题均阻塞，判定BLOCKED。",
+  "issues": [
+    {
+      "issue_id": "CODE-001",
+      "dimension": "correctness",
+      "severity": "critical",
+      "category": "SCHEMA_VALIDATION",
+      "description": "unified_schema.json 中 gate_reason 属性被重复声明，导致 JSON Schema 存在重复键。",
+      "location": "DARE-Skills/dare-report/references/unified_schema.json:83-90",
+      "evidence": "Schema 在第 83-86 行与第 87-90 行两次定义了同名的 \"gate_reason\" 属性，结构完全相同，形成重复键。",
+      "impact": "Schema 解析器可能报错或行为未定义，破坏所有依赖统一 Schema 的报告验证流程。",
+      "recommendation": "删除重复的 gate_reason 定义，仅保留一个声明。"
+    },
+    {
+      "issue_id": "CODE-002",
+      "dimension": "correctness",
+      "severity": "high",
+      "category": "SCHEMA_VALIDATION",
+      "description": "request_schema.json 使用字段名 intensity，而统一 Schema 与阶段输出 Schema 使用 intensity_level，字段名不一致。",
+      "location": "DARE-Skills/dare-core/references/request_schema.json:19",
+      "evidence": "request_schema.json:19 定义 \"intensity\": {\"type\": \"integer\", ...}，但 unified_schema.json:34 与 code_output_schema.json:32 均要求 \"intensity_level\"。",
+      "impact": "请求输入与阶段输出之间字段名无法对齐，集成和消费端会出现解析失败。",
+      "recommendation": "统一将 request_schema.json 中的 \"intensity\" 重命名为 \"intensity_level\"，并同步所有引用。"
+    },
+    {
+      "issue_id": "CODE-003",
+      "dimension": "correctness",
+      "severity": "high",
+      "category": "SCHEMA_VALIDATION",
+      "description": "编排模式标识与输出 Schema 的 mode 枚举不一致，council 等多 Agent 模式无法被输出 Schema 表示。",
+      "location": "DARE-Skills/dare-core/references/request_schema.json:14-18",
+      "evidence": "request_schema.json 的 mode 枚举为 [\"A\", \"B\", \"C\"]；unified_schema.json:40 与 code_output_schema.json:38 的 mode 枚举为 [\"debate\", \"review\", \"audit\"]，且不含 \"council\"。",
+      "impact": "编排配置无法正确映射到报告输出，Lv.4/Lv.5 委员会模式在结构化输出中丢失。",
+      "recommendation": "统一编排模式标识与输出 mode 枚举，或在输出 Schema 中增加 \"council\" 等模式。"
+    },
+    {
+      "issue_id": "CODE-004",
+      "dimension": "correctness",
+      "severity": "high",
+      "category": "SCHEMA_VALIDATION",
+      "description": "Judge-Arch Prompt 使用的 Gate 结果枚举与 Schema 不一致。",
+      "location": "DARE-Skills/dare-arch/references/prompt_templates.md",
+      "evidence": "Judge-Arch Prompt 输出示例使用 \"rejected/conditional_pass/pass\"，而所有 Schema 要求 \"PASSED/CONDITIONAL/BLOCKED\"。",
+      "impact": "Agent 生成的报告将无法通过 Schema 校验，导致下游报告生成失败。",
+      "recommendation": "将所有 Prompt 中的 Gate 结果枚举统一为 Schema 规定的 \"PASSED/CONDITIONAL/BLOCKED\"。"
+    },
+    {
+      "issue_id": "CODE-005",
+      "dimension": "correctness",
+      "severity": "high",
+      "category": "SCHEMA_VALIDATION",
+      "description": "dare-code Lv.3 Prompt 输出示例与 code_output_schema.json 严重冲突。",
+      "location": "DARE-Skills/dare-code/references/prompt_templates.md:266-290",
+      "evidence": "示例使用 issue_id \"DARE-CODE-XXX\"（Schema 要求 \"CODE-XXX\"）、severity 包含 \"Info\"（Schema 无此枚举）、dimension 为中文、confidence_score 范围 0-100（Schema 为 0-1）、缺少必需的 scores 对象。",
+      "impact": "以此示例为蓝本的 Agent 会持续生成非法 JSON，导致所有 CODE 阶段输出不可用。",
+      "recommendation": "完全重写 Lv.3 输出示例，使其严格匹配 code_output_schema.json 的字段、类型与枚举。"
+    },
+    {
+      "issue_id": "CODE-006",
+      "dimension": "correctness",
+      "severity": "high",
+      "category": "SCHEMA_VALIDATION",
+      "description": "报告模板引用大量输出 Schema 未定义的字段。",
+      "location": "DARE-Skills/dare-report/references/report_templates/*.md",
+      "evidence": "code_report_template.md 引用 {scores.reliability}、{contention_summary}、{devil_arguments_summary}、{judge_rulings_summary}、{lines_added}、{lines_removed}、{diff_excerpt} 等字段，均未在 unified_schema.json 中定义。",
+      "impact": "按模板生成的 Markdown 报告会包含无法从 JSON 输入填充的字段，造成报告与 Schema 脱节。",
+      "recommendation": "清理模板中未在 Schema 定义的占位符，或将其补充到统一 Schema 中。"
+    },
+    {
+      "issue_id": "CODE-007",
+      "dimension": "maintainability",
+      "severity": "high",
+      "category": "SCHEMA_VALIDATION",
+      "description": "各阶段 Schema 的 dimension 枚举与统一 Schema 及 scores 对象不一致。",
+      "location": "DARE-Skills/dare-report/references/unified_schema.json:139-142",
+      "evidence": "unified_schema.json dimension 枚举包含 correctness/usability/compliance/reliability/scalability，但 scores 对象仅包含 overall/security/maintainability/performance；同时 ARCH/REQ 阶段输出 Schema 的 dimension 枚举缺少 security。",
+      "impact": "Issue 分类无法映射到评分维度，部分安全问题在 ARCH/REQ 阶段无法被正确标记。",
+      "recommendation": "统一所有 Schema 的 dimension 枚举，并确保每个 dimension 都有对应的 score 维度。"
+    },
+    {
+      "issue_id": "CODE-008",
+      "dimension": "security",
+      "severity": "critical",
+      "category": "CWE-284",
+      "description": "human_override 对象缺乏身份校验与字段约束，可被伪造以绕过 Gate。",
+      "location": "DARE-Skills/dare-report/references/unified_schema.json:110-118",
+      "evidence": "human_override 包含 original_gate_result 但仅为 string 类型，无 enum 约束；缺乏签名、角色校验或时间戳防重放机制。",
+      "impact": "攻击者可通过构造 human_override 对象将 BLOCKED 结果篡改为 PASSED，绕过合并门禁。",
+      "recommendation": "为 original_gate_result 添加 PASSED/CONDITIONAL/BLOCKED 枚举约束，并引入身份标识、审批理由强制填充与防篡改校验。"
+    },
+    {
+      "issue_id": "CODE-009",
+      "dimension": "security",
+      "severity": "critical",
+      "category": "CWE-74",
+      "description": "Prompt 模板将原始 {{code_diff}} 直接嵌入 fenced code block，存在 Prompt Injection 风险。",
+      "location": "DARE-Skills/dare-code/references/prompt_templates.md:184-186",
+      "evidence": "Lv.3 主审查 Prompt 在 markdown code fence 中直接展开 {{code_diff}} 变量，未进行转义或隔离。",
+      "impact": "被审查代码中的恶意注释或字符串可注入额外指令，操纵 Agent 输出或绕过安全审查。",
+      "recommendation": "对 diff 内容进行转义/沙箱化处理，或将代码内容以 JSON 字符串形式传入，与指令模板严格分离。"
+    },
+    {
+      "issue_id": "CODE-010",
+      "dimension": "security",
+      "severity": "high",
+      "category": "CWE-22",
+      "description": "request_schema.json 对 file_path 类型未做路径约束，存在路径遍历风险。",
+      "location": "DARE-Skills/dare-core/references/request_schema.json:32-45",
+      "evidence": "input_artifacts 中 type=file_path 的 content 为普通字符串，未限制为仓库相对路径或合法路径模式。",
+      "impact": "攻击者可传入 \"../../../etc/passwd\" 等路径读取任意文件，扩大攻击面。",
+      "recommendation": "为 file_path 内容添加正则或 URI 模式约束，强制仓库相对路径并在读取前做路径归一化与沙箱校验。"
+    },
+    {
+      "issue_id": "CODE-011",
+      "dimension": "security",
+      "severity": "high",
+      "category": "SCHEMA_VALIDATION",
+      "description": "统一 Schema 的 Issue 定义缺失安全关键字段，且 CODE Schema 中这些字段为可选。",
+      "location": "DARE-Skills/dare-report/references/unified_schema.json:131-183",
+      "evidence": "unified_schema.json issue 定义未包含 category、attack_vector、code_snippet、line_number；code_output_schema.json 中 attack_vector、category、line_number、location 均为可选。",
+      "impact": "安全 Issue 可被弱化上报，缺少 CWE 分类、攻击向量与代码位置，降低可追溯性与修复效率。",
+      "recommendation": "在统一 Schema 中补充上述字段，并在 CODE Schema 中对安全类 Issue 设为 required。"
+    },
+    {
+      "issue_id": "CODE-012",
+      "dimension": "security",
+      "severity": "high",
+      "category": "SCHEMA_VALIDATION",
+      "description": "所有 Schema 顶层设置 additionalProperties: true，允许注入任意字段。",
+      "location": "DARE-Skills/dare-report/references/unified_schema.json:8",
+      "evidence": "unified_schema.json:8、code_output_schema.json:18、request_schema.json:7 均设置 \"additionalProperties\": true。",
+      "impact": "恶意或错误的输出可携带未定义字段，绕过基于 Schema 的校验与审计。",
+      "recommendation": "将顶层 additionalProperties 改为 false，或通过明确扩展字段清单控制额外属性。"
+    },
+    {
+      "issue_id": "CODE-013",
+      "dimension": "security",
+      "severity": "medium",
+      "category": "POLICY",
+      "description": "报告生成 Prompt 的 Gate 策略未显式绑定 security_score 阈值。",
+      "location": "DARE-Skills/dare-report/references/report_generation_prompt.md",
+      "evidence": "报告生成 Prompt 的阻塞条件未明确引用 security_score 阈值，仅依赖 issues 计数。",
+      "impact": "Gate 判定可能忽略安全评分，使安全评分低于阈值的提交仍可通过。",
+      "recommendation": "在报告生成 Prompt 中增加显式规则：security_score 低于阶段阈值时强制 BLOCKED。"
+    },
+    {
+      "issue_id": "CODE-014",
+      "dimension": "maintainability",
+      "severity": "medium",
+      "category": "STYLE",
+      "description": "Prompt 模板中 severity 大小写与 Schema 不一致。",
+      "location": "DARE-Skills/dare-code/references/prompt_templates.md:275",
+      "evidence": "示例中 severity 枚举为 \"Critical|High|Medium|Low|Info\"，而 Schema 要求小写 \"critical|high|medium|low\"。",
+      "impact": "Agent 输出会因大小写不匹配导致 Schema 校验失败，增加维护成本。",
+      "recommendation": "统一所有 Prompt 与 Schema 中的 severity 为小写，并移除 Schema 不存在的 \"Info\"。"
+    },
+    {
+      "issue_id": "CODE-015",
+      "dimension": "maintainability",
+      "severity": "medium",
+      "category": "DOCUMENTATION",
+      "description": "SKILL.md 文档与 Schema 不一致，且过度压缩、结构不统一。",
+      "location": "DARE-Skills/*/SKILL.md",
+      "evidence": "dare-report/SKILL.md 输入示例缺少 scores.overall；5/7 的 SKILL.md 行数低于 150 行；各 SKILL.md 章节结构不一致；AHS 阈值与 dare-arch/references/ahs_calculation.md 不一致。",
+      "impact": "文档不可靠，误导实现者，增加后续维护与新人 onboarding 成本。",
+      "recommendation": "更新所有 SKILL.md 示例以匹配 Schema，统一章节结构，扩展压缩内容，并校准 AHS 阈值。"
+    },
+    {
+      "issue_id": "CODE-016",
+      "dimension": "maintainability",
+      "severity": "medium",
+      "category": "TECH_DEBT",
+      "description": "阶段输出 Schema 保留大量遗留字段与宽松扩展，导致 Schema 臃肿。",
+      "location": "DARE-Skills/dare-code/references/code_output_schema.json:103-111",
+      "evidence": "code_output_schema.json 包含标注为遗留的 file_path、blocker_count 字段；additionalProperties 为 true；debate_context 子属性未全部 required。",
+      "impact": "Schema 职责不清晰，校验宽松，长期积累兼容性债务。",
+      "recommendation": "清理未使用的遗留字段，或将其标记为 deprecated 并提供迁移说明；收紧 additionalProperties 与 debate_context 约束。"
+    },
+    {
+      "issue_id": "CODE-017",
+      "dimension": "correctness",
+      "severity": "medium",
+      "category": "SCHEMA_VALIDATION",
+      "description": "CODE/TEST 低强度 Prompt 允许 Markdown 输出，与 Schema 的 JSON 要求冲突。",
+      "location": "DARE-Skills/dare-code/references/prompt_templates.md:48-63",
+      "evidence": "Lv.1 与 Lv.2 输出模板为 Markdown 格式，未要求生成符合 code_output_schema.json 的 JSON。",
+      "impact": "低强度审查输出无法被下游 JSON 消费链路处理，破坏端到端自动化。",
+      "recommendation": "所有强度等级均要求输出符合对应 Schema 的 JSON，或为 Markdown 输出定义独立的转换契约。"
+    },
+    {
+      "issue_id": "CODE-018",
+      "dimension": "correctness",
+      "severity": "medium",
+      "category": "SCHEMA_VALIDATION",
+      "description": "metrics.fix_duration_hours 类型未允许 null，无法表示未修复 Issue。",
+      "location": "DARE-Skills/dare-report/references/unified_schema.json:264-267",
+      "evidence": "fix_duration_hours 声明为 \"type\": \"number\"，未包含 null，而尚未解决的 Issue 没有修复时长。",
+      "impact": "未修复 Issue 无法合法表示 fix_duration_hours，迫使使用 0 等不准确值。",
+      "recommendation": "将 fix_duration_hours 类型改为 [\"number\", \"null\"]。"
+    }
+  ],
+  "scores": {
+    "overall": 57,
+    "security": 50,
+    "maintainability": 55,
+    "performance": 68
+  },
+  "gate_result": "BLOCKED",
+  "gate_reason": "Lv.5 阻塞条件触发：存在 3 个 critical、6 个 high 及 9 个 medium 问题；根据 Lv.5 标准，任何 Medium+ 问题均值得阻塞。",
+  "confidence_score": 0.92,
+  "escalation_triggered": true,
+  "debate_context": {
+    "mode": "council",
+    "agents": ["Devil-Code", "Devil-Sec", "Devil-Maint"],
+    "rounds": 1
+  }
+}

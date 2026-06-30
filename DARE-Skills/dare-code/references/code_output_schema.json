@@ -36,7 +36,7 @@
     },
     "mode": {
       "type": "string",
-      "enum": ["debate", "review", "audit"]
+      "enum": ["debate", "review", "audit", "council"]
     },
     "participants": {
       "type": "array",
@@ -90,7 +90,30 @@
       "enum": ["L1", "L2", "L3", null]
     },
     "human_override": {
-      "type": ["object", "null"]
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["overridden_by", "override_reason", "original_gate_result", "overridden_at"],
+      "properties": {
+        "overridden_by": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Identity of the human who overrode the gate decision"
+        },
+        "override_reason": {
+          "type": "string",
+          "minLength": 10,
+          "description": "Detailed written reason for the override"
+        },
+        "original_gate_result": {
+          "type": "string",
+          "enum": ["PASSED", "CONDITIONAL", "BLOCKED"],
+          "description": "Original gate result before override"
+        },
+        "overridden_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
     },
     "feedback_score": {
       "type": ["integer", "null"],
@@ -134,7 +157,18 @@
   "definitions": {
     "issue": {
       "type": "object",
+      "additionalProperties": false,
       "required": ["issue_id", "dimension", "severity", "description", "evidence", "impact", "recommendation"],
+      "allOf": [
+        {
+          "if": {
+            "properties": { "dimension": { "const": "security" } }
+          },
+          "then": {
+            "required": ["category", "attack_vector", "line_number", "location"]
+          }
+        }
+      ],
       "properties": {
         "issue_id": {
           "type": "string",
@@ -143,7 +177,7 @@
         },
         "dimension": {
           "type": "string",
-          "enum": ["correctness", "security", "maintainability", "performance"],
+          "enum": ["security", "maintainability", "performance", "reliability", "scalability", "usability", "compliance", "correctness"],
           "description": "实现方案挑战 → correctness; 安全漏洞扫描 → security; 可维护性评估 → maintainability; 性能瓶颈识别 → performance"
         },
         "severity": {
@@ -189,7 +223,12 @@
         "overall": { "type": "number", "minimum": 0, "maximum": 100, "description": "security/maintainability/performance 加权平均" },
         "security": { "type": "number", "minimum": 0, "maximum": 100 },
         "maintainability": { "type": "number", "minimum": 0, "maximum": 100 },
-        "performance": { "type": "number", "minimum": 0, "maximum": 100 }
+        "performance": { "type": "number", "minimum": 0, "maximum": 100 },
+        "correctness": { "type": "number", "minimum": 0, "maximum": 100 },
+        "reliability": { "type": "number", "minimum": 0, "maximum": 100 },
+        "scalability": { "type": "number", "minimum": 0, "maximum": 100 },
+        "usability": { "type": "number", "minimum": 0, "maximum": 100 },
+        "compliance": { "type": "number", "minimum": 0, "maximum": 100 }
       }
     },
     "metrics": {
@@ -198,7 +237,7 @@
         "issue_density": { "type": "number" },
         "critical_issue_ratio": { "type": "number" },
         "recurring_issue_ratio": { "type": "number" },
-        "fix_duration_hours": { "type": "number" }
+        "fix_duration_hours": { "type": ["number", "null"] }
       }
     }
   }

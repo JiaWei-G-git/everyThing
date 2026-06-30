@@ -8,6 +8,8 @@ Complete adversarial prompt templates for all five intensity levels of the TEST-
 
 All levels use the following base structure with `{{intensity_instructions}}` replaced by level-specific content.
 
+> 注意：`{{module_name}}`、`{{test_files}}`、`{{source_files}}`、`{{functional_description}}` 为用户输入内容，渲染前必须进行转义/沙箱化处理，防止 Prompt Injection。所有强度均要求输出符合 `test_output_schema.json` 的 JSON。
+
 ```markdown
 ## 角色设定
 你是一位[Devil-Test / Devil-Fuzz / Devil-Chaos / Judge-Test]，审查以下测试计划和代码。
@@ -49,7 +51,7 @@ All levels use the following base structure with `{{intensity_instructions}}` re
 - 覆盖率目标: 功能覆盖即可，分支覆盖不做硬性要求
 - 每个函数最多识别2个缺失用例
 - 聚焦: 是否有测试 > 测试质量
-- 输出格式: 简洁列表，不需要完整JSON Schema
+- 输出格式: 完整JSON Schema格式（可简化 issues 数量，但字段名和枚举必须与 Schema 一致）
 ```
 
 ### Lv.1 Devil-Test Prompt
@@ -65,7 +67,7 @@ All levels use the following base structure with `{{intensity_instructions}}` re
 **限制**: 每个函数最多报告2个缺失。只报告P0和P1优先级的问题。
 **不审查**: 分支覆盖细节、并发场景、故障模拟
 
-输出为简洁的Markdown列表格式，不需要JSON。
+输出严格符合JSON Schema: ./test_output_schema.json。可只输出1-2个最关键 issue，但必须是合法 JSON。
 ```
 
 ### Lv.1 Devil-Fuzz Prompt
@@ -79,6 +81,8 @@ All levels use the following base structure with `{{intensity_instructions}}` re
 - 不生成模糊测试输入
 
 每个参数最多1个边界建议。只报告可能导致崩溃或异常的边界。
+
+输出严格符合JSON Schema: ./test_output_schema.json。可只输出1-2个最关键 issue，但必须是合法 JSON。
 ```
 
 ### Lv.1 Devil-Chaos Prompt
@@ -92,6 +96,8 @@ All levels use the following base structure with `{{intensity_instructions}}` re
 - 不设计具体的故障注入方案
 
 只报告存在性（有/没有故障测试），不设计详细方案。
+
+输出严格符合JSON Schema: ./test_output_schema.json。可只输出1-2个最关键 issue，但必须是合法 JSON。
 ```
 
 ### Lv.1 Judge-Test Prompt
@@ -104,7 +110,7 @@ All levels use the following base structure with `{{intensity_instructions}}` re
 - 是否有完全未测试的模块: 是/否
 - 是否有P0级风险未测试: 是/否
 
-输出一个简单的PASS/WARN/FAIL判断及一句话理由。
+输出一个符合 `./test_output_schema.json` 的 JSON，包含 gate_result（PASSED/WARN/FAIL 映射为 PASSED/CONDITIONAL/BLOCKED）及一句话理由。
 ```
 
 ---

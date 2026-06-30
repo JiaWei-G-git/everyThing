@@ -36,7 +36,7 @@
     },
     "mode": {
       "type": "string",
-      "enum": ["debate", "review", "audit"]
+      "enum": ["debate", "review", "audit", "council"]
     },
     "participants": {
       "type": "array",
@@ -90,7 +90,30 @@
       "enum": ["L1", "L2", "L3", null]
     },
     "human_override": {
-      "type": ["object", "null"]
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["overridden_by", "override_reason", "original_gate_result", "overridden_at"],
+      "properties": {
+        "overridden_by": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Identity of the human who overrode the gate decision"
+        },
+        "override_reason": {
+          "type": "string",
+          "minLength": 10,
+          "description": "Detailed written reason for the override"
+        },
+        "original_gate_result": {
+          "type": "string",
+          "enum": ["PASSED", "CONDITIONAL", "BLOCKED"],
+          "description": "Original gate result before override"
+        },
+        "overridden_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
     },
     "feedback_score": {
       "type": ["integer", "null"],
@@ -134,6 +157,7 @@
   "definitions": {
     "issue": {
       "type": "object",
+      "additionalProperties": false,
       "required": ["issue_id", "dimension", "severity", "description", "evidence", "impact", "recommendation"],
       "properties": {
         "issue_id": {
@@ -142,18 +166,34 @@
         },
         "dimension": {
           "type": "string",
-          "enum": ["correctness", "maintainability", "usability"],
-          "description": "隐性假设挖掘/需求矛盾检测 → correctness; ROI合理性挑战/范围蔓延预警 → maintainability; 综合判定 → usability"
+          "enum": ["security", "maintainability", "performance", "reliability", "scalability", "usability", "compliance", "correctness"],
+          "description": "隐性假设挖掘/需求矛盾检测 → correctness; ROI合理性挑战/范围蔓延预警 → maintainability; 安全需求缺陷 → security; 综合判定 → usability"
         },
         "severity": {
           "type": "string",
           "enum": ["critical", "high", "medium", "low"]
         },
+        "category": {
+          "type": "string",
+          "description": "问题分类，安全类使用 CWE 编号"
+        },
         "description": { "type": "string" },
+        "code_snippet": {
+          "type": "string",
+          "description": "相关需求/设计片段"
+        },
         "evidence": { "type": "string" },
         "impact": { "type": "string" },
         "recommendation": { "type": "string" },
+        "line_number": {
+          "type": "integer",
+          "minimum": 1
+        },
         "location": { "type": "string" },
+        "attack_vector": {
+          "type": "string",
+          "description": "安全类问题的攻击向量"
+        },
         "recurring": { "type": "boolean", "default": false },
         "recurring_count": { "type": "integer", "minimum": 1 },
         "first_seen": { "type": "string", "format": "date-time" },
@@ -171,7 +211,10 @@
         "overall": { "type": "number", "minimum": 0, "maximum": 100 },
         "security": { "type": "number", "minimum": 0, "maximum": 100 },
         "maintainability": { "type": "number", "minimum": 0, "maximum": 100 },
-        "performance": { "type": "number", "minimum": 0, "maximum": 100 }
+        "performance": { "type": "number", "minimum": 0, "maximum": 100 },
+        "correctness": { "type": "number", "minimum": 0, "maximum": 100 },
+        "usability": { "type": "number", "minimum": 0, "maximum": 100 },
+        "compliance": { "type": "number", "minimum": 0, "maximum": 100 }
       }
     },
     "metrics": {
@@ -180,7 +223,7 @@
         "issue_density": { "type": "number" },
         "critical_issue_ratio": { "type": "number" },
         "recurring_issue_ratio": { "type": "number" },
-        "fix_duration_hours": { "type": "number" }
+        "fix_duration_hours": { "type": ["number", "null"] }
       }
     }
   }

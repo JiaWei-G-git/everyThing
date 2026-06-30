@@ -75,7 +75,7 @@ gate_policy:
 - `record_id`, `stage`, `timestamp`, `intensity_level`
 - `review_summary`（字符串，≤200字）
 - `issues[]`：每个 issue 包含 `issue_id`, `dimension`, `severity`, `description`, `evidence`, `impact`, `recommendation`
-- `scores`: `{ overall, security, maintainability, performance }`
+- `scores`: `{ overall, security, maintainability, performance, reliability?, scalability? }`（可选维度无数据时省略）
 - `gate_result`: `PASSED` / `CONDITIONAL` / `BLOCKED`
 - `confidence_score`: 0.0-1.0
 - `assumptions_catalog`（REQ 阶段扩展）

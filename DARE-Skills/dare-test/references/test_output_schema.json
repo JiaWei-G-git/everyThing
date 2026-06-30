@@ -36,7 +36,7 @@
     },
     "mode": {
       "type": "string",
-      "enum": ["debate", "review", "audit"]
+      "enum": ["debate", "review", "audit", "council"]
     },
     "participants": {
       "type": "array",
@@ -89,7 +89,30 @@
       "enum": ["L1", "L2", "L3", null]
     },
     "human_override": {
-      "type": ["object", "null"]
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["overridden_by", "override_reason", "original_gate_result", "overridden_at"],
+      "properties": {
+        "overridden_by": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Identity of the human who overrode the gate decision"
+        },
+        "override_reason": {
+          "type": "string",
+          "minLength": 10,
+          "description": "Detailed written reason for the override"
+        },
+        "original_gate_result": {
+          "type": "string",
+          "enum": ["PASSED", "CONDITIONAL", "BLOCKED"],
+          "description": "Original gate result before override"
+        },
+        "overridden_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
     },
     "feedback_score": {
       "type": ["integer", "null"],
@@ -222,6 +245,7 @@
   "definitions": {
     "issue": {
       "type": "object",
+      "additionalProperties": false,
       "required": ["issue_id", "dimension", "severity", "description", "evidence", "impact", "recommendation"],
       "properties": {
         "issue_id": {
@@ -230,18 +254,34 @@
         },
         "dimension": {
           "type": "string",
-          "enum": ["correctness", "maintainability", "reliability", "security", "performance"],
+          "enum": ["security", "maintainability", "performance", "reliability", "scalability", "usability", "compliance", "correctness"],
           "description": "functional/branch/boundary → correctness; fault_tolerance/integration → reliability; concurrency → performance; security → security"
         },
         "severity": {
           "type": "string",
           "enum": ["critical", "high", "medium", "low"]
         },
+        "category": {
+          "type": "string",
+          "description": "问题分类，安全类使用 CWE 编号"
+        },
         "description": { "type": "string" },
+        "code_snippet": {
+          "type": "string",
+          "description": "相关测试/被测代码片段"
+        },
         "evidence": { "type": "string" },
         "impact": { "type": "string" },
         "recommendation": { "type": "string" },
+        "line_number": {
+          "type": "integer",
+          "minimum": 1
+        },
         "location": { "type": "string" },
+        "attack_vector": {
+          "type": "string",
+          "description": "安全类问题的攻击向量"
+        },
         "recurring": { "type": "boolean", "default": false },
         "recurring_count": { "type": "integer", "minimum": 1 },
         "first_seen": { "type": "string", "format": "date-time" }
@@ -255,7 +295,10 @@
         "security": { "type": "number", "minimum": 0, "maximum": 100, "description": "从security相关gap和fault覆盖率推导" },
         "maintainability": { "type": "number", "minimum": 0, "maximum": 100, "description": "从branch覆盖率推导" },
         "performance": { "type": "number", "minimum": 0, "maximum": 100, "description": "从concurrency/performance相关gap推导" },
-        "reliability": { "type": "number", "minimum": 0, "maximum": 100, "description": "从fault覆盖率推导" }
+        "reliability": { "type": "number", "minimum": 0, "maximum": 100, "description": "从fault覆盖率推导" },
+        "correctness": { "type": "number", "minimum": 0, "maximum": 100 },
+        "usability": { "type": "number", "minimum": 0, "maximum": 100 },
+        "compliance": { "type": "number", "minimum": 0, "maximum": 100 }
       }
     },
     "metrics": {
@@ -264,7 +307,7 @@
         "issue_density": { "type": "number" },
         "critical_issue_ratio": { "type": "number" },
         "recurring_issue_ratio": { "type": "number" },
-        "fix_duration_hours": { "type": "number" }
+        "fix_duration_hours": { "type": ["number", "null"] }
       }
     },
     "coverage_dimension": {

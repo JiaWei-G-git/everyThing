@@ -34,7 +34,7 @@ description: >
   "target": { "file_path": "src/auth/login.ts", "commit_sha": "a1b2c3d" },
   "debate_rounds": 3,
   "issues": [],
-  "scores": { "security": 65, "maintainability": 78, "performance": 82 },
+  "scores": { "overall": 72, "security": 65, "maintainability": 78, "performance": 82 },
   "gate_result": "BLOCKED"
 }
 ```

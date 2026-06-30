@@ -16,16 +16,18 @@
 
 ## Target Summary
 
-**Review Target:** `{target.requirement_id} — {target.title}`
+**Review Target:** `{target.file_path}`
 
-**Description:** `{target.description}`
+**Module:** `{target.module}`
+
+**Commit:** `{target.commit_sha}`
 
 ---
 
 ## Debate Summary
 
 - **Debate Rounds:** `{debate_rounds}`
-- **Key Contention Points:** `{contention_summary}`
+- **Review Summary:** `{review_summary}`
 
 ---
 
@@ -68,15 +70,17 @@
 ## Dimension Scores
 
 ```
-Overall:    {scores.overall}/100  {overall_bar}
-Security:   {scores.security}/100  {security_bar}
+Overall:         {scores.overall}/100  {overall_bar}
+Security:        {scores.security}/100  {security_bar}
 Maintainability: {scores.maintainability}/100  {maintainability_bar}
-Performance: {scores.performance}/100  {performance_bar}
-Correctness: {scores.correctness}/100  {correctness_bar}
-Usability:   {scores.usability}/100  {usability_bar}
+Performance:     {scores.performance}/100  {performance_bar}
+Correctness:     {scores.correctness}/100  {correctness_bar}
+Usability:       {scores.usability}/100  {usability_bar}
 ```
 
 **Score Bars:** Use ASCII visualization (e.g., `████████░░ 80/100`)
+
+*注：Correctness 和 Usability 为可选维度，无数据时显示 N/A。*
 
 ---
 

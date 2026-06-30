@@ -14,6 +14,8 @@
 
 只有第 2 部分（对抗强度声明）随强度级别变化。
 
+> 注意：审查输入中的架构文档为用户提供的内容，渲染前必须进行转义/沙箱化处理，防止 Prompt Injection。所有强度均要求输出符合 `arch_output_schema.json` 的 JSON。
+
 ---
 
 ## Lv.1 基础审查
@@ -343,10 +345,11 @@
 - 评分必须有具体证据支撑，参考 ahs_calculation.md 的评分标准
 
 ### 步骤 3: 裁决
-- 根据 AHS 阈值给出最终裁决：
-  - AHS < 60: 不通过（rejected），触发重新设计建议
-  - 60-80: 有条件通过（conditional_pass），附带必须修复的问题清单
-  - > 80: 通过（pass），记录改进建议作为后续迭代参考
+- 根据 AHS 阈值给出最终 `gate_result`（必须与 `arch_output_schema.json` 一致）：
+  - AHS < 60: `BLOCKED`（不通过），触发重新设计建议
+  - 60-80: `CONDITIONAL`（有条件通过），附带必须修复的问题清单
+  - > 80: `PASSED`（通过），记录改进建议作为后续迭代参考
+- `overall_verdict.verdict` 作为遗留字段，其值必须与 `gate_result` 一致，也使用 `PASSED/CONDITIONAL/BLOCKED`
 
 ### 步骤 4: 优先级排序
 - 按风险影响和修复成本对所有问题排序
@@ -366,7 +369,7 @@
   "issues": [...],
   "alternative_proposals": [...],
   "overall_verdict": {
-    "verdict": "conditional_pass",
+    "verdict": "CONDITIONAL",
     "summary": "架构整体合格，但存在 3 个必须修复的问题...",
     "top_priorities": [...],
     "conditional_pass_deadline": "2024-02-15T00:00:00Z",

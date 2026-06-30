@@ -16,19 +16,18 @@
 
 ## Target Summary
 
-**Review Target:** `{target.module} — {target.component}`
+**Review Target:** `{target.file_path}`
 
-**Architecture Decision:** `{target.adl_reference}`
+**Module:** `{target.module}`
 
-**Description:** `{target.description}`
+**Commit:** `{target.commit_sha}`
 
 ---
 
 ## Debate Summary
 
 - **Debate Rounds:** `{debate_rounds}`
-- **Key Contention Points:** `{contention_summary}`
-- **Architecture Decisions Challenged:** `{decisions_challenged}`
+- **Review Summary:** `{review_summary}`
 
 ---
 
@@ -71,13 +70,17 @@
 ## Architecture Dimension Scores
 
 ```
-Overall:       {scores.overall}/100  {overall_bar}
-Security:      {scores.security}/100  {security_bar}
-Scalability:   {scores.scalability}/100  {scalability_bar}
+Overall:         {scores.overall}/100  {overall_bar}
+Security:        {scores.security}/100  {security_bar}
 Maintainability: {scores.maintainability}/100  {maintainability_bar}
-Performance:   {scores.performance}/100  {performance_bar}
-Reliability:   {scores.reliability}/100  {reliability_bar}
+Performance:     {scores.performance}/100  {performance_bar}
+Reliability:     {scores.reliability}/100  {reliability_bar}
+Scalability:     {scores.scalability}/100  {scalability_bar}
 ```
+
+**Score Bars:** Use ASCII visualization (e.g., `████████░░ 80/100`)
+
+*注：Reliability 和 Scalability 为可选维度，无数据时显示 N/A。*
 
 ---
 
