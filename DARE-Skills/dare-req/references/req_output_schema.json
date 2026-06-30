@@ -1,0 +1,232 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "D.A.R.E. Requirement Review Output Schema",
+  "description": "REQ-Challenger需求阶段对抗审查的标准输出格式",
+  "type": "object",
+  "required": ["review_summary", "issues", "assumptions_catalog", "confidence_score", "reviewer_role"],
+  "properties": {
+    "review_summary": {
+      "type": "object",
+      "required": ["document_title", "review_date", "reviewer_role", "total_issues", "severity_distribution", "key_findings", "recommendation_summary"],
+      "properties": {
+        "document_title": {
+          "type": "string",
+          "description": "被审查需求文档的标题"
+        },
+        "review_date": {
+          "type": "string",
+          "format": "date-time",
+          "description": "审查执行时间，ISO 8601格式"
+        },
+        "reviewer_role": {
+          "type": "string",
+          "enum": ["Devil-BA", "Devil-UX", "Devil-Tech", "Judge-Req"],
+          "description": "执行审查的角色"
+        },
+        "review_level": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "对抗强度等级"
+        },
+        "total_issues": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "发现的问题总数"
+        },
+        "severity_distribution": {
+          "type": "object",
+          "required": ["CRITICAL", "HIGH", "MEDIUM", "LOW"],
+          "properties": {
+            "CRITICAL": { "type": "integer", "minimum": 0 },
+            "HIGH": { "type": "integer", "minimum": 0 },
+            "MEDIUM": { "type": "integer", "minimum": 0 },
+            "LOW": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "key_findings": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1,
+          "description": "核心发现摘要，3-5条"
+        },
+        "recommendation_summary": {
+          "type": "string",
+          "description": "总体建议概要"
+        }
+      }
+    },
+    "issues": {
+      "type": "array",
+      "description": "发现的所有问题列表",
+      "items": {
+        "type": "object",
+        "required": ["issue_id", "dimension", "severity", "description", "evidence", "impact", "recommendation"],
+        "properties": {
+          "issue_id": {
+            "type": "string",
+            "description": "问题唯一标识，格式: REQ-{ROLE}-{NNN}，如 REQ-BA-001"
+          },
+          "dimension": {
+            "type": "string",
+            "enum": ["隐性假设挖掘", "需求矛盾检测", "ROI合理性挑战", "范围蔓延预警", "综合判定"],
+            "description": "问题所属的对抗维度"
+          },
+          "severity": {
+            "type": "string",
+            "enum": ["CRITICAL", "HIGH", "MEDIUM", "LOW"],
+            "description": "严重程度评级"
+          },
+          "description": {
+            "type": "string",
+            "description": "问题详细描述"
+          },
+          "evidence": {
+            "type": "object",
+            "required": ["source_text", "location", "clarity"],
+            "properties": {
+              "source_text": {
+                "type": "string",
+                "description": "需求文档中的原文引用"
+              },
+              "location": {
+                "type": "string",
+                "description": "在需求文档中的位置（章节/页码/行号）"
+              },
+              "clarity": {
+                "type": "string",
+                "enum": ["高", "中", "低"],
+                "description": "证据明确性等级"
+              }
+            }
+          },
+          "impact": {
+            "type": "object",
+            "required": ["description", "quantifiability"],
+            "properties": {
+              "description": {
+                "type": "string",
+                "description": "影响描述"
+              },
+              "quantifiability": {
+                "type": "string",
+                "enum": ["高", "中", "低"],
+                "description": "影响可量化性等级"
+              },
+              "estimated_cost": {
+                "type": "string",
+                "description": "预估修复成本或损失（可选）"
+              }
+            }
+          },
+          "recommendation": {
+            "type": "object",
+            "required": ["action"],
+            "properties": {
+              "action": {
+                "type": "string",
+                "enum": ["必须修复", "建议修复", "可选优化", "接受风险", "需进一步分析"],
+                "description": "建议采取的行动"
+              },
+              "details": {
+                "type": "string",
+                "description": "具体建议内容"
+              },
+              "alternative": {
+                "type": "string",
+                "description": "替代方案（Lv.3及以上必填）"
+              }
+            }
+          },
+          "assumption_if_any": {
+            "type": "string",
+            "description": "此问题所依赖的隐性假设（如适用）"
+          },
+          "related_issues": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "关联的其他issue_id"
+          }
+        }
+      }
+    },
+    "assumptions_catalog": {
+      "type": "array",
+      "description": "隐性假设完整目录",
+      "items": {
+        "type": "object",
+        "required": ["assumption_id", "assumption", "location", "risk_level", "validation_method"],
+        "properties": {
+          "assumption_id": {
+            "type": "string",
+            "description": "假设唯一标识，格式: ASM-{NNN}"
+          },
+          "assumption": {
+            "type": "string",
+            "description": "假设的具体内容"
+          },
+          "location": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "涉及的文档位置列表"
+          },
+          "risk_level": {
+            "type": "string",
+            "enum": ["CRITICAL", "HIGH", "MEDIUM", "LOW"],
+            "description": "假设不成立时的风险等级"
+          },
+          "consequence_if_invalid": {
+            "type": "string",
+            "description": "假设不成立时的具体后果"
+          },
+          "validation_method": {
+            "type": "string",
+            "description": "验证该假设的建议方法"
+          },
+          "related_issues": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "关联的issue_id列表"
+          }
+        }
+      }
+    },
+    "confidence_score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "审查结果的置信度评分（0=完全不确定，1=完全确信）"
+    },
+    "reviewer_role": {
+      "type": "string",
+      "enum": ["Devil-BA", "Devil-UX", "Devil-Tech", "Judge-Req"],
+      "description": "执行本次审查的角色"
+    },
+    "meta": {
+      "type": "object",
+      "description": "审查元数据",
+      "properties": {
+        "level": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5
+        },
+        "duration_estimate": {
+          "type": "string",
+          "description": "预计审查耗时"
+        },
+        "roles_involved": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["Devil-BA", "Devil-UX", "Devil-Tech", "Judge-Req"]
+          }
+        },
+        "follow_up_required": {
+          "type": "boolean",
+          "description": "是否需要后续审查"
+        }
+      }
+    }
+  }
+}

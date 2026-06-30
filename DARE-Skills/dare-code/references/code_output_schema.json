@@ -1,0 +1,163 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "DARE-CODE Review Output Schema",
+  "description": "D.A.R.E.框架代码阶段对抗审查输出格式规范。所有代码审查Agent必须严格遵循此Schema输出结果。",
+  "type": "object",
+  "required": [
+    "file_path",
+    "review_summary",
+    "issues",
+    "security_score",
+    "maintainability_score",
+    "performance_score",
+    "blocker_count",
+    "confidence_score"
+  ],
+  "properties": {
+    "file_path": {
+      "type": "string",
+      "description": "被审查文件的绝对路径"
+    },
+    "review_summary": {
+      "type": "string",
+      "description": "整体审查结论摘要，不超过200字。需包含: 主要发现、评分概况、是否推荐合并。"
+    },
+    "issues": {
+      "type": "array",
+      "description": "审查发现的所有问题列表",
+      "items": {
+        "$ref": "#/definitions/issue"
+      }
+    },
+    "security_score": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "安全评分: 100=无安全问题, 0=严重安全缺陷。Gate条件: <70阻塞合并。"
+    },
+    "maintainability_score": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "可维护性评分: 100=完美可维护, 基于圈复杂度、耦合度、可读性。"
+    },
+    "performance_score": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "性能评分: 100=无性能问题, 基于算法复杂度、资源使用、查询效率。"
+    },
+    "blocker_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "阻塞合并的问题数量。Critical>0 或 High>3 时 Gate 触发。"
+    },
+    "confidence_score": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Agent对审查结果的置信度。考虑代码复杂度、上下文完整性、变更范围。"
+    },
+    "debate_context": {
+      "type": "object",
+      "description": "多Agent辩论模式下的额外上下文（可选）",
+      "required": ["mode", "agents", "rounds"],
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": ["single", "debate", "council", "self_adversarial"],
+          "description": "审查模式"
+        },
+        "agents": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["Devil-Code", "Devil-Sec", "Devil-Maint", "Judge-Code"]
+          },
+          "description": "参与的Agent角色列表"
+        },
+        "rounds": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "辩论轮数"
+        }
+      }
+    }
+  },
+  "definitions": {
+    "issue": {
+      "type": "object",
+      "required": [
+        "issue_id",
+        "line_number",
+        "dimension",
+        "severity",
+        "category",
+        "description",
+        "code_snippet",
+        "evidence",
+        "recommendation"
+      ],
+      "properties": {
+        "issue_id": {
+          "type": "string",
+          "description": "问题唯一标识。格式: DARE-CODE-{递增数字}",
+          "pattern": "^DARE-CODE-[0-9]+$"
+        },
+        "line_number": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "问题所在行号。如跨多行，取起始行。"
+        },
+        "dimension": {
+          "type": "string",
+          "enum": [
+            "实现方案挑战",
+            "安全漏洞扫描",
+            "可维护性评估",
+            "性能瓶颈识别"
+          ],
+          "description": "对抗维度分类"
+        },
+        "severity": {
+          "type": "string",
+          "enum": ["Critical", "High", "Medium", "Low", "Info"],
+          "description": "严重程度: Critical=阻塞, High=24h修复, Medium=Sprint内, Low=建议, Info=提示"
+        },
+        "category": {
+          "type": "string",
+          "description": "问题分类。安全类使用CWE编号(如CWE-89)，其他使用分类名称(如CODE_SMELL, PERFORMANCE)",
+          "examples": [
+            "CWE-89",
+            "CWE-22",
+            "CWE-200",
+            "CODE_SMELL",
+            "PERFORMANCE",
+            "COMPLEXITY",
+            "STYLE"
+          ]
+        },
+        "description": {
+          "type": "string",
+          "description": "问题描述。清晰说明是什么问题以及为什么是个问题。"
+        },
+        "code_snippet": {
+          "type": "string",
+          "description": "相关代码片段。包含足够上下文理解问题，通常3-10行。"
+        },
+        "evidence": {
+          "type": "string",
+          "description": "问题证据。说明为什么这是个真实问题，可引用外部参考。"
+        },
+        "recommendation": {
+          "type": "string",
+          "description": "修复建议。提供具体的代码级修复方案或重构方向。"
+        },
+        "attack_vector": {
+          "type": "string",
+          "description": "攻击向量（安全类问题必填，其他可选）。描述攻击者如何利用此问题。"
+        }
+      }
+    }
+  }
+}

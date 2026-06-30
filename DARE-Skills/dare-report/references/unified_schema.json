@@ -1,0 +1,266 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://dare-framework.dev/schemas/unified-report",
+  "title": "D.A.R.E. Unified Report Schema",
+  "description": "All-stage unified output schema for D.A.R.E. framework adversarial reports. Applies to REQ, ARCH, CODE, and TEST stages.",
+  "type": "object",
+  "required": ["record_id", "stage", "timestamp", "intensity_level", "review_summary", "issues", "scores", "gate_result", "confidence_score", "escalation_triggered"],
+  "properties": {
+    "record_id": {
+      "type": "string",
+      "pattern": "^dare-[0-9]{8}-[0-9]{3}$",
+      "description": "Unique report identifier. Format: dare-YYYYMMDD-NNN"
+    },
+    "stage": {
+      "type": "string",
+      "enum": ["REQ", "ARCH", "CODE", "TEST"],
+      "description": "Adversarial review stage"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Session completion time in ISO 8601 format"
+    },
+    "trigger_type": {
+      "type": "string",
+      "enum": ["pull_request", "commit", "manual", "scheduled", "merge_request", "release"],
+      "description": "Event type that triggered the adversarial session"
+    },
+    "trigger_ref": {
+      "type": "string",
+      "description": "Reference to the trigger event, e.g., PR number, commit SHA, release tag"
+    },
+    "intensity_level": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5,
+      "description": "Adversarial intensity level: 1=light, 3=standard, 5=deep"
+    },
+    "mode": {
+      "type": "string",
+      "enum": ["debate", "review", "audit"],
+      "description": "Adversarial interaction mode"
+    },
+    "participants": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "List of agent roles participating in the session"
+    },
+    "target": {
+      "type": "object",
+      "properties": {
+        "file_path": { "type": "string" },
+        "commit_sha": { "type": "string" },
+        "module": { "type": "string" },
+        "pr_number": { "type": "string" }
+      }
+    },
+    "debate_rounds": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of debate rounds conducted"
+    },
+    "review_summary": {
+      "type": "string",
+      "maxLength": 200,
+      "description": "Concise summary of the adversarial review, max 200 characters"
+    },
+    "issues": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/issue"
+      }
+    },
+    "scores": {
+      "$ref": "#/definitions/scores"
+    },
+    "gate_result": {
+      "type": "string",
+      "enum": ["PASSED", "CONDITIONAL", "BLOCKED"],
+      "description": "Gate policy decision"
+    },
+    "gate_reason": {
+      "type": "string",
+      "description": "Human-readable explanation for the gate decision"
+    },
+    "confidence_score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Confidence level of the overall assessment (0-1)"
+    },
+    "resolution": {
+      "$ref": "#/definitions/resolution"
+    },
+    "escalation_triggered": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether escalation was triggered for this report"
+    },
+    "escalation_level": {
+      "type": ["string", "null"],
+      "enum": ["L1", "L2", "L3", null],
+      "description": "Escalation level: L1=notify developer, L2=notify TL, L3=notify architect"
+    },
+    "human_override": {
+      "type": ["object", "null"],
+      "properties": {
+        "overridden_by": { "type": "string" },
+        "override_reason": { "type": "string" },
+        "original_gate_result": { "type": "string" },
+        "overridden_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "feedback_score": {
+      "type": ["integer", "null"],
+      "minimum": 1,
+      "maximum": 5,
+      "description": "Developer feedback score on usefulness of the adversarial review"
+    },
+    "metrics": {
+      "$ref": "#/definitions/metrics"
+    }
+  },
+  "definitions": {
+    "issue": {
+      "type": "object",
+      "required": ["issue_id", "dimension", "severity", "description"],
+      "properties": {
+        "issue_id": {
+          "type": "string",
+          "pattern": "^(REQ|ARCH|CODE|TEST)-[0-9]{3}$",
+          "description": "Issue identifier, stage-prefixed with 3-digit sequence"
+        },
+        "dimension": {
+          "type": "string",
+          "enum": ["security", "maintainability", "performance", "reliability", "scalability", "usability", "compliance", "correctness"],
+          "description": "Review dimension the issue belongs to"
+        },
+        "severity": {
+          "type": "string",
+          "enum": ["critical", "high", "medium", "low"],
+          "description": "Issue severity level"
+        },
+        "description": {
+          "type": "string",
+          "description": "Detailed issue description"
+        },
+        "evidence": {
+          "type": "string",
+          "description": "Concrete evidence supporting the issue finding"
+        },
+        "impact": {
+          "type": "string",
+          "description": "Impact description if the issue is not resolved"
+        },
+        "recommendation": {
+          "type": "string",
+          "description": "Recommended fix or mitigation approach"
+        },
+        "location": {
+          "type": "string",
+          "description": "File path and line number, e.g., src/auth/login.ts:45"
+        },
+        "recurring": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether this is a recurring issue pattern"
+        },
+        "recurring_count": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Number of times this issue pattern has been found"
+        },
+        "first_seen": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when this issue pattern was first detected"
+        }
+      }
+    },
+    "scores": {
+      "type": "object",
+      "required": ["overall", "security", "maintainability", "performance"],
+      "properties": {
+        "overall": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Weighted overall score"
+        },
+        "security": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "maintainability": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "performance": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "reliability": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "scalability": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        }
+      }
+    },
+    "resolution": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["pending", "in_progress", "resolved", "wont_fix", "overridden"]
+        },
+        "resolved_by": {
+          "type": "string",
+          "description": "Who resolved the issue: developer, ai_agent, tl_override"
+        },
+        "resolution_commit": {
+          "type": "string",
+          "description": "Git commit SHA of the fix"
+        },
+        "resolved_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "resolution_note": {
+          "type": "string",
+          "description": "Additional notes about the resolution"
+        }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "description": "Computed quality metrics for this report",
+      "properties": {
+        "issue_density": {
+          "type": "number",
+          "description": "Issues per 1000 lines of code"
+        },
+        "critical_issue_ratio": {
+          "type": "number",
+          "description": "Ratio of critical+high issues to total issues"
+        },
+        "recurring_issue_ratio": {
+          "type": "number",
+          "description": "Ratio of recurring issues to total issues"
+        },
+        "fix_duration_hours": {
+          "type": "number",
+          "description": "Average fix duration in hours (if resolved)"
+        }
+      }
+    }
+  }
+}

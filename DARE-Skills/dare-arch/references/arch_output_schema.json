@@ -1,0 +1,255 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ARCH-Challenger Output Schema",
+  "description": "D.A.R.E.框架架构阶段对抗审查的标准输出格式，含架构健康度评分(AHS)",
+  "type": "object",
+  "required": [
+    "architecture_health_score",
+    "dimension_scores",
+    "issues",
+    "alternative_proposals",
+    "overall_verdict"
+  ],
+  "properties": {
+    "architecture_health_score": {
+      "type": "number",
+      "description": "架构健康度总分，范围 0-100",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "dimension_scores": {
+      "type": "object",
+      "description": "四个审查维度的独立评分",
+      "required": [
+        "technical_selection",
+        "robustness",
+        "scalability",
+        "tech_debt"
+      ],
+      "properties": {
+        "technical_selection": {
+          "type": "number",
+          "description": "技术选型评分 0-100",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "robustness": {
+          "type": "number",
+          "description": "架构健壮性评分 0-100",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "scalability": {
+          "type": "number",
+          "description": "扩展性评分 0-100",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "tech_debt": {
+          "type": "number",
+          "description": "技术债务评分 0-100",
+          "minimum": 0,
+          "maximum": 100
+        }
+      },
+      "additionalProperties": false
+    },
+    "issues": {
+      "type": "array",
+      "description": "审查发现的所有问题列表",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "dimension",
+          "severity",
+          "title",
+          "description",
+          "recommendation"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "问题唯一标识，格式 ISSUE-{维度缩写}-{序号}，如 ISSUE-TS-001"
+          },
+          "dimension": {
+            "type": "string",
+            "enum": [
+              "technical_selection",
+              "robustness",
+              "scalability",
+              "tech_debt"
+            ],
+            "description": "问题所属维度"
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "critical",
+              "high",
+              "medium",
+              "low"
+            ],
+            "description": "严重程度：critical=阻塞性，high=必须修复，medium=建议修复，low=参考"
+          },
+          "title": {
+            "type": "string",
+            "description": "问题标题，简洁描述"
+          },
+          "description": {
+            "type": "string",
+            "description": "问题详细描述，包含发现过程和潜在影响"
+          },
+          "evidence": {
+            "type": "string",
+            "description": "支撑发现的证据引用，如架构文档章节、代码位置等"
+          },
+          "recommendation": {
+            "type": "string",
+            "description": "修复建议或缓解措施"
+          },
+          "remediation_effort": {
+            "type": "string",
+            "enum": [
+              "trivial",
+              "small",
+              "medium",
+              "large",
+              "massive"
+            ],
+            "description": "修复工作量估计"
+          },
+          "anti_pattern_ref": {
+            "type": "string",
+            "description": "关联的反模式编号，引用 anti_patterns_catalog.md"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "alternative_proposals": {
+      "type": "array",
+      "description": "审查者提出的替代架构方案",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "target_decision",
+          "proposal"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "替代方案唯一标识，格式 ALT-{序号}"
+          },
+          "target_decision": {
+            "type": "string",
+            "description": "所挑战的原始架构决策"
+          },
+          "proposal": {
+            "type": "string",
+            "description": "替代方案描述"
+          },
+          "trade_offs": {
+            "type": "object",
+            "description": "替代方案与原方案的权衡比较",
+            "required": [
+              "pros",
+              "cons"
+            ],
+            "properties": {
+              "pros": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "替代方案优势"
+              },
+              "cons": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "替代方案劣势"
+              },
+              "migration_cost": {
+                "type": "string",
+                "description": "迁移成本评估"
+              }
+            },
+            "additionalProperties": false
+          },
+          "applicable_scenarios": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "替代方案更适用的场景"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "overall_verdict": {
+      "type": "object",
+      "description": "Judge-Arch 的综合裁决",
+      "required": [
+        "verdict",
+        "summary"
+      ],
+      "properties": {
+        "verdict": {
+          "type": "string",
+          "enum": [
+            "rejected",
+            "conditional_pass",
+            "pass"
+          ],
+          "description": "最终裁决：rejected=不通过，conditional_pass=有条件通过，pass=通过"
+        },
+        "summary": {
+          "type": "string",
+          "description": "裁决总结，包含主要关切和关键建议"
+        },
+        "top_priorities": {
+          "type": "array",
+          "description": "按优先级排序的必须处理事项",
+          "items": {
+            "type": "object",
+            "required": [
+              "priority",
+              "item"
+            ],
+            "properties": {
+              "priority": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "优先级序号，1 为最高"
+              },
+              "item": {
+                "type": "string",
+                "description": "优先处理事项描述"
+              },
+              "rationale": {
+                "type": "string",
+                "description": "优先级理由"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "conditional_pass_deadline": {
+          "type": "string",
+          "description": "有条件通过时的修复时限要求（ISO 8601 格式）"
+        },
+        "re_review_required": {
+          "type": "boolean",
+          "description": "是否需要复审",
+          "default": false
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
