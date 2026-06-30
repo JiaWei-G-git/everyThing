@@ -1,179 +1,111 @@
 ---
 name: dare-req
-description: |
-  D.A.R.E.框架需求阶段对抗审查（REQ-Challenger）。通过Devil-BA（业务批判者）、
-  Devil-UX（体验批判者）、Devil-Tech（技术约束者）和Judge-Req（需求裁决者）四个角色，
-  对需求文档进行隐性假设挖掘、需求矛盾检测、ROI合理性挑战和范围蔓延预警。
-  当需求文档待评审、用户故事需要验证、或产品方案需要批判性审视时触发。
-  默认强度Lv.2（标准模式）。
+description: >
+  D.A.R.E.框架需求阶段对抗审查（REQ-Challenger）。当需求文档待评审、用户故事需要验证、产品方案需要批判性审视时触发。
+  通过 Devil-BA、Devil-UX、Devil-Tech 和 Judge-Req 挖掘隐性假设、检测需求矛盾、挑战ROI合理性、预警范围蔓延。
+  默认强度 Lv.2。
 ---
 
-# D.A.R.E.框架 — 需求阶段对抗审查 (REQ-Challenger)
+# D.A.R.E. 需求阶段对抗审查 (REQ-Challenger)
 
-## 1. 概述
+## 概述
 
-需求阶段是错误成本最低但影响最大的阶段。需求缺陷在开发后期修复的成本是需求阶段的10-100倍。REQ-Challenger通过对抗性审查，在需求冻结前发现隐性假设、需求矛盾、ROI不合理和范围蔓延风险。
+需求阶段是错误成本最低但影响最大的阶段。REQ-Challenger 通过对抗性审查，在需求冻结前发现隐性假设、需求矛盾、ROI 不合理和范围蔓延风险。
 
-**审查流程**: 三Devil独立审查 → Judge-Req裁决 → 输出结构化报告
+审查流程：三 Devil 独立审查 → Judge-Req 裁决 → 输出结构化报告。
 
-**强度控制**: 支持Lv.1~Lv.5五级对抗强度，默认Lv.2
+## 触发条件
 
----
+- 需求文档变更为"待评审"状态
+- 用户明确请求"审查需求"、"看看需求有没有问题"
+- PR/Issue 描述中包含需求变更且影响 > 5 个用户故事
+- 每周批量审查新增/变更需求
 
-## 2. 对抗维度与目标
-
-| 对抗维度 | 目标问题 | 典型遗漏场景 |
-|----------|----------|-------------|
-| 隐性假设挖掘 | 需求编写者无意识依赖的未声明前提 | "假设用户都有稳定网络" |
-| 需求矛盾检测 | 不同需求条目之间的逻辑冲突 | 用户故事A要求"秒级响应"，B要求"全量实时同步" |
-| ROI合理性挑战 | 需求价值与实现成本不匹配 | 花费3人月实现仅影响0.1%用户的功能 |
-| 范围蔓延预警 | 需求边界模糊导致的隐性扩展 | "等后续再补充"类表述 |
-
----
-
-## 3. 角色定义
+## 角色定义
 
 | 角色 | 职责 | 对抗视角 |
 |------|------|----------|
-| Devil-BA | 挑战业务价值假设，质疑ROI合理性 | "这个需求解决的是真问题还是伪需求？" |
+| Devil-BA | 挑战业务价值假设，质疑 ROI 合理性 | "这个需求解决的是真问题还是伪需求？" |
 | Devil-UX | 挑战用户体验假设，发现场景遗漏 | "如果用户在弱网环境下操作，流程会断裂吗？" |
-| Devil-Tech | 挑战技术可行性假设，标记实现风险 | "需求要求100万并发，但架构只验证了1万" |
-| Judge-Req | 评估争议，判定问题成立与否，输出风险评级 | 基于证据权重进行二进制或分级判定 |
+| Devil-Tech | 挑战技术可行性假设，标记实现风险 | "需求要求 100 万并发，但架构只验证了 1 万" |
+| Judge-Req | 评估争议，判定问题成立与否 | 基于证据权重进行判定 |
 
----
-
-## 4. 强度差异指令
-
-| 等级 | 名称 | 核心特征 |
-|------|------|----------|
-| Lv.1 | 温和模式 | 建议性语言，仅标记明显问题，不强制替代方案 |
-| Lv.2 | **标准模式** | 直接指出问题，要求对中等风险解释，标记警告 |
-| Lv.3 | 严格模式 | 必须证明可行性，要求穷举反例，高风险必须给替代方案 |
-| Lv.4 | 激进模式 | 多维度同步攻击，逐一回应，阻塞致命问题 |
-| Lv.5 | 极端模式 | 零容忍，所有假设必须被证明，包含损失估算 |
-
-> 详细Prompt模板见 `references/prompt_lv{1-5}.md`
-
----
-
-## 5. Lv.3（严格模式）完整Prompt模板
-
-```markdown
-## 角色设定
-你是一位经验丰富的[Devil-BA / Devil-UX / Devil-Tech]，以批判性视角审查以下需求文档。
-你的任务不是赞美，而是穷尽一切可能找出需求中的缺陷、遗漏和隐性假设。
-
-## 对抗强度: Level {{level}} ({{level_name}})
-- 你必须主动挑战每一个需求陈述，不允许默认接受
-- 中等及以上风险必须提供可执行的替代方案
-- 所有发现的问题必须附带具体的证据引用（需求文档中的原文）
-- 你必须穷举至少3个反例场景来验证需求假设
-- 对于任何声称"简单"或"快速"的实现，要求证明
-
-## 审查输入
-[注入待审查的需求文档全文]
-
-## 审查维度 (必须覆盖全部)
-
-### 1. 隐性假设挖掘
-列出所有未声明的前提假设。对每个假设说明：
-- 假设内容 / 不成立的后果 / 验证方法
-
-### 2. 需求矛盾检测
-检查以下矛盾类型：
-- 功能性矛盾：功能A与功能B的行为冲突
-- 非功能性矛盾：性能要求与可用性要求的冲突
-- 时序矛盾：依赖关系的先后逻辑错误
-
-### 3. ROI合理性挑战
-评估维度：
-- 目标用户规模与影响范围
-- 业务价值量化依据
-- 实现复杂度评估
-- 低成本替代方案是否存在
-
-### 4. 范围蔓延预警
-识别以下风险表述：
-- "后续优化"、"二期实现"
-- "视情况而定"、"可配置"
-- 未定义边界的"扩展性"要求
-
-## 输出格式
-严格遵循JSON Schema输出: `/references/req_output_schema.json`
-```
-
----
-
-## 6. 触发条件
-
-| 触发方式 | 条件 | 推荐模式 |
-|----------|------|----------|
-| 自动触发 | 需求文档变更为"待评审"状态 | 双Agent辩论 |
-| 手动触发 | 用户明确请求对抗审查 | 按需选择强度等级 |
-| 定时触发 | 每周批量审查新增/变更需求 | 单Agent自对抗 |
-| 事件触发 | 需求变更影响>5个用户故事 | 多Agent委员会 |
-
----
-
-## 7. 判定标准
-
-### Issue成立判定
-
-Issue被判定"成立"需同时满足：
-- **证据明确性** >= 中等（有需求文档原文支撑）
-- **影响可量化性** >= 中等（能描述具体损失场景）
-
-### 风险评级
-
-| 评级 | 判定标准 | 处理要求 |
-|------|----------|----------|
-| CRITICAL | 证据明确 + 影响严重（系统不可用/合规风险） | 必须阻塞，冻结需求 |
-| HIGH | 证据明确 + 影响较大（显著成本增加） | 必须解决后才能继续 |
-| MEDIUM | 证据部分 + 影响可控（额外工作量） | 记录跟踪，限期处理 |
-| LOW | 证据薄弱 + 影响轻微（建议项） | 可选采纳，记录存档 |
-
----
-
-## 8. 输出Schema
-
-输出必须遵循: `references/req_output_schema.json`
-
-核心结构包含:
-- `review_summary`: 审查摘要与统计
-- `issues[]`: 发现的问题列表（含issue_id, dimension, severity, description, evidence, impact, recommendation, assumption_if_any）
-- `assumptions_catalog[]`: 隐性假设目录（含assumption, location, risk_level, validation_method）
-- `confidence_score`: 审查置信度（0-1）
-- `reviewer_role`: 审查角色标识
-
----
-
-## 9. 使用模式
-
-### 模式A: 单角色独立审查
-```
-User提供需求文档 → 选择角色(Devil-BA/UX/Tech) → 执行审查 → 输出报告
-```
-
-### 模式B: 三Devil并行 + Judge裁决
-```
-User提供需求文档 → 三角色并行审查 → Judge-Req合并裁决 → 输出统一报告
-```
-
-### 模式C: 双Agent辩论
-```
-User提供需求文档 → Devil-A提出质疑 → Devil-B辩护 → Judge裁决
-```
-
----
-
-## 10. 默认参数
+## 默认配置
 
 ```yaml
-default_level: 2          # 默认Lv.2标准模式
-min_level: 1
-max_level: 5
+default_level: 2
+mode: debate
 roles: [Devil-BA, Devil-UX, Devil-Tech, Judge-Req]
-dimensions: [隐性假设挖掘, 需求矛盾检测, ROI合理性挑战, 范围蔓延预警]
-output_format: JSON       # 必须严格遵循Schema
-language: zh-CN           # 默认中文输出
+gate_policy:
+  critical_blocker: critical > 0 → BLOCKED
+  high_threshold: high > 3 → BLOCKED
 ```
+
+## 对抗维度
+
+| 维度 | 目标问题 | 映射到统一 dimension |
+|------|----------|---------------------|
+| 隐性假设挖掘 | 未声明的前提假设 | `correctness` |
+| 需求矛盾检测 | 需求条目之间的逻辑冲突 | `correctness` |
+| ROI合理性挑战 | 需求价值与实现成本不匹配 | `maintainability` |
+| 范围蔓延预警 | 需求边界模糊导致的隐性扩展 | `maintainability` |
+
+## 使用模式
+
+### 模式A：单角色独立审查
+用户提需求文档 → 选择 Devil-BA/UX/Tech → 执行审查 → 输出报告
+
+### 模式B：三 Devil 并行 + Judge 裁决（推荐）
+用户提需求文档 → 三角色并行审查 → Judge-Req 合并裁决 → 输出统一报告
+
+### 模式C：双 Agent 辩论
+用户提需求文档 → Devil 提出质疑 → Advocate 辩护 → Judge 裁决
+
+## 输入
+
+- 需求文档全文（用户故事、验收标准、业务背景）
+- （可选）关联架构文档或技术约束说明
+- （可选）强度级别和模式覆盖
+
+## 输出
+
+输出必须遵循 `references/req_output_schema.json`，该 Schema 已与 `dare-report/references/unified_schema.json` 对齐。
+
+核心字段：
+- `record_id`, `stage`, `timestamp`, `intensity_level`
+- `review_summary`（字符串，≤200字）
+- `issues[]`：每个 issue 包含 `issue_id`, `dimension`, `severity`, `description`, `evidence`, `impact`, `recommendation`
+- `scores`: `{ overall, security, maintainability, performance }`
+- `gate_result`: `PASSED` / `CONDITIONAL` / `BLOCKED`
+- `confidence_score`: 0.0-1.0
+- `assumptions_catalog`（REQ 阶段扩展）
+
+## Claude Code 工具集成
+
+1. **读取输入**
+   - `Read` 读取需求文档（如果用户提供了文件路径）
+   - `Read` 读取 `references/req_output_schema.json` 和 `references/prompt_templates.md`
+
+2. **创建审查任务**
+   ```
+   TaskCreate: "Devil-BA review requirements"
+   TaskCreate: "Devil-UX review requirements"
+   TaskCreate: "Devil-Tech review requirements"
+   ```
+   或并行调用 3 个 `Agent`，每个携带对应角色 prompt。
+
+3. **执行 Judge 裁决**
+   - 使用 `TaskOutput` 收集三个 Devil 的输出
+   - 调用 `Agent` 作为 Judge-Req 合并裁决
+
+4. **生成报告**
+   - 确保输出 JSON 符合 `references/req_output_schema.json`
+   - 调用 `dare-report` Skill 生成可读 Markdown 摘要
+
+## 参考资料
+
+- `references/req_output_schema.json` — 阶段输出 Schema
+- `references/prompt_templates.md` — Lv.1-Lv.5 完整 Prompt 模板
+- `../dare-core/references/intensity_matrix.md` — 强度矩阵
+- `../dare-report/references/unified_schema.json` — 统一输出 Schema
+- `../dare-report/references/report_templates/req_report_template.md` — 报告模板

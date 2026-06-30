@@ -1,197 +1,120 @@
 ---
 name: dare-arch
-description: |
-  D.A.R.E.框架架构阶段对抗审查（ARCH-Challenger）。通过Devil-Arch（架构批判者）、Devil-Perf（性能批判者）、Devil-Sec（安全批判者）、Devil-Ops（运维批判者）和Judge-Arch（架构裁决者）五个角色，对架构设计进行技术选型挑战、架构脆弱点分析、扩展性评估和技术债务预警。当技术选型评审、架构设计评审、或重大架构变更需要批判性审视时触发。默认强度Lv.3，推荐多Agent委员会模式。
+description: >
+  D.A.R.E.框架架构阶段对抗审查（ARCH-Challenger）。当技术选型评审、架构设计评审、重大架构变更需要批判性审视时触发。
+  通过 Devil-Arch、Devil-Perf、Devil-Sec、Devil-Ops 和 Judge-Arch 挑战技术选型、分析架构脆弱点、评估扩展性、预警技术债务。
+  默认强度 Lv.3，推荐多Agent委员会模式。
 ---
 
 # D.A.R.E. 架构阶段对抗审查 (ARCH-Challenger)
+
+## 概述
 
 架构决策一旦确定，变更成本随时间呈指数增长。ARCH-Challenger 聚焦技术选型、架构模式和设计约束的合理性验证，通过多 Agent 对替代架构方案的系统性比较，揭示单一设计者难以察觉的结构性风险。
 
 ## 触发条件
 
-在以下场景激活 ARCH-Challenger：
-
-| 场景 | 推荐模式 | 强度建议 |
-|------|---------|---------|
-| 技术选型评审会前（验证选型合理性） | 多 Agent 委员会 | Lv.3 |
-| 架构设计评审前（发现结构缺陷） | 多 Agent 委员会 | Lv.3 |
-| 重大架构变更时（评估影响范围） | 多 Agent 委员会 | Lv.3-Lv.4 |
-| 线上故障后架构复盘 | 单角色深度 | Lv.4 |
-| 年度架构健康度检查 | 多 Agent 委员会 | Lv.2 |
-
-## 对抗维度与目标
-
-| 对抗维度 | 目标问题 | 典型遗漏场景 |
-|----------|----------|-------------|
-| 技术选型挑战 | 技术栈选择的偏见和未考虑的替代方案 | "用 Redis 因为团队熟悉"但忽略数据一致性要求 |
-| 架构脆弱点 | 单点故障、级联失败、资源争用等结构性风险 | 未考虑依赖服务降级时的熔断策略 |
-| 扩展性评估 | 架构在规模增长时的瓶颈预判 | 数据库分片策略在数据量翻倍时的迁移成本 |
-| 技术债务预警 | 短期便利带来的长期维护成本 | 临时方案未标记为"待重构" |
+- 技术选型评审会前
+- 架构设计评审前
+- 重大架构变更时
+- 线上故障后架构复盘
+- 年度架构健康度检查
 
 ## 角色定义
 
 | 角色 | 职责 | 对抗视角 |
 |------|------|----------|
-| Devil-Arch | 挑战架构决策的技术合理性，提出替代方案 | "微服务拆分过度，通信成本超过维护收益" |
-| Devil-Perf | 挑战架构在负载下的表现假设 | "当前设计在 QPS 达到 10 万时，连接池会耗尽" |
-| Devil-Sec | 挑战架构的安全边界和威胁模型 | "该设计假设所有内部服务可信，但内部威胁未被考虑" |
-| Devil-Ops | 挑战架构的可运维性和部署复杂度 | "需要同时维护 5 种存储系统，运维团队能否支撑？" |
-| Judge-Arch | 综合评估各维度挑战，给出架构健康度评分 | 多维度加权评分，输出优先级排序的改进建议 |
+| Devil-Arch | 挑战架构决策的技术合理性 | "微服务拆分过度，通信成本超过维护收益" |
+| Devil-Perf | 挑战架构在负载下的表现 | "当前设计在 QPS 10 万时连接池会耗尽" |
+| Devil-Sec | 挑战架构的安全边界和威胁模型 | "该设计假设所有内部服务可信" |
+| Devil-Ops | 挑战架构的可运维性 | "需要同时维护 5 种存储系统，运维能否支撑？" |
+| Judge-Arch | 综合评估，给出架构健康度评分 | 多维度加权评分 |
 
-### 角色激活规则
+## 默认配置
 
-- 默认激活全部四个 Devil 角色 + Judge-Arch
-- 若架构文档明确标注某维度已充分论证（附证据），可豁免对应 Devil 角色
-- Judge-Arch 必须在至少两个 Devil 角色完成审查后激活
-- 单角色深度模式：针对特定风险领域，仅激活对应 Devil 角色 + Judge-Arch
+```yaml
+default_level: 3
+mode: council
+roles: [Devil-Arch, Devil-Perf, Devil-Sec, Devil-Ops, Judge-Arch]
+gate_policy:
+  ahs_threshold:
+    < 60 → BLOCKED
+    60-80 → CONDITIONAL
+    > 80 → PASSED
+```
 
-## 全强度差异矩阵
+## 对抗维度
 
-| 强度 | 技术选型要求 | 脆弱点分析深度 | 扩展性验证 | 替代方案要求 |
-|------|-------------|---------------|-----------|-------------|
-| Lv.1 | 指出明显不当 | 单点故障识别 | 当前规模验证 | 可选 |
-| Lv.2 | 质疑选择理由 | 级联失败场景 | 2x 规模预判 | 建议 |
-| Lv.3 | 强制比较替代 | 失效模式枚举 | 10x 规模验证 | 必须提供 |
-| Lv.4 | 多维度攻击 | 攻击树分析 | 100x 规模推演 | 定量比较 |
-| Lv.5 | 全市场扫描 | 形式化验证要求 | 理论极限分析 | PoC 要求 |
-
-### 强度选择指南
-
-- **Lv.1**: 快速扫描，适用于早期概念验证阶段或时间紧迫的预评审
-- **Lv.2**: 标准审查，适用于常规迭代中的架构微调
-- **Lv.3**: 深度对抗，适用于正式架构评审（默认推荐）
-- **Lv.4**: 严苛审查，适用于核心系统重构、重大技术转型
-- **Lv.5**: 极限压力，适用于金融级、安全关键系统或合规审查
+| 维度 | 目标问题 | 映射到统一 dimension |
+|------|----------|---------------------|
+| 技术选型挑战 | 技术栈选择的偏见和未考虑的替代方案 | `maintainability` |
+| 架构脆弱点 | 单点故障、级联失败、资源争用 | `reliability` |
+| 扩展性评估 | 架构在规模增长时的瓶颈 | `scalability` |
+| 技术债务预警 | 短期便利带来的长期维护成本 | `maintainability` |
 
 ## 架构健康度评分（AHS）
-
-### 计算公式
 
 ```
 AHS = 0.25 * technical_selection + 0.30 * robustness + 0.25 * scalability + 0.20 * tech_debt
 ```
 
-| 维度 | 权重 | 评估范围 |
-|------|------|---------|
-| 技术选型 | 25% | 0-100 |
-| 架构健壮性 | 30% | 0-100 |
-| 扩展性 | 25% | 0-100 |
-| 技术债务 | 20% | 0-100 |
+AHS 映射到 `scores.overall`，各维度映射到 `scores.maintainability`、`scores.reliability`、`scores.scalability`。
 
-### 阈值解读
-
-| AHS 区间 | 评级 | 行动要求 |
-|---------|------|---------|
-| < 60 | 不通过 | 触发重新设计建议，必须解决关键问题后方可继续 |
-| 60-80 | 有条件通过 | 附带必须修复的问题清单，指定修复时限和验收标准 |
-| > 80 | 通过 | 记录改进建议作为后续迭代参考，非阻塞性 |
-
-完整 AHS 计算方法见 `/mnt/agents/output/dare-arch/references/ahs_calculation.md`。
-
-## Lv.3 Prompt 模板（核心框架）
-
-默认使用 Lv.3 强度。完整模板见 `/mnt/agents/output/dare-arch/references/prompt_templates.md`。
-
-```markdown
-## 角色设定
-你是一位[Devil-Arch/Devil-Perf/Devil-Sec/Devil-Ops]，负责审查以下架构设计文档。
-你的使命是找出架构决策中的每一个弱点——无论设计者多么自信。
-
-## 对抗强度: Level 3 (深度对抗)
-- 对每一个技术选型，必须提供至少一个经过深思熟虑的替代方案并进行定量/定性比较
-- 枚举所有可识别的失效模式，包括低概率高影响场景
-- 验证架构在 10 倍规模增长下的表现，指出最先成为瓶颈的组件
-- 标记所有未明确标注为"临时"的便利主义设计选择
-
-## 审查输入
-[注入架构设计文档：技术选型说明、架构图、接口定义、数据流描述]
-
-## 审查维度
-1. **技术选型挑战**: 核心假设/被排除的替代方案/已知限制
-2. **架构脆弱点**: 单点故障/级联失败最坏场景/故障隔离机制
-3. **扩展性评估**: 最大支持规模/10 倍增长时最先瓶颈的组件/扩展成本
-4. **技术债务预警**: 未标记的临时方案/增加长期维护成本的便利性选择/反模式
-
-## 输出格式
-严格遵循 JSON Schema 输出，见 `/mnt/agents/output/dare-arch/references/arch_output_schema.json`
-```
-
-## 多 Agent 委员会模式执行流程
-
-1. **并行审查**: 四个 Devil 角色同时独立审查架构文档，各自输出 JSON 报告
-2. **交叉验证**: Judge-Arch 收集各 Devil 报告，识别共识性问题和冲突观点
-3. **AHS 计算**: Judge-Arch 基于四维评分计算架构健康度总分
-4. **裁决输出**: Judge-Arch 综合输出最终裁决、改进建议优先级排序
+完整计算方法和阈值解读见 `references/ahs_calculation.md`。
 
 ## 审查输入要求
 
-为获得最佳审查效果，架构文档至少应包含：
+为获得最佳效果，架构文档至少应包含：
 
 - [ ] 技术选型说明（含选择理由和排除方案）
 - [ ] 架构图（组件关系、数据流、部署拓扑）
-- [ ] 接口定义（内部服务间和外部依赖）
-- [ ] 非功能性需求（性能目标、可用性目标、安全要求）
+- [ ] 接口定义
+- [ ] 非功能性需求
 - [ ] 已知限制和待决策事项
-- [ ] 规模假设（当前量级的数据/流量/用户数）
+- [ ] 规模假设
 
-## 输出规范
+## 输出
 
-所有角色审查输出必须符合 `/mnt/agents/output/dare-arch/references/arch_output_schema.json` 中定义的 JSON Schema。
+输出必须遵循 `references/arch_output_schema.json`，该 Schema 已与 `dare-report/references/unified_schema.json` 对齐。
 
-### Judge-Arch 裁决输出格式
+核心字段：
+- `record_id`, `stage`, `timestamp`, `intensity_level`
+- `review_summary`（字符串，≤200字）
+- `issues[]`：每个 issue 包含 `issue_id`, `dimension`, `severity`, `description`, `evidence`, `impact`, `recommendation`
+- `scores`: `{ overall, security, maintainability, performance, reliability, scalability }`
+- `gate_result`: `PASSED` / `CONDITIONAL` / `BLOCKED`
+- `confidence_score`: 0.0-1.0
+- `architecture_health_score` / `dimension_scores`（遗留字段，兼容旧输出）
+- `alternative_proposals`（ARCH 阶段扩展）
 
-```
-## 架构健康度评分: {AHS}/100
+## Claude Code 工具集成
 
-### 维度评分
-- 技术选型: {score}/100
-- 架构健壮性: {score}/100
-- 扩展性: {score}/100
-- 技术债务: {score}/100
+1. **读取输入**
+   - `Read` 读取架构文档
+   - `Read` 读取 `references/arch_output_schema.json` 和 `references/prompt_templates.md`
 
-### 关键发现
-[按优先级排序的 TOP 5 问题]
+2. **并行审查**
+   ```
+   TaskCreate: "Devil-Arch review architecture"
+   TaskCreate: "Devil-Perf review architecture"
+   TaskCreate: "Devil-Sec review architecture"
+   TaskCreate: "Devil-Ops review architecture"
+   ```
 
-### 改进建议
-[按成本效益排序的修复建议]
+3. **Judge 裁决**
+   - 使用 `TaskOutput` 收集四个 Devil 输出
+   - 调用 `Agent` 作为 Judge-Arch 计算 AHS 并判定 gate_result
 
-### 最终裁决
-[不通过/有条件通过/通过] + 理由
-```
+4. **生成报告**
+   - 确保输出 JSON 符合 `references/arch_output_schema.json`
+   - 调用 `dare-report` Skill 生成报告
 
-## 常见架构反模式
+## 参考资料
 
-审查过程中重点识别的反模式清单见 `/mnt/agents/output/dare-arch/references/anti_patterns_catalog.md`。
-
-## 使用示例
-
-### 多 Agent 委员会模式（推荐）
-
-```
-用户: "请审查我们的订单系统架构设计 [附架构文档]"
-
-→ 并行激活 Devil-Arch, Devil-Perf, Devil-Sec, Devil-Ops
-→ 各角色基于 Lv.3 Prompt 模板独立审查
-→ 汇总至 Judge-Arch
-→ 输出 AHS 评分和裁决报告
-```
-
-### 单角色深度模式
-
-```
-用户: "请重点关注性能风险 [附架构文档]"
-
-→ 激活 Devil-Perf + Judge-Arch
-→ Devil-Perf 基于 Lv.3 Prompt 深度审查性能维度
-→ Judge-Arch 仅输出性能维度评分和建议
-```
-
-## 参考文件
-
-| 文件 | 路径 |
-|------|------|
-| JSON 输出 Schema | `/mnt/agents/output/dare-arch/references/arch_output_schema.json` |
-| AHS 计算详细说明 | `/mnt/agents/output/dare-arch/references/ahs_calculation.md` |
-| 全强度 Prompt 模板 | `/mnt/agents/output/dare-arch/references/prompt_templates.md` |
-| 架构反模式目录 | `/mnt/agents/output/dare-arch/references/anti_patterns_catalog.md` |
+- `references/arch_output_schema.json` — 阶段输出 Schema
+- `references/prompt_templates.md` — Lv.1-Lv.5 完整 Prompt 模板
+- `references/ahs_calculation.md` — AHS 计算详细说明
+- `references/anti_patterns_catalog.md` — 常见架构反模式目录
+- `../dare-core/references/intensity_matrix.md` — 强度矩阵
+- `../dare-report/references/unified_schema.json` — 统一输出 Schema
+- `../dare-report/references/report_templates/arch_report_template.md` — 报告模板

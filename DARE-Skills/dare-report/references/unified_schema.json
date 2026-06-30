@@ -5,6 +5,7 @@
   "description": "All-stage unified output schema for D.A.R.E. framework adversarial reports. Applies to REQ, ARCH, CODE, and TEST stages.",
   "type": "object",
   "required": ["record_id", "stage", "timestamp", "intensity_level", "review_summary", "issues", "scores", "gate_result", "confidence_score", "escalation_triggered"],
+  "additionalProperties": true,
   "properties": {
     "record_id": {
       "type": "string",
@@ -83,6 +84,10 @@
       "type": "string",
       "description": "Human-readable explanation for the gate decision"
     },
+    "gate_reason": {
+      "type": "string",
+      "description": "Human-readable explanation for the gate decision"
+    },
     "confidence_score": {
       "type": "number",
       "minimum": 0,
@@ -124,7 +129,7 @@
   "definitions": {
     "issue": {
       "type": "object",
-      "required": ["issue_id", "dimension", "severity", "description"],
+      "required": ["issue_id", "dimension", "severity", "description", "evidence", "impact", "recommendation"],
       "properties": {
         "issue_id": {
           "type": "string",

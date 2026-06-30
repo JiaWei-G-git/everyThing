@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "DARERequest",
+  "description": "D.A.R.E.框架对抗审查任务的输入配置Schema",
+  "type": "object",
+  "required": ["stage", "input_artifacts"],
+  "additionalProperties": true,
+  "properties": {
+    "stage": {
+      "type": "string",
+      "enum": ["REQ", "ARCH", "CODE", "TEST"],
+      "description": "审查目标阶段"
+    },
+    "mode": {
+      "type": "string",
+      "enum": ["A", "B", "C"],
+      "description": "编排模式：A=单Agent自对抗，B=双Agent辩论，C=多Agent委员会。不指定时自动选择"
+    },
+    "intensity": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5,
+      "description": "对抗强度级别，不指定时使用阶段默认值"
+    },
+    "max_rounds": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5,
+      "default": 3,
+      "description": "最大辩论轮次"
+    },
+    "input_artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["type", "content"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["text", "code", "url", "file_path"]
+          },
+          "content": { "type": "string" },
+          "metadata": { "type": "object" }
+        }
+      }
+    },
+    "focus_areas": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "重点关注领域，如安全性、性能、可维护性"
+    },
+    "convergence_threshold": {
+      "type": "string",
+      "enum": ["consensus", "max_rounds", "no_new_args"],
+      "default": "max_rounds",
+      "description": "收敛条件优先级"
+    }
+  }
+}

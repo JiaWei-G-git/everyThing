@@ -29,7 +29,7 @@ All levels use the following base structure with `{{intensity_instructions}}` re
 4. **测试盲区发现**: 并发访问 / 时序和竞态条件 / 配置变更影响
 
 ## 输出格式
-严格按照JSON Schema输出审查结果: `/mnt/agents/output/dare-test/references/test_output_schema.json`
+严格按照JSON Schema输出审查结果: `./test_output_schema.json`
 ```
 
 ---
@@ -156,7 +156,7 @@ All levels use the following base structure with `{{intensity_instructions}}` re
 - "这个分支的失败会导致数据丢失或安全漏洞吗？"
 - "生产环境中这个分支的执行频率是多少？"
 
-输出严格符合JSON Schema: /mnt/agents/output/dare-test/references/test_output_schema.json
+输出严格符合JSON Schema: ./test_output_schema.json
 ```
 
 ### Lv.2 Devil-Fuzz Prompt
@@ -182,7 +182,7 @@ All levels use the following base structure with `{{intensity_instructions}}` re
 
 **每个参数至少识别2个未测试边界**。
 
-输出严格符合JSON Schema: /mnt/agents/output/dare-test/references/test_output_schema.json
+输出严格符合JSON Schema: ./test_output_schema.json
 ```
 
 ### Lv.2 Devil-Chaos Prompt
@@ -210,7 +210,7 @@ And {{verification_points}}
 
 **最小要求**: 每个外部依赖至少1个超时场景。
 
-输出严格符合JSON Schema: /mnt/agents/output/dare-test/references/test_output_schema.json
+输出严格符合JSON Schema: ./test_output_schema.json
 ```
 
 ### Lv.2 Judge-Test Prompt
@@ -219,7 +219,7 @@ And {{verification_points}}
 你的核心假设：行覆盖率是一个谎言，真正的测试质量取决于风险覆盖。
 
 **评估任务**:
-1. 基于风险驱动覆盖率模型（/mnt/agents/output/dare-test/SKILL.md）对功能分类:
+1. 基于风险驱动覆盖率模型（../SKILL.md）对功能分类:
    - 核心功能（支付、认证、权限、数据持久化）
    - 一般功能（业务逻辑、数据处理）
    - 工具/内部功能（日志、配置、辅助函数）
@@ -234,7 +234,7 @@ And {{verification_points}}
 - targets_by_risk_tier: 按风险等级的目标数组
 - priority_actions: 按影响排序的改进建议
 
-输出严格符合JSON Schema: /mnt/agents/output/dare-test/references/test_output_schema.json
+输出严格符合JSON Schema: ./test_output_schema.json
 ```
 
 ---
