@@ -58,13 +58,21 @@ gate_policy:
 AHS = 0.25 * technical_selection + 0.30 * robustness + 0.25 * scalability + 0.20 * tech_debt
 ```
 
-AHS 映射到 `scores.overall`，各维度映射到 `scores.maintainability`、`scores.reliability`、`scores.scalability`。
+AHS 映射到 `scores.overall`。各原始维度到 `scores` 各字段的映射关系如下：
 
-完整计算方法和阈值解读见 `references/ahs_calculation.md`。
+| 原始维度 | 目标 scores 字段 | 映射方式 |
+|----------|------------------|----------|
+| `technical_selection` + `tech_debt` | `scores.maintainability` | `(technical_selection * 0.25 + tech_debt * 0.20) / 0.45` |
+| `robustness` | `scores.reliability` | 直接映射：`scores.reliability = robustness` |
+| `scalability` | `scores.performance` | 直接映射：`scores.performance = scalability` |
+| `scores.security` | `scores.security` | 从安全架构缺陷评估独立计算（不在 AHS 公式内） |
+| AHS 总分 | `scores.overall` | `scores.overall = AHS` |
 
-## 审查输入要求
+**完整计算路径：** 先计算四个维度评分 → 加权得 AHS → AHS 作为 `scores.overall` → 各维度分别映射到 `scores` 对应字段。
 
-为获得最佳效果，架构文档至少应包含：
+## 最小输入检查清单
+
+为获得有效审查结果，架构文档至少应包含：
 
 - [ ] 技术选型说明（含选择理由和排除方案）
 - [ ] 架构图（组件关系、数据流、部署拓扑）

@@ -120,9 +120,11 @@ convergence_threshold: consensus|max_rounds|no_new_args  # 可选，默认max_ro
 
 3. **分配 Agent 角色**
    - `review`：单个 Agent 兼任 Devil 和 Advocate
-   - `debate`：Devil + Advocate + Judge
-   - `council`：Devil组（2-3人）+ Advocate组（1-2人）+ Judge
-   - `audit`：Devil-Sec/Devil-Code + Advocate + Judge
+   - `debate`：Devil + Advocate（由方案作者或维护者 Agent 担任）+ Judge
+   - `council`：Devil 组（2-3 人）+ Advocate 组（1-2 人，可由不同视角维护者组成）+ Judge
+   - `audit`：Devil-Sec/Devil-Code + Advocate（代码/方案作者）+ Judge
+
+   Advocate 职责：正面回应每个质疑，提供数据或先例支持；无法辩护时承认问题；主动补充被 Devil 遗漏的正面论据。
 
 4. **创建并行审查任务**
    ```
@@ -145,7 +147,11 @@ convergence_threshold: consensus|max_rounds|no_new_args  # 可选，默认max_ro
 
 1. 按依赖顺序排列阶段：REQ → ARCH → CODE → TEST
 2. 前一阶段的 Confirmed Issue 自动作为后一阶段的输入约束
-3. 每个阶段独立选择模式和强度
+3. 每个阶段独立选择模式和强度，**同时遵循阶段间强度自动继承规则**：
+   - REQ 阶段发现 Confirmed Issue → ARCH 阶段自动最低 Lv.3
+   - ARCH 阶段发现 Confirmed Issue → CODE 阶段自动最低 Lv.4
+   - CODE 阶段发现 Confirmed Issue → TEST 阶段自动最低 Lv.3
+   - 若用户显式指定了更高强度，以用户配置为准
 4. 最终由 `dare-report` 汇总跨阶段依赖关系和累积风险
 
 ## 参考资料

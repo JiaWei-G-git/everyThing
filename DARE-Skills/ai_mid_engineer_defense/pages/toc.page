@@ -1,0 +1,203 @@
+pageType: table_of_contents
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: toc-deco
+    elementType: text
+    bounds: [40, 200, 400, 300]
+    content:
+      fontSize: 80
+      color: "#E2E8F0"
+      fontFamily: "Liter, MiSans"
+      align: [left, middle]
+      wrap: false
+      letterSpacing: 4
+      text: |
+        <p>CONTENTS</p>
+  - elementId: toc-title
+    elementType: text
+    bounds: [60, 60, 300, 50]
+    content:
+      style: "$pageTitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>目录</p>
+  - elementId: toc-divider
+    elementType: shape
+    shapeName: straightConnector1
+    bounds: [60, 120, 60, 0]
+    border:
+      style: solid
+      width: 3
+      color: "$accent"
+  - elementId: card1-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [460, 150, 360, 200]
+    fill:
+      type: solid
+      color: "$cardBg"
+  - elementId: card1-accent
+    elementType: shape
+    shapeName: rect
+    bounds: [460, 150, 3, 200]
+    fill:
+      type: solid
+      color: "$accent"
+  - elementId: card1-num
+    elementType: text
+    bounds: [480, 170, 80, 50]
+    content:
+      style: "$number"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>01</p>
+  - elementId: card1-title
+    elementType: text
+    bounds: [480, 225, 320, 30]
+    content:
+      style: "$subtitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>岗位认知</p>
+  - elementId: card1-desc
+    elementType: text
+    bounds: [480, 265, 320, 60]
+    content:
+      style: "$caption"
+      align: [left, top]
+      text: |
+        <p>角色定位、核心职责、核心价值</p>
+  - elementId: card2-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [860, 150, 360, 200]
+    fill:
+      type: solid
+      color: "$cardBg"
+  - elementId: card2-accent
+    elementType: shape
+    shapeName: rect
+    bounds: [860, 150, 3, 200]
+    fill:
+      type: solid
+      color: "$accent"
+  - elementId: card2-num
+    elementType: text
+    bounds: [880, 170, 80, 50]
+    content:
+      style: "$number"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>02</p>
+  - elementId: card2-title
+    elementType: text
+    bounds: [880, 225, 320, 30]
+    content:
+      style: "$subtitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>AI能力提升</p>
+  - elementId: card2-desc
+    elementType: text
+    bounds: [880, 265, 320, 60]
+    content:
+      style: "$caption"
+      align: [left, top]
+      text: |
+        <p>思维、技能、协作方式的转型</p>
+  - elementId: card3-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [460, 380, 360, 200]
+    fill:
+      type: solid
+      color: "$cardBg"
+  - elementId: card3-accent
+    elementType: shape
+    shapeName: rect
+    bounds: [460, 380, 3, 200]
+    fill:
+      type: solid
+      color: "$accent"
+  - elementId: card3-num
+    elementType: text
+    bounds: [480, 400, 80, 50]
+    content:
+      style: "$number"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>03</p>
+  - elementId: card3-title
+    elementType: text
+    bounds: [480, 455, 320, 30]
+    content:
+      style: "$subtitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>典型案例</p>
+  - elementId: card3-desc
+    elementType: text
+    bounds: [480, 495, 320, 60]
+    content:
+      style: "$caption"
+      align: [left, top]
+      text: |
+        <p>项目全链路与能力映射</p>
+  - elementId: card4-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [860, 380, 360, 200]
+    fill:
+      type: solid
+      color: "$cardBg"
+  - elementId: card4-accent
+    elementType: shape
+    shapeName: rect
+    bounds: [860, 380, 3, 200]
+    fill:
+      type: solid
+      color: "$accent"
+  - elementId: card4-num
+    elementType: text
+    bounds: [880, 400, 80, 50]
+    content:
+      style: "$number"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>04</p>
+  - elementId: card4-title
+    elementType: text
+    bounds: [880, 455, 320, 30]
+    content:
+      style: "$subtitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>答辩交流</p>
+  - elementId: card4-desc
+    elementType: text
+    bounds: [880, 495, 320, 60]
+    content:
+      style: "$caption"
+      align: [left, top]
+      text: |
+        <p>问答与讨论</p>
+  - elementId: page-num
+    elementType: text
+    bounds: [1160, 680, 60, 20]
+    content:
+      style: "$caption"
+      align: [right, middle]
+      wrap: false
+      text: |
+        <p>02</p>

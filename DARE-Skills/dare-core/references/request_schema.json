@@ -73,6 +73,15 @@
       "enum": ["consensus", "max_rounds", "no_new_args"],
       "default": "max_rounds",
       "description": "收敛条件优先级"
+    },
+    "trigger_type": {
+      "type": "string",
+      "enum": ["pull_request", "commit", "manual", "scheduled", "merge_request", "release"],
+      "description": "触发对抗审查的事件类型，影响报告中的 trigger_type 和 trigger_ref 字段"
+    },
+    "trigger_ref": {
+      "type": "string",
+      "description": "触发事件引用，如 PR 编号、commit SHA、release tag 等，对应报告中的 trigger_ref"
     }
   }
 }

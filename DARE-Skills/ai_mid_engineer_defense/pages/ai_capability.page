@@ -1,0 +1,134 @@
+pageType: content
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: nav-bar
+    elementType: shape
+    shapeName: rect
+    bounds: [0, 0, 1280, 40]
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: nav-accent
+    elementType: shape
+    shapeName: rect
+    bounds: [200, 38, 100, 2]
+    fill:
+      type: solid
+      color: "$accent"
+  - elementId: nav-1
+    elementType: text
+    bounds: [60, 0, 120, 40]
+    content:
+      style: "$nav"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>01 岗位认知</p>
+  - elementId: nav-2
+    elementType: text
+    bounds: [200, 0, 140, 40]
+    content:
+      style: "$nav"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>02 AI能力提升</strong></p>
+  - elementId: nav-3
+    elementType: text
+    bounds: [360, 0, 120, 40]
+    content:
+      style: "$nav"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>03 典型案例</p>
+  - elementId: nav-4
+    elementType: text
+    bounds: [500, 0, 120, 40]
+    content:
+      style: "$nav"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>04 答辩交流</p>
+  - elementId: page-title
+    elementType: text
+    bounds: [60, 60, 400, 40]
+    content:
+      style: "$pageTitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>02 AI能力提升</p>
+  - elementId: title-line
+    elementType: shape
+    shapeName: straightConnector1
+    bounds: [60, 110, 60, 0]
+    border:
+      style: solid
+      width: 3
+      color: "$accent"
+  - elementId: left-content
+    elementType: text
+    bounds: [60, 140, 700, 400]
+    content:
+      style: "$body"
+      align: [left, top]
+      text: |
+        <p><strong>本页待填写内容：</strong></p>
+        <p style="margin-top:12px">• 阐述个人在思维、技能、协作方式等方面为适应AI变革所采取的具体行动</p>
+        <p style="margin-top:8px">• 简述参与AI工作/项目的经验历程</p>
+        <p style="margin-top:8px">• 建议展示：技术学习路径、关键技能突破、团队协作方式转变等</p>
+        <p style="margin-top:24px"><span style="color:$secondary;">提示：请在3-5分钟内完成岗位认知和AI能力提升的讲解呈现，重点放在典型项目的讲解。</span></p>
+  - elementId: right-card-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [820, 140, 400, 400]
+    fill:
+      type: solid
+      color: "$cardBg"
+  - elementId: right-card-bar
+    elementType: shape
+    shapeName: rect
+    bounds: [820, 140, 3, 400]
+    fill:
+      type: solid
+      color: "$accent"
+  - elementId: right-card-icon
+    elementType: icon
+    bounds: [850, 170, 40, 40]
+    iconName: "fas:lightbulb"
+    fill:
+      type: solid
+      color: "$accent"
+  - elementId: right-card-title
+    elementType: text
+    bounds: [850, 225, 340, 30]
+    content:
+      style: "$subtitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>填写建议</p>
+  - elementId: right-card-content
+    elementType: text
+    bounds: [850, 270, 340, 250]
+    content:
+      style: "$body"
+      align: [left, top]
+      text: |
+        <p>1. 列举具体学习的AI技术或框架</p>
+        <p style="margin-top:8px">2. 描述参与的代表性AI项目</p>
+        <p style="margin-top:8px">3. 说明个人在AI转型中的成长路径</p>
+        <p style="margin-top:8px">4. 展示获得的技能认证或成果</p>
+  - elementId: page-num
+    elementType: text
+    bounds: [1160, 680, 60, 20]
+    content:
+      style: "$caption"
+      align: [right, middle]
+      wrap: false
+      text: |
+        <p>04</p>

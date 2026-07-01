@@ -1,0 +1,198 @@
+pageType: content
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: nav-bar
+    elementType: shape
+    shapeName: rect
+    bounds: [0, 0, 1280, 40]
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: nav-accent
+    elementType: shape
+    shapeName: rect
+    bounds: [360, 38, 80, 2]
+    fill:
+      type: solid
+      color: "$accent"
+  - elementId: nav-1
+    elementType: text
+    bounds: [60, 0, 120, 40]
+    content:
+      style: "$nav"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>01 岗位认知</p>
+  - elementId: nav-2
+    elementType: text
+    bounds: [200, 0, 140, 40]
+    content:
+      style: "$nav"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>02 AI能力提升</p>
+  - elementId: nav-3
+    elementType: text
+    bounds: [360, 0, 120, 40]
+    content:
+      style: "$nav"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>03 典型案例</strong></p>
+  - elementId: nav-4
+    elementType: text
+    bounds: [500, 0, 120, 40]
+    content:
+      style: "$nav"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>04 答辩交流</p>
+  - elementId: page-title
+    elementType: text
+    bounds: [60, 60, 500, 40]
+    content:
+      style: "$pageTitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>03 典型案例</p>
+  - elementId: title-line
+    elementType: shape
+    shapeName: straightConnector1
+    bounds: [60, 110, 60, 0]
+    border:
+      style: solid
+      width: 3
+      color: "$accent"
+  - elementId: intro-text
+    elementType: text
+    bounds: [60, 130, 1160, 60]
+    content:
+      style: "$body"
+      align: [left, top]
+      text: |
+        <p>针对每个案例（建议1-3个），按以下<strong>四段式结构</strong>进行阐述：</p>
+  - elementId: step1-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [60, 210, 560, 220]
+    fill:
+      type: solid
+      color: "$cardBg"
+  - elementId: step1-bar
+    elementType: shape
+    shapeName: rect
+    bounds: [60, 210, 3, 220]
+    fill:
+      type: solid
+      color: "$accent"
+  - elementId: step1-num
+    elementType: text
+    bounds: [80, 225, 60, 36]
+    content:
+      style: "$number"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>3.1</p>
+  - elementId: step1-title
+    elementType: text
+    bounds: [140, 225, 460, 30]
+    content:
+      style: "$subtitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>案例背景与目标</p>
+  - elementId: step1-content
+    elementType: text
+    bounds: [80, 270, 520, 140]
+    content:
+      style: "$body"
+      align: [left, top]
+      text: |
+        <p>简述项目要解决的核心业务问题或抓住的市场机会。明确项目的核心目标（尤其是AI要达成的具体效果）。</p>
+  - elementId: step2-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [660, 210, 560, 220]
+    fill:
+      type: solid
+      color: "$cardBg"
+  - elementId: step2-bar
+    elementType: shape
+    shapeName: rect
+    bounds: [660, 210, 3, 220]
+    fill:
+      type: solid
+      color: "$accent"
+  - elementId: step2-num
+    elementType: text
+    bounds: [680, 225, 60, 36]
+    content:
+      style: "$number"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>3.2</p>
+  - elementId: step2-title
+    elementType: text
+    bounds: [740, 225, 460, 30]
+    content:
+      style: "$subtitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>项目全链路与能力映射</p>
+  - elementId: step2-content
+    elementType: text
+    bounds: [680, 270, 520, 140]
+    content:
+      style: "$body"
+      align: [left, top]
+      text: |
+        <p>清晰、完整地拆解项目的流程。将流程中的每个关键环节，与能力标准进行一一对应。在对应位置标注能力项名称即可。</p>
+  - elementId: hint-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [60, 460, 1160, 100]
+    fill:
+      type: solid
+      color: "#FEF3C7"
+  - elementId: hint-bar
+    elementType: shape
+    shapeName: rect
+    bounds: [60, 460, 3, 100]
+    fill:
+      type: solid
+      color: "#F59E0B"
+  - elementId: hint-icon
+    elementType: icon
+    bounds: [85, 480, 28, 28]
+    iconName: "fas:exclamation-triangle"
+    fill:
+      type: solid
+      color: "#F59E0B"
+  - elementId: hint-text
+    elementType: text
+    bounds: [125, 470, 1070, 80]
+    content:
+      style: "$body"
+      align: [left, middle]
+      text: |
+        <p><strong>提示：</strong>请在此页补充具体案例的背景、目标、全链路与能力映射。建议准备1-3个典型案例，重点放在与AI能力直接相关的项目。</p>
+  - elementId: page-num
+    elementType: text
+    bounds: [1160, 680, 60, 20]
+    content:
+      style: "$caption"
+      align: [right, middle]
+      wrap: false
+      text: |
+        <p>05</p>

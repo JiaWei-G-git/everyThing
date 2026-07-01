@@ -1,0 +1,86 @@
+pageType: cover
+background:
+  type: solid
+  color: "#0F172A"
+elements:
+  - elementId: deco-rect1
+    elementType: shape
+    shapeName: rect
+    bounds: [900, 80, 320, 460]
+    opacity: 0.08
+    fill:
+      type: solid
+      color: "$accent"
+  - elementId: deco-rect2
+    elementType: shape
+    shapeName: rect
+    bounds: [1000, 180, 220, 340]
+    opacity: 0.12
+    fill:
+      type: solid
+      color: "$accent"
+  - elementId: deco-rect3
+    elementType: shape
+    shapeName: rect
+    bounds: [1080, 120, 140, 200]
+    opacity: 0.06
+    fill:
+      type: solid
+      color: "#FFFFFF"
+  - elementId: badge-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [60, 60, 140, 32]
+    fill:
+      type: solid
+      color: "$accent"
+  - elementId: badge-text
+    elementType: text
+    bounds: [60, 60, 140, 32]
+    content:
+      fontSize: 14
+      color: "#FFFFFF"
+      fontFamily: "Liter, MiSans"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>AI能力认证</p>
+  - elementId: main-title
+    elementType: text
+    bounds: [60, 180, 700, 60]
+    content:
+      style: "$title"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>AI中级工程师</p>
+  - elementId: sub-title
+    elementType: text
+    bounds: [60, 255, 700, 50]
+    content:
+      fontSize: 32
+      color: "#FFFFFF"
+      fontFamily: "Liter, MiSans"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>能力认证答辩</p>
+  - elementId: divider
+    elementType: shape
+    shapeName: straightConnector1
+    bounds: [60, 330, 200, 0]
+    border:
+      style: solid
+      width: 2
+      color: "$accent"
+  - elementId: info
+    elementType: text
+    bounds: [60, 620, 600, 30]
+    content:
+      fontSize: 16
+      color: "#FFFFFF"
+      fontFamily: "Liter, MiSans"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>答辩人：姓名&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;2026年6月</p>

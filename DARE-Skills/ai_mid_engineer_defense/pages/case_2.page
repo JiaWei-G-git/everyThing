@@ -1,0 +1,201 @@
+pageType: content
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: nav-bar
+    elementType: shape
+    shapeName: rect
+    bounds: [0, 0, 1280, 40]
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: nav-accent
+    elementType: shape
+    shapeName: rect
+    bounds: [360, 38, 80, 2]
+    fill:
+      type: solid
+      color: "$accent"
+  - elementId: nav-1
+    elementType: text
+    bounds: [60, 0, 120, 40]
+    content:
+      style: "$nav"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>01 岗位认知</p>
+  - elementId: nav-2
+    elementType: text
+    bounds: [200, 0, 140, 40]
+    content:
+      style: "$nav"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>02 AI能力提升</p>
+  - elementId: nav-3
+    elementType: text
+    bounds: [360, 0, 120, 40]
+    content:
+      style: "$nav"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>03 典型案例</strong></p>
+  - elementId: nav-4
+    elementType: text
+    bounds: [500, 0, 120, 40]
+    content:
+      style: "$nav"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>04 答辩交流</p>
+  - elementId: page-title
+    elementType: text
+    bounds: [60, 60, 500, 40]
+    content:
+      style: "$pageTitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>03 典型案例（续）</p>
+  - elementId: title-line
+    elementType: shape
+    shapeName: straightConnector1
+    bounds: [60, 110, 60, 0]
+    border:
+      style: solid
+      width: 3
+      color: "$accent"
+  - elementId: card1-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [60, 140, 1160, 160]
+    fill:
+      type: solid
+      color: "$cardBg"
+  - elementId: card1-bar
+    elementType: shape
+    shapeName: rect
+    bounds: [60, 140, 3, 160]
+    fill:
+      type: solid
+      color: "$accent"
+  - elementId: card1-num
+    elementType: text
+    bounds: [85, 155, 60, 36]
+    content:
+      style: "$number"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>3.3</p>
+  - elementId: card1-title
+    elementType: text
+    bounds: [155, 155, 300, 30]
+    content:
+      style: "$subtitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>AI专属贡献与产出</p>
+  - elementId: card1-content
+    elementType: text
+    bounds: [85, 200, 1110, 80]
+    content:
+      style: "$body"
+      align: [left, top]
+      text: |
+        <p>明确列出具体的、可衡量的AI相关产出物（如：核心Prompt集、评估报告、工作流设计文档等，也可列出token消耗等AI使用数据）。</p>
+  - elementId: card2-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [60, 320, 1160, 160]
+    fill:
+      type: solid
+      color: "$cardBg"
+  - elementId: card2-bar
+    elementType: shape
+    shapeName: rect
+    bounds: [60, 320, 3, 160]
+    fill:
+      type: solid
+      color: "$accent"
+  - elementId: card2-num
+    elementType: text
+    bounds: [85, 335, 60, 36]
+    content:
+      style: "$number"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>3.4</p>
+  - elementId: card2-title
+    elementType: text
+    bounds: [155, 335, 300, 30]
+    content:
+      style: "$subtitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>成果与效果验证</p>
+  - elementId: card2-content
+    elementType: text
+    bounds: [85, 380, 1110, 80]
+    content:
+      style: "$body"
+      align: [left, top]
+      text: |
+        <p>用量化数据或事实说明项目最终达成的业务成果或技术效果，说明项目带来的长期价值/复用潜力。（以量化数据为最优）</p>
+  - elementId: card3-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [60, 500, 1160, 140]
+    fill:
+      type: solid
+      color: "$cardBg"
+  - elementId: card3-bar
+    elementType: shape
+    shapeName: rect
+    bounds: [60, 500, 3, 140]
+    fill:
+      type: solid
+      color: "$accent"
+  - elementId: card3-num
+    elementType: text
+    bounds: [85, 515, 60, 36]
+    content:
+      style: "$number"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>3.5</p>
+  - elementId: card3-title
+    elementType: text
+    bounds: [155, 515, 300, 30]
+    content:
+      style: "$subtitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>知识资产沉淀</p>
+  - elementId: card3-content
+    elementType: text
+    bounds: [85, 560, 1110, 60]
+    content:
+      style: "$body"
+      align: [left, top]
+      text: |
+        <p>对组织知识资产沉淀的贡献。说明对于AI知识库建设（知识、技能、规则等）的贡献，如SKILL库、AI工作流、MCP库、开发规范等。</p>
+  - elementId: page-num
+    elementType: text
+    bounds: [1160, 680, 60, 20]
+    content:
+      style: "$caption"
+      align: [right, middle]
+      wrap: false
+      text: |
+        <p>06</p>

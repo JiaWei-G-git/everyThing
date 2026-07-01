@@ -46,6 +46,17 @@ description: >
 1. `.dare/records/dare-YYYYMMDD-NNN.json` — 完整结构化数据
 2. `.dare/records/dare-YYYYMMDD-NNN.md` — 可读摘要
 
+首次使用前，请确保以下目录结构已创建：
+
+```
+.dare/
+├── records/          # 对抗报告存储（必需）
+│   └── 按 dare-YYYYMMDD-NNN.json / .md 格式写入
+├── config/           # 项目级配置（可选）
+│   └── project_config.json
+└── cache/            # 临时缓存（可选）
+```
+
 统一输出 Schema 见 `references/unified_schema.json`，阶段报告模板见 `references/report_templates/`。
 
 ## 报告生成工作流
@@ -95,6 +106,27 @@ description: >
 4. **趋势分析**
    - `Bash` 运行脚本计算 Issue 密度、严重 Issue 占比等指标
    - 输出趋势图表或表格
+
+## 错误处理与超时策略
+
+当对抗审查流程中出现异常时，按以下策略处理：
+
+| 异常场景 | 处理策略 | 默认值 |
+|----------|----------|--------|
+| Agent 调用超时 | 记录超时日志，使用已有结果继续，缺失角色的结论标记为 `confidence_score: 0.5` | 单次 Agent 超时：5 分钟 |
+| Agent 返回非 JSON | 尝试正则提取关键字段，失败时标记为 `REVIEW_FAILED` | — |
+| 文件读取失败 | 跳过该文件，在报告中注明遗漏 | — |
+| 历史记录损坏 | 跳过趋势分析，仅生成当前报告 | — |
+| 内存/Token 不足 | 降级为 `review` 单 Agent 模式，减少上下文 | — |
+
+**降级决策树：**
+```
+超时/失败?
+  Y → 该角色标记为 UNAVAILABLE
+    所有 Devil 均失败? → 终止审查，返回 REVIEW_FAILED
+    部分 Devil 失败? → 使用剩余结果继续，置信度下调
+    Judge 失败? → 使用 Devil 结论的最高严重级别作为 gate_result
+```
 
 ## 参考资料
 

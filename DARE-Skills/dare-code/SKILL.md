@@ -70,7 +70,7 @@ paths:
   - "**/password/**"
   - "**/token/**"
   - "**/permission/**"
-keywords_in_diff: [password, secret, token, encrypt, hash, sudo, eval(, exec(]
+keywords_in_diff: [password, secret, token, encrypt, hash, sudo, "eval(", "exec("]
 ```
 
 ## 输出
@@ -85,6 +85,17 @@ keywords_in_diff: [password, secret, token, encrypt, hash, sudo, eval(, exec(]
 - `gate_result`: `PASSED` / `CONDITIONAL` / `BLOCKED`
 - `confidence_score`: 0.0-1.0
 - `category`, `code_snippet`, `line_number`, `attack_vector`（CODE 阶段扩展）
+
+## 最小输入检查清单
+
+为获得有效审查结果，请确保提供以下信息：
+
+- [ ] **代码变更内容**：`git diff` 或 PR diff 全文（必需）
+- [ ] **被变更文件的完整上下文**：变更函数/类的完整代码（推荐，至少包含变更位置前后 10 行）
+- [ ] **变更理由/PR 描述**：说明为什么做这个变更（推荐，有助于判断实现方案合理性）
+- [ ] **关联 Issue/需求编号**：上下文追溯用（可选）
+
+**特别注意：** 当变更路径匹配安全敏感模式时，审查会自动提升至 Lv.4，请确保提供足够的上下文。
 
 ## Claude Code 工具集成
 

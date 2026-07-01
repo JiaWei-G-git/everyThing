@@ -188,6 +188,35 @@ if 维度重复率 > 25% for 连续3次对抗:
 | CODE | 10x | 代码阶段发现避免测试和部署返工 |
 | TEST | 5x | 测试阶段发现避免生产事故 |
 
+### 可操作方法
+
+**预估避免损失计算：**
+```python
+estimated_avoided_loss = 0
+for issue in issues:
+    # 根据严重级别取成本中位数
+    severity_value = severity_cost_map[issue.severity]['median']
+    # 根据发现阶段取倍数
+    stage_multiplier = stage_multiplier_map[issue.discovered_stage]
+    estimated_avoided_loss += severity_value * stage_multiplier
+```
+
+**对抗执行成本计算：**
+```python
+execution_cost = (
+    total_agent_calls * avg_tokens_per_call * cost_per_token  # 计算成本
+    + human_review_hours * hourly_rate                          # 人工复核成本
+)
+```
+
+**简化估算（无需精确计算时使用）：**
+| 场景 | 预估避免损失 | 对抗执行成本 | 收益比 |
+|------|------------|-------------|--------|
+| 需求阶段发现 1 个 Critical | $50,000 | ~$500 | 100x |
+| 架构阶段发现 2 个 High | $25,000 | ~$500 | 50x |
+| 代码阶段发现 5 个 Medium | $5,000 | ~$500 | 10x |
+| 仅发现 Low 级别问题 | $500 | ~$500 | 1x |
+
 ### ROI Interpretation
 
 | ROI范围 | 评价 | 建议 |

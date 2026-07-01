@@ -1,0 +1,201 @@
+pageType: content
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: nav-bar
+    elementType: shape
+    shapeName: rect
+    bounds: [0, 0, 1280, 40]
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: nav-accent
+    elementType: shape
+    shapeName: rect
+    bounds: [60, 38, 80, 2]
+    fill:
+      type: solid
+      color: "$accent"
+  - elementId: nav-1
+    elementType: text
+    bounds: [60, 0, 120, 40]
+    content:
+      style: "$nav"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>01 岗位认知</strong></p>
+  - elementId: nav-2
+    elementType: text
+    bounds: [200, 0, 140, 40]
+    content:
+      style: "$nav"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>02 AI能力提升</p>
+  - elementId: nav-3
+    elementType: text
+    bounds: [360, 0, 120, 40]
+    content:
+      style: "$nav"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>03 典型案例</p>
+  - elementId: nav-4
+    elementType: text
+    bounds: [500, 0, 120, 40]
+    content:
+      style: "$nav"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>04 答辩交流</p>
+  - elementId: page-title
+    elementType: text
+    bounds: [60, 60, 400, 40]
+    content:
+      style: "$pageTitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>01 岗位认知</p>
+  - elementId: title-line
+    elementType: shape
+    shapeName: straightConnector1
+    bounds: [60, 110, 60, 0]
+    border:
+      style: solid
+      width: 3
+      color: "$accent"
+  - elementId: card1-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [60, 130, 360, 340]
+    fill:
+      type: solid
+      color: "$cardBg"
+  - elementId: card1-bar
+    elementType: shape
+    shapeName: rect
+    bounds: [60, 130, 3, 340]
+    fill:
+      type: solid
+      color: "$accent"
+  - elementId: card1-num
+    elementType: text
+    bounds: [80, 150, 100, 47]
+    content:
+      style: "$number"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>01</p>
+  - elementId: card1-title
+    elementType: text
+    bounds: [80, 205, 320, 26]
+    content:
+      style: "$subtitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>1.1 角色定位</p>
+  - elementId: card1-content
+    elementType: text
+    bounds: [80, 245, 320, 210]
+    content:
+      style: "$body"
+      align: [left, top]
+      text: |
+        <p>能针对业务问题提出融合AI能力的可行架构与技术方案，深刻理解大模型边界，善于设计提示词、编排智能体并治理数据，营造团队AI学习与实验氛围，对AI应用进行总结，分享经验成果，研发出智能高效、客户满意度高、产品化程度高的AI原生架构并推广实施。</p>
+  - elementId: card2-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [460, 130, 360, 500]
+    fill:
+      type: solid
+      color: "$cardBg"
+  - elementId: card2-bar
+    elementType: shape
+    shapeName: rect
+    bounds: [460, 130, 3, 500]
+    fill:
+      type: solid
+      color: "$accent"
+  - elementId: card2-num
+    elementType: text
+    bounds: [480, 150, 100, 47]
+    content:
+      style: "$number"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>02</p>
+  - elementId: card2-title
+    elementType: text
+    bounds: [480, 205, 320, 26]
+    content:
+      style: "$subtitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>1.2 核心职责</p>
+  - elementId: card2-content
+    elementType: text
+    bounds: [480, 245, 320, 360]
+    content:
+      style: "$body"
+      align: [left, top]
+      text: |
+        <p>以项目落地和公司效益为核心，主导AI原生应用的需求定义与架构编排，高效解决AI系统在数据、模型及输出稳定性方面的复杂难题。主动追踪前沿技术并评估其业务价值，致力于提升客户满意度。根据实战经验提炼可复用的设计规范与治理策略，指导团队从传统开发向AI编排转型，积极学习并推广契合AI工作流的研发基础设施，进一步提升团队整体的智能化交付效率与技术创新能力。</p>
+  - elementId: card3-bg
+    elementType: shape
+    shapeName: rect
+    bounds: [860, 130, 360, 370]
+    fill:
+      type: solid
+      color: "$cardBg"
+  - elementId: card3-bar
+    elementType: shape
+    shapeName: rect
+    bounds: [860, 130, 3, 370]
+    fill:
+      type: solid
+      color: "$accent"
+  - elementId: card3-num
+    elementType: text
+    bounds: [880, 150, 100, 47]
+    content:
+      style: "$number"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>03</p>
+  - elementId: card3-title
+    elementType: text
+    bounds: [880, 205, 320, 26]
+    content:
+      style: "$subtitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>1.3 核心价值</p>
+  - elementId: card3-content
+    elementType: text
+    bounds: [880, 245, 320, 240]
+    content:
+      style: "$body"
+      align: [left, top]
+      text: |
+        <p>将AI技术精准转化为可量化的业务增长与客户满意度提升，加速产品智能化迭代。为团队构建高复用AI设计模式与治理规范，显著降低试错成本，提升整体交付效率。为组织沉淀AI原生工程资产与最佳实践，形成差异化技术壁垒，支撑公司长期战略创新与持续竞争力。</p>
+  - elementId: page-num
+    elementType: text
+    bounds: [1160, 680, 60, 20]
+    content:
+      style: "$caption"
+      align: [right, middle]
+      wrap: false
+      text: |
+        <p>03</p>

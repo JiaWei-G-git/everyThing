@@ -1,0 +1,61 @@
+pageType: final
+background:
+  type: solid
+  color: "#0F172A"
+elements:
+  - elementId: deco-rect1
+    elementType: shape
+    shapeName: rect
+    bounds: [50, 150, 150, 400]
+    opacity: 0.06
+    fill:
+      type: solid
+      color: "$accent"
+  - elementId: deco-rect2
+    elementType: shape
+    shapeName: rect
+    bounds: [1080, 100, 150, 350]
+    opacity: 0.08
+    fill:
+      type: solid
+      color: "$accent"
+  - elementId: thanks
+    elementType: text
+    bounds: [240, 250, 800, 60]
+    content:
+      fontSize: 44
+      color: "#FFFFFF"
+      fontFamily: "Liter, MiSans"
+      align: [center, middle]
+      wrap: false
+      letterSpacing: 4
+      text: |
+        <p>感谢聆听</p>
+  - elementId: divider
+    elementType: shape
+    shapeName: straightConnector1
+    bounds: [540, 330, 200, 0]
+    border:
+      style: solid
+      width: 2
+      color: "$accent"
+  - elementId: brand
+    elementType: text
+    bounds: [340, 360, 600, 30]
+    content:
+      fontSize: 16
+      color: "#FFFFFF"
+      fontFamily: "Liter, MiSans"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>关注朗新 · 了解更多能源科技资讯</p>
+  - elementId: page-num
+    elementType: text
+    bounds: [1160, 680, 60, 20]
+    content:
+      style: "$caption"
+      align: [right, middle]
+      wrap: false
+      text: |
+        <p>07</p>
